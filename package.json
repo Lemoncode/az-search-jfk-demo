@@ -1,0 +1,56 @@
+{
+  "name": "jfk-files",
+  "version": "1.0.0",
+  "description": "Azure Search Demo based on declassified JFK Files",
+  "main": "app.js",
+  "config": {
+    "build": "dist",
+    "remote": "GH-Lemoncode",
+    "msg": "Github Deploy in gh-pages"
+  },
+  "scripts": {
+    "start": "webpack-dev-server --config=webpack.dev.config.js",
+    "clean": "rimraf \"%npm_package_config_build%/**/*\" && rimraf \"%npm_package_config_build%/**/.!(git)\"",
+    "build:dev": "npm run clean && webpack --config=webpack.dev.config.js",
+    "build:prod": "npm run clean && webpack -p --config=webpack.prod.config.js",
+    "build:deploy": "npm run clean && webpack --config=webpack.prod.config.js",
+    "gh:reset": "rimraf %npm_package_config_build% && git worktree prune && git branch -D gh-pages && git push -d %npm_package_config_remote% gh-pages",
+    "gh:init": "git worktree add -B gh-pages %npm_package_config_build% && npm run clean",
+    "gh:deploy": "npm run build:deploy && cd %npm_package_config_build% && git add --all && git commit -m \"%npm_package_config_msg%\" && git push %npm_package_config_remote% gh-pages"
+  },
+  "author": "Javier Calzado",
+  "license": "ISC",
+  "dependencies": {
+    "downshift": "^1.28.0",
+    "lodash.throttle": "^4.1.1",
+    "material-ui": "^1.0.0-beta.33",
+    "material-ui-icons": "^1.0.0-beta.17",
+    "material-ui-pickers": "^1.0.0-beta.15.1",
+    "moment": "^2.20.1",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-router-dom": "^4.2.2"
+  },
+  "devDependencies": {
+    "@types/history": "^4.6.1",
+    "@types/react": "~16.0.21",
+    "@types/react-dom": "~16.0.2",
+    "@types/react-router-dom": "^4.2.0",
+    "awesome-typescript-loader": "^3.3.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "css-loader": "~0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "file-loader": "~1.1.5",
+    "html-webpack-plugin": "~2.30.1",
+    "node-sass": "^4.7.2",
+    "rimraf": "^2.6.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "~0.19.0",
+    "typescript": "~2.6.1",
+    "url-loader": "~0.6.2",
+    "webpack": "~3.8.1",
+    "webpack-dev-server": "^2.9.4",
+    "webpack-merge": "^4.1.1"
+  }
+}
