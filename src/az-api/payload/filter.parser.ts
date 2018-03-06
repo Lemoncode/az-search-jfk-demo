@@ -10,24 +10,21 @@ import { AzFilterGroupItem } from ".";
  */
 
 
-const checkSingleValueEqualityAgainstMultipleValues = (fieldName, operator, values) => {
-  // Compare equality/not equality against multiple values.
-  // Special case of search.in function for performance.
-  return `${operator==="ne" ? "not " : ""}search.in(${fieldName},'${values.join("|")}', '|')`;
+const isComparingEquality = (operator, logic) => {
+  // Is comparing equality + or / not equality + and ?
+  return (operator === "eq" && (!logic || logic === "or")) || 
+    (operator === "ne" && (!logic || logic === "and"));
 }
 
 const parseFilterSingle = (f: AzFilterSingle): string => {
-  if (f.value.length) {
-    // Compare against multiple values.
+  if (f.value.length) { // Compare against multiple values.
     const values = f.value as string[];
-    if ((f.operator === "eq" && (!f.logic || f.logic === "or")) || 
-      (f.operator === "ne" && (!f.logic || f.logic === "and"))) {
-      return checkSingleValueEqualityAgainstMultipleValues(f.fieldName, f.operator, values);      
+    if (isComparingEquality(f.operator, f.logic)) {
+      return `${f.operator==="ne" ? "not " : ""}search.in(${f.fieldName},'${values.join("|")}', '|')`;
     } else {
       return values.map(v => `${f.fieldName} ${f.operator} ${v}`).join(` ${f.logic} `);
     }
-  } else {
-    // Compare against single value.
+  } else {  // Compare against single value.
     return `${f.fieldName} ${f.operator} ${f.value}`;
   }  
 }
