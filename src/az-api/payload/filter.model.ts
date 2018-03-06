@@ -20,7 +20,9 @@ export interface AzFilterCollection {
 
 export type AzFilter = AzFilterSingle | AzFilterCollection;
 
+export type AzFilterGroupItem = (AzFilter | AzFilterGroup);
+
 export interface AzFilterGroup {
-  items: (AzFilter | AzFilterGroup)[];
+  items: AzFilterGroupItem[];
   logic: "and" | "or";
 }

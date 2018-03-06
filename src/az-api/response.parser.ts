@@ -31,7 +31,7 @@ export const parseResponse = async (response: Response, config: AzResponseConfig
   const jsonObject = await response.json();
 
   if (!response.ok) {
-    console.log(jsonObject);
+    console.debug(jsonObject);
     throw new Error(`${response.status} - ${response.statusText}
       Message: ${jsonObject.error.message}`);
   }

@@ -1,5 +1,6 @@
 import { AzFilterGroup, AzFilter, AzFilterCollection, AzFilterSingle } from "./filter.model";
 import { isArrayEmpty, checkDuckType } from "../../util";
+import { AzFilterGroupItem } from ".";
 
 /**
  * Parsers for Filters.
@@ -9,17 +10,20 @@ import { isArrayEmpty, checkDuckType } from "../../util";
  */
 
 
+const checkSingleValueEqualityAgainstMultipleValues = (fieldName, operator, values) => {
+  // Compare equality/not equality against multiple values.
+  // Special case of search.in function for performance.
+  return `${operator==="ne" ? "not " : ""}search.in(${fieldName},'${values.join("|")}', '|')`;
+}
+
 const parseFilterSingle = (f: AzFilterSingle): string => {
   if (f.value.length) {
     // Compare against multiple values.
     const values = f.value as string[];
     if ((f.operator === "eq" && (!f.logic || f.logic === "or")) || 
       (f.operator === "ne" && (!f.logic || f.logic === "and"))) {
-      // Compare equality/not equality against multiple values.
-      // Special case of search.in function for performance.
-      return `${f.operator==="ne" ? "not " : ""}search.in(${f.fieldName},'${values.join("|")}', '|')`;
+      return checkSingleValueEqualityAgainstMultipleValues(f.fieldName, f.operator, values);      
     } else {
-      // TODO: Is this case necessary? does it have any sense?
       return values.map(v => `${f.fieldName} ${f.operator} ${v}`).join(` ${f.logic} `);
     }
   } else {
@@ -37,18 +41,23 @@ const parseFilterCollection = (f: AzFilterCollection): string => {
   })})`;
 }
 
+const reduceItemToExpression = (item: AzFilterGroupItem) => {
+  if (checkDuckType(item as AzFilterGroup, "items" )) {
+    return parseFilterGroup(item as AzFilterGroup);
+  } else if (checkDuckType(item as AzFilterCollection, "mode" )){
+    return parseFilterCollection(item as AzFilterCollection);
+  } else {
+    return parseFilterSingle(item as AzFilterSingle);
+  }
+}
+
 export const parseFilterGroup = (fg: AzFilterGroup): string => {
   if (isArrayEmpty(fg.items)) return "";
 
   return `(${
-    fg.items.map(f => {
-      if (checkDuckType(f as AzFilterGroup, "items" )) {
-        return parseFilterGroup(f as AzFilterGroup);
-      } else if (checkDuckType(f as AzFilterCollection, "mode" )){
-        return parseFilterCollection(f as AzFilterCollection);
-      } else {
-        return parseFilterSingle(f as AzFilterSingle);
-      }
-    }).filter(f => f).join(` ${fg.logic} `)
+    fg.items
+      .map(reduceItemToExpression)
+      .filter(expression => expression)
+      .join(` ${fg.logic} `)
   })`;
 };
