@@ -1,1 +1,1 @@
-export { ItemViewComponent } from "./item-view.component";
+export { ItemCollectionViewComponent } from "./item-collection-view.component";

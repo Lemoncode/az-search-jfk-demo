@@ -19,10 +19,6 @@ interface SearchProps {
   className?: string;
 }
 
-const handleOnSearchUpdate = (props: SearchProps) => (newValue: string) => {
-  props.onSearchUpdate(newValue);
-}
-
 const handleOnSearchSubmit = (props: SearchProps) => () => {
   props.onSearchSubmit(props.value);
 }
@@ -33,38 +29,55 @@ const captureEnter = (props) => (e) => {
   }
 }
 
+const SearchAutocompleteInput = ({searchValue, suggestionCollection, onSearchUpdate, onKeyPress}) => (
+  <AutocompleteInputComponent className={style.input}
+    type="search"
+    name="searchBox"
+    id="searchBox"
+    placeholder="Search ..."
+    searchValue={searchValue}
+    suggestionCollection={suggestionCollection}
+    onSearchUpdate={onSearchUpdate}
+    onKeyPress={onKeyPress}
+    autoFocus
+  />
+);
+
+const SearchButton = ({ onClick }) => (
+  <Button classes={{root: style.button}}
+    variant="raised"
+    size="small"
+    color="secondary"
+    onClick={onClick}
+  >
+    <Search />
+  </Button>
+);
+
+const ResultCounter = ({ count }) => (
+  <Typography variant="subheading"
+    color={count ? "primary" : "secondary"}
+  >
+    {`${count} results found`}
+  </Typography>
+);
+
 const SearchComponent: React.StatelessComponent<SearchProps> = (props) => {
   return (
     <div className={cnc(props.className, style.container)}>
       <div className={style.controlContainer}>
-        <AutocompleteInputComponent className={style.input}
-          type="search"
-          name="searchBox"
-          id="searchBox"
-          placeholder="Search ..."
+        <SearchAutocompleteInput 
           searchValue={props.value}
           suggestionCollection={props.suggestionCollection}
-          onSearchUpdate={handleOnSearchUpdate(props)}
+          onSearchUpdate={props.onSearchUpdate}
           onKeyPress={captureEnter(props)}
-          autoFocus
         />
-        <Button classes={{root: style.button}}
-          variant="raised"
-          size="small"
-          color="secondary"
-          onClick={handleOnSearchSubmit(props)}
-        >
-          <Search />
-        </Button>
+        <SearchButton onClick={handleOnSearchSubmit(props)} />
       </div>
       {
         props.resultCount !== null ?
           <div className={style.infoContainer}>
-            <Typography variant="subheading"
-              color={props.resultCount ? "primary" : "secondary"}
-            >
-              {`${props.resultCount} results found`}
-            </Typography>
+            <ResultCounter count={props.resultCount} />  
           </div>
         : null
       }        

@@ -2,7 +2,7 @@ import * as React from "react";
 import { PageBarComponent } from "./components/pageBar";
 import { DrawerComponent } from "./components/drawer";
 import { SearchComponent } from "./components/search";
-import { ItemViewComponent } from "./components/item";
+import { ItemCollectionViewComponent } from "./components/item";
 import { FacetViewComponent } from "./components/facets";
 import {
   ItemCollection,
@@ -65,7 +65,7 @@ class SearchPageComponent extends React.Component<SearchPageProps, {}> {
             value={this.props.searchValue}
             onMenuClick={this.props.onMenuClick}
           />
-          <ItemViewComponent
+          <ItemCollectionViewComponent
              items={this.props.itemCollection}
              loading={this.props.loading}
              onLoadMore={this.props.onLoadMore}

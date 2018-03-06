@@ -3,14 +3,14 @@ import { ItemComponent } from "./item.component";
 import { ItemCollection } from "../../view-model";
 import { infiniteScroll } from "../../../../common/components/infinite-scroll";
 
-const style = require("./item-view.style.scss");
+const style = require("./item-collection-view.style.scss");
 
 
 interface ItemViewProps {
   items?: ItemCollection;
 }
 
-class ItemViewClass extends React.Component<ItemViewProps, {}> {
+class ItemCollectionViewClass extends React.Component<ItemViewProps, {}> {
   public constructor(props) {
     super(props);
   }
@@ -28,4 +28,4 @@ class ItemViewClass extends React.Component<ItemViewProps, {}> {
   }  
 }
 
-export const ItemViewComponent = infiniteScroll(ItemViewClass);
+export const ItemCollectionViewComponent = infiniteScroll(ItemCollectionViewClass);

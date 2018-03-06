@@ -26,28 +26,28 @@ const ratingStars = (item: Item) => ((item.rating >= 1.0) ?
   )) : null
 );
 
-const ItemMedia: React.StatelessComponent<ItemProps> = (props) => {
+const ItemMedia: React.StatelessComponent<ItemProps> = ({ item }) => {
   return (
-    props.item.thumbnail && props.item.thumbnail.length ? 
+    item.thumbnail ? 
     <CardMedia className={style.itemMedia}
       component="img"
-      src={props.item.thumbnail}        
-      title={props.item.title}
+      src={item.thumbnail}        
+      title={item.title}
     /> : null
   );
 }
 
-const ItemCaption: React.StatelessComponent<ItemProps> = (props) => {
+const ItemCaption: React.StatelessComponent<ItemProps> = ({ item }) => {
   return (
     <CardContent classes={{root: style.itemCaption}}>
       <Typography variant="headline" component="h2">
-        {props.item.title} 
+        {item.title} 
         <span className={style.subtitle}>
-          {props.item.subtitle}
+          {item.subtitle}
         </span>
       </Typography>        
       <Typography component="p">
-        {props.item.excerpt}
+        {item.excerpt}
       </Typography>
     </CardContent>
   );
@@ -76,12 +76,12 @@ const generateExtraField = (field: any, index: number) => (
   ) : null
 );
 
-const ItemExtraFieldList: React.StatelessComponent<ItemProps> = (props) => {
-  if (props.item.extraFields) {
+const ItemExtraFieldList: React.StatelessComponent<ItemProps> = ({ item }) => {
+  if (item.extraFields) {
     return (
       <CardContent><List>
         {
-          props.item.extraFields.map((field, fieldIndex) => 
+          item.extraFields.map((field, fieldIndex) => 
             generateExtraField(field, fieldIndex))
         }
       </List></CardContent>
