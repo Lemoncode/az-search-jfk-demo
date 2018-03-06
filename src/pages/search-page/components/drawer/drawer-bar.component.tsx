@@ -10,13 +10,13 @@ import { Service } from "../../service";
 const style = require("./drawer-bar.style.scss");
 
 
-interface DrawerBar {
+interface DrawerBarProps {
   activeService: Service;
   onClose: () => void;
   className?: string;
 }
 
-const DrawerBarComponent: React.StatelessComponent<DrawerBar> = (props) => {
+const DrawerBarComponent: React.StatelessComponent<DrawerBarProps> = (props) => {
   return (
     <Toolbar 
       classes={{root: cnc(props.className, style.drawerBarContainer)}}

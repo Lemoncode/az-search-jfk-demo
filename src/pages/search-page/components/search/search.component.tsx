@@ -10,7 +10,7 @@ import Typography from "material-ui/Typography";
 const style = require("./search.style.scss");
 
 
-interface Search {
+interface SearchProps {
   value: string;
   onSearchSubmit: (value: string) => void;
   onSearchUpdate: (value: string) => void;
@@ -19,11 +19,11 @@ interface Search {
   className?: string;
 }
 
-const handleOnSearchUpdate = (props: Search) => (newValue: string) => {
+const handleOnSearchUpdate = (props: SearchProps) => (newValue: string) => {
   props.onSearchUpdate(newValue);
 }
 
-const handleOnSearchSubmit = (props: Search) => () => {
+const handleOnSearchSubmit = (props: SearchProps) => () => {
   props.onSearchSubmit(props.value);
 }
 
@@ -33,7 +33,7 @@ const captureEnter = (props) => (e) => {
   }
 }
 
-const SearchComponent: React.StatelessComponent<Search> = (props) => {
+const SearchComponent: React.StatelessComponent<SearchProps> = (props) => {
   return (
     <div className={cnc(props.className, style.container)}>
       <div className={style.controlContainer}>

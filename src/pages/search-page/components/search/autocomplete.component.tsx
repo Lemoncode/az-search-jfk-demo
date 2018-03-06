@@ -9,7 +9,7 @@ import Downshift from "downshift";
 const style = require("./autocomplete.style.scss");
 
 
-interface AutocompleteInput {
+interface AutocompleteInputProps {
   type: string;
   name: string;
   id: string;
@@ -79,7 +79,7 @@ const renderSuggestionCollection = (params) => {
 
 const handleItemToString = item => (item ? item.toString() : "");
 
-const AutocompleteInputComponent: React.StatelessComponent<AutocompleteInput> = props => {
+const AutocompleteInputComponent: React.StatelessComponent<AutocompleteInputProps> = props => {
   return (
     <Downshift      
       selectedItem={props.searchValue}

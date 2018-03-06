@@ -6,13 +6,13 @@ import { cnc } from "../../../util";
 const style = require("./chevron.style.scss");
 
 
-interface Props {
+interface ChevronProps {
   expanded: boolean;
   onClick: () => void;
   className?: string;
 }
 
-const Chevron: React.StatelessComponent<Props> = (props) => {
+const Chevron: React.StatelessComponent<ChevronProps> = (props) => {
   return (
     <IconButton
       classes={{

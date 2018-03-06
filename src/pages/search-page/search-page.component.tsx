@@ -15,7 +15,7 @@ import { Service } from "./service";
 
 const style = require("./search-page.style.scss");
 
-interface Props {
+interface SearchPageProps {
   activeService: Service;
   showDrawer: boolean;
   searchValue: string;
@@ -33,7 +33,7 @@ interface Props {
   onLoadMore: () => void;
 }
 
-class SearchPageComponent extends React.Component<Props, {}> {
+class SearchPageComponent extends React.Component<SearchPageProps, {}> {
   constructor(props) {
     super(props);
   }

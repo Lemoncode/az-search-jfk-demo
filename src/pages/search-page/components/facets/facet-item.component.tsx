@@ -9,7 +9,7 @@ import { CreateSelectionControl } from "../selection-controls";
 
 const style = require("./facet-item.style.scss");
 
-interface FacetItem {
+interface FacetItemProps {
   facet: Facet;
   filter: Filter;
   onFilterUpdate: (newFilter: Filter) => void;
@@ -19,7 +19,7 @@ interface State {
   expanded: boolean;
 }
 
-class FacetItemComponent extends React.Component<FacetItem, State> {
+class FacetItemComponent extends React.Component<FacetItemProps, State> {
   constructor(props) {
     super(props);
 

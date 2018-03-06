@@ -12,7 +12,7 @@ import StarIcon from "material-ui-icons/Star";
 const style = require("./item.style.scss");
 
 
-interface Props {
+interface ItemProps {
   item: Item;
 }
 
@@ -26,7 +26,7 @@ const ratingStars = (item: Item) => ((item.rating >= 1.0) ?
   )) : null
 );
 
-const ItemMedia: React.StatelessComponent<Props> = (props) => {
+const ItemMedia: React.StatelessComponent<ItemProps> = (props) => {
   return (
     props.item.thumbnail && props.item.thumbnail.length ? 
     <CardMedia className={style.itemMedia}
@@ -37,7 +37,7 @@ const ItemMedia: React.StatelessComponent<Props> = (props) => {
   );
 }
 
-const ItemCaption: React.StatelessComponent<Props> = (props) => {
+const ItemCaption: React.StatelessComponent<ItemProps> = (props) => {
   return (
     <CardContent classes={{root: style.itemCaption}}>
       <Typography variant="headline" component="h2">
@@ -76,7 +76,7 @@ const generateExtraField = (field: any, index: number) => (
   ) : null
 );
 
-const ItemExtraFieldList: React.StatelessComponent<Props> = (props) => {
+const ItemExtraFieldList: React.StatelessComponent<ItemProps> = (props) => {
   if (props.item.extraFields) {
     return (
       <CardContent><List>
@@ -91,7 +91,7 @@ const ItemExtraFieldList: React.StatelessComponent<Props> = (props) => {
   }
 }
 
-class ItemComponent extends React.Component<Props, State> {
+class ItemComponent extends React.Component<ItemProps, State> {
   constructor(props) {
     super(props);
 

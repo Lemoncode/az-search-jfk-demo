@@ -11,7 +11,7 @@ import SvgIcon from "material-ui-icons/Menu";
 const logoSvg = require("../../../../assets/svg/azure-search.logo.svg");
 const style = require("./page-bar.style.scss");
 
-interface Bar {
+interface BarProps {
   value: string;
   onMenuClick: () => void;
 }
@@ -27,7 +27,7 @@ const LogoComponent = () => (
   </div>
 );
 
-const PageBarComponent: React.StatelessComponent<Bar> = (props) => {
+const PageBarComponent: React.StatelessComponent<BarProps> = (props) => {
   return (
     <AppBar position="static">
       <Toolbar classes={{root: style.toolbar}}>

@@ -8,14 +8,14 @@ import { Service } from "../../service";
 const style = require("./drawer.style.scss");
 
 
-interface Drawer {
+interface DrawerProps {
   activeService: Service;
   show: boolean;
   onClose: () => void;
   className?: string;
 }
 
-const DrawerForMobileComponent: React.StatelessComponent<Drawer> = (props) => {
+const DrawerForMobileComponent: React.StatelessComponent<DrawerProps> = (props) => {
   return (
     <Hidden mdUp>
       <Drawer classes={{ paper: style.drawerPaperMobile }}
@@ -34,7 +34,7 @@ const DrawerForMobileComponent: React.StatelessComponent<Drawer> = (props) => {
   );
 };
 
-const DrawerForDesktopComponent: React.StatelessComponent<Drawer> = (props) => {
+const DrawerForDesktopComponent: React.StatelessComponent<DrawerProps> = (props) => {
   return (
     <Hidden smDown>
       <Drawer classes={{ 
@@ -54,7 +54,7 @@ const DrawerForDesktopComponent: React.StatelessComponent<Drawer> = (props) => {
   );
 };
 
-const DrawerComponent: React.StatelessComponent<Drawer> = (props) => {
+const DrawerComponent: React.StatelessComponent<DrawerProps> = (props) => {
   return (
     <div className={cnc(props.show && style.raise, props.className)}>
       <DrawerForMobileComponent 

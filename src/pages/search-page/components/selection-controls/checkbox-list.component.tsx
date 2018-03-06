@@ -8,11 +8,11 @@ import { isValueInArray, addValueToArray, removeValueFromArray } from "../../../
 const style = require("./checkbox-list.style.scss");
 
 
-interface Props extends SelectionProps {
+interface CheckboxListProps extends SelectionProps {
   //
 }
 
-class CheckboxListComponent extends React.Component<Props, {}> {
+class CheckboxListComponent extends React.Component<CheckboxListProps, {}> {
   constructor(props) {
     super(props);
   }

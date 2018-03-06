@@ -6,11 +6,11 @@ import { infiniteScroll } from "../../../../common/components/infinite-scroll";
 const style = require("./item-view.style.scss");
 
 
-interface ItemView {
+interface ItemViewProps {
   items?: ItemCollection;
 }
 
-class ItemViewClass extends React.Component<ItemView, {}> {
+class ItemViewClass extends React.Component<ItemViewProps, {}> {
   public constructor(props) {
     super(props);
   }

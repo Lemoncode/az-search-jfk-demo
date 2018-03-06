@@ -7,11 +7,11 @@ import { Moment } from "moment";
 const style = require("./year-picker.style.scss");
 
 
-interface Props extends SelectionProps {
+interface YearPickerProps extends SelectionProps {
   //
 }
 
-class YearPickerComponent extends React.Component<Props, {}> {
+class YearPickerComponent extends React.Component<YearPickerProps, {}> {
   constructor(props) {
     super(props);
   }

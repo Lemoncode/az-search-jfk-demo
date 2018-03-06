@@ -5,13 +5,13 @@ import { FacetItemComponent } from "./facet-item.component";
 const style = require("./facet-view.style.scss");
 
 
-interface FacetView {
+interface FacetViewProps {
   facets: FacetCollection;
   filters: FilterCollection;
   onFilterUpdate: (newFilter: Filter) => void;
 }
 
-const FacetViewComponent: React.StatelessComponent<FacetView> = (props) => {
+const FacetViewComponent: React.StatelessComponent<FacetViewProps> = (props) => {
   return props.facets ? (
     <div className={style.container}>
       { props.facets.map((facet, index) => {
