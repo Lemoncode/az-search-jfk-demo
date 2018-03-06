@@ -1,13 +1,11 @@
-import * as React from "react"
-import Card, { CardActions, CardContent } from "material-ui/Card";
-import Typography from "material-ui/Typography";
-import Collapse from "material-ui/transitions/Collapse";
+import * as React from "react";
+import Card from "material-ui/Card";
+import { FacetHeaderComponent } from "./facet-header.component";
+import { FacetBodyComponent } from "./facet-body.component";
 import { Facet, Filter } from "../../view-model";
-import { Chevron } from "../../../../common/components/chevron";
-import { Icon } from "material-ui";
-import { CreateSelectionControl } from "../selection-controls";
 
 const style = require("./facet-item.style.scss");
+
 
 interface FacetItemProps {
   facet: Facet;
@@ -19,7 +17,7 @@ interface State {
   expanded: boolean;
 }
 
-class FacetItemComponent extends React.Component<FacetItemProps, State> {
+export class FacetItemComponent extends React.Component<FacetItemProps, State> {
   constructor(props) {
     super(props);
 
@@ -43,28 +41,18 @@ class FacetItemComponent extends React.Component<FacetItemProps, State> {
 
     return (
       <Card classes={{root:style.item}} elevation={0}>
-        <CardActions classes={{root: style.itemActions}}>
-          <div className={style.itemTitle}>
-            { facet.iconName ? 
-              <Icon classes={{root: style.itemIcon}} color="action">
-                {facet.iconName}
-              </Icon>
-              : null
-            }            
-            <Typography variant="title">
-              {facet.displayName}
-            </Typography>
-          </div>          
-          <Chevron onClick={this.toggleExpand} expanded={expanded}/>
-        </CardActions>
-        <Collapse in={expanded} timeout="auto">
-          <div className={style.controlContainer}>
-            {CreateSelectionControl(facet, filter, onFilterUpdate)}
-          </div>          
-        </Collapse>  
+        <FacetHeaderComponent
+          facet={facet}
+          expanded={expanded}
+          onToggleExpanded={this.toggleExpand}
+        />
+        <FacetBodyComponent
+          facet={facet}
+          expanded={expanded}
+          filter={filter}
+          onFilterUpdate={onFilterUpdate}
+        />
       </Card>
     );
   }  
 }
-
-export { FacetItemComponent };
