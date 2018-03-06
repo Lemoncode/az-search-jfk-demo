@@ -1,0 +1,30 @@
+.item {
+  flex: 1 1 auto;
+  margin: 0;
+
+  &-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-title {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  &-icon {
+    margin-right: 0.5rem;
+  }
+
+  &-toggle {
+    margin: 0 0 0 auto;
+  }
+}
+
+.control-container {
+  margin-left: 2rem;
+}

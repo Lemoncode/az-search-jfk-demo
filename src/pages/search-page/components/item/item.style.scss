@@ -1,0 +1,53 @@
+.item {
+  width: 19rem;
+  margin: 1rem;
+
+  &-media {
+    height: 26rem;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  &-caption {
+    //
+  }
+
+  &-rating {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  &-star {
+    width: 16px;
+  }
+
+  &-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-chevron {
+    margin: 0 0 0 auto;
+  }
+}
+
+.subtitle {
+  font-size: 0.8em;
+  margin-left: 0.3em;
+  color: silver;
+}
+
+.tag {
+  margin: 0.15rem;
+
+  &-container {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    width: 100%;
+  }
+}

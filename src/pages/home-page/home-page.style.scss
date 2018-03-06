@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  width: 50vw;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+}
+
+.button-group {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  & a {
+    text-decoration: none;
+  }
+}
