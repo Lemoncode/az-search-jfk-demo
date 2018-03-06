@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 import { Link } from 'react-router-dom';
 import Button from 'material-ui/Button';
 import Typography from "material-ui/Typography";
@@ -9,7 +9,7 @@ export const HomePageComponent: React.StatelessComponent<{}> = () => {
   return (
     <div className={style.container}>
       <Typography variant="display2" classes={{root: style.header}}>
-        JFK Azure Search PoC
+        JFK Files
       </Typography>
       <br />
       <div className={style.buttonGroup}>

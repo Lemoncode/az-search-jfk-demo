@@ -5,3 +5,4 @@ node_modules
 .vscode/
 .dist/
 desktop.ini
+package-lock.json
