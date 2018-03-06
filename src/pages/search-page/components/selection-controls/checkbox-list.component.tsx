@@ -49,7 +49,7 @@ class CheckboxListComponent extends React.Component<Props, {}> {
   }
 
   private getCheckbox = (facetValue) => (
-    <Checkbox
+    <Checkbox color="primary"
       value={facetValue.toString()}
       checked={this.isValueInFilterList(facetValue)}
       onChange={this.handleChange(facetValue)}

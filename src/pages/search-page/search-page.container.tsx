@@ -69,8 +69,9 @@ class SearchPageContainer extends React.Component<{}, ViewState> {
   private handleSearchSubmit = (newValue: string) => {
     // Run search but reset filters/suggestions intentionally.
     // No filters or suggestion list should appear when running a search.
+    // TODO: BUG. Filters are not being reset actually. This behaviour around filters must be reworked.
     this.changeState("searchValue", newValue);
-    this.runCleanSearch(newValue, this.state.filterCollection);
+    this.runCleanSearch(newValue, null);
   }; 
 
   private runSearch = (value: string,

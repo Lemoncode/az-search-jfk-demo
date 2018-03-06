@@ -5,8 +5,8 @@ import { mapStateToSearchPayload, mapSearchResponseToState } from "./mapper.sear
 
 
 export const jfkServiceConfig: ServiceConfig = {
-  serviceId: "jfk-files",
-  serviceName: "JFK Files",
+  serviceId: "jfk-docs",
+  serviceName: "JFK Documents",
   serviceIcon: "fingerprint",
   
   searchConfig: {
