@@ -1,0 +1,21 @@
+.page-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  position: relative;
+}
+
+.drawer-container {
+  //
+}
+
+.main-container {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}

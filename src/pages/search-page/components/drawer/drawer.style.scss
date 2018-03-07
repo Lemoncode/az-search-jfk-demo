@@ -1,0 +1,31 @@
+$drawer-max-width: 25rem;
+
+.raise {
+  z-index: 1200;
+  box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.15);
+}
+
+.drawer-dock {
+  margin-left: 0;
+  transition: margin-left 0.15s ease-out;
+
+  &-hidden {
+    @extend .drawer-dock;
+
+    margin-left: -$drawer-max-width;
+  }
+}
+
+.drawer-paper {
+  &-mobile {
+    width: 85vw;
+    max-width: $drawer-max-width;
+    padding: 0 1rem;
+  }
+
+  &-desktop {
+    position: static !important;
+    width: $drawer-max-width;
+    padding: 0 1rem;
+  }
+}

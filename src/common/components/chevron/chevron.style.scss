@@ -1,0 +1,14 @@
+.chevron svg {
+  font-size: 1.25em;
+  perspective: 100vw;
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease-out;
+}
+
+.chevron-up svg {
+  @extend .chevron;
+
+  transform: rotateX(180deg);
+}
+
+
