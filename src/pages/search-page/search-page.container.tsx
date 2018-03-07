@@ -15,6 +15,7 @@ import {
   postSearchSuccessAppend,
   postSearchErrorReset,
   postSearchErrorKeep,
+  lastPageIndexReachedUpdate,
 } from "./search-page.container.state";
 
 
@@ -98,6 +99,8 @@ class SearchPageContainer extends React.Component<{}, State> {
       return;
     } else if (this.reachedLastValidPageIndex()) {
       this.informMessage("No More Results Available");
+      this.setState(lastPageIndexReachedUpdate(true));
+      return;
     }
 
     this.setState(
@@ -150,6 +153,7 @@ class SearchPageContainer extends React.Component<{}, State> {
           onDrawerClose={this.handleDrawerClose}
           loading={this.state.loading}
           onLoadMore={this.handleLoadMore}
+          noMoreResults={this.state.lastPageIndexReached}
         />
       </div>
     );

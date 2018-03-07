@@ -25,6 +25,7 @@ interface SearchPageProps {
   suggestionCollection?: SuggestionCollection;
   resultCount?: number;
   loading: boolean;
+  noMoreResults: boolean;
   onSearchSubmit: () => void;
   onSearchUpdate: (value: string) => void;
   onFilterUpdate: (newFilter: Filter) => void;
@@ -69,6 +70,7 @@ class SearchPageComponent extends React.Component<SearchPageProps, {}> {
              items={this.props.itemCollection}
              loading={this.props.loading}
              onLoadMore={this.props.onLoadMore}
+             noMoreResults={this.props.noMoreResults}
           />
         </main>
       </div>

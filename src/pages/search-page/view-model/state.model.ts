@@ -15,4 +15,5 @@ export interface State {
   loading: boolean;
   pageSize: number;
   pageIndex: number;
+  lastPageIndexReached: boolean;
 }

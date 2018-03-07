@@ -2,6 +2,7 @@ import * as React from "react";
 import * as ReactDOM from 'react-dom';
 import * as throttle from 'lodash.throttle';
 import { CircularProgress } from 'material-ui/Progress';
+import Typography from "material-ui/Typography";
 
 const style = require("./infinite-scroll.style.scss");
 
@@ -9,6 +10,7 @@ const style = require("./infinite-scroll.style.scss");
 interface InfiniteScrollProps {
   onLoadMore: () => void;
   loading: boolean;
+  noMoreResults?: boolean;
   scrollThreshold?: number;
 }
 
@@ -20,15 +22,15 @@ export const infiniteScroll = function<P extends InfiniteScrollProps>(
       super(props);
     }
 
-    private wrappedRef = null;
+    private containerRef = null;
 
     private setRef = (ref) => {
-      this.wrappedRef = ref;
+      this.containerRef = ref;
     }
 
     private onScroll = () => {
       if (!this.props.loading) {
-        const viewNode = ReactDOM.findDOMNode(this.wrappedRef);
+        const viewNode = ReactDOM.findDOMNode(this.containerRef);
         const currentScrollPositionAtBottom = viewNode.scrollTop + viewNode.getBoundingClientRect().height;
         const scrollThresholdAtBottom = viewNode.scrollHeight - (this.props.scrollThreshold || 300);
 
@@ -41,23 +43,33 @@ export const infiniteScroll = function<P extends InfiniteScrollProps>(
     private onThrottledScroll = throttle(this.onScroll, 500);
   
     public componentDidMount() {
-      ReactDOM.findDOMNode(this.wrappedRef).addEventListener('scroll', this.onThrottledScroll, false)
+      ReactDOM.findDOMNode(this.containerRef).addEventListener('scroll', this.onThrottledScroll, false)
     }
   
     public componentWillUnmount() {
-      ReactDOM.findDOMNode(this.wrappedRef).removeEventListener('scroll', this.onThrottledScroll, false)
+      ReactDOM.findDOMNode(this.containerRef).removeEventListener('scroll', this.onThrottledScroll, false)
     }
-  
+
     public render() {
       return (
-        <div className={style.container}>
-          <WrappedComponent ref={this.setRef} {...this.props} />
-          { this.props.loading ? 
-            <CircularProgress classes={{root: style.loader}}/>
-            : null 
-          }
+        <div className={style.container} ref={this.setRef} >
+          <WrappedComponent {...this.props} />
+          <LoadIndicator 
+            loading={this.props.loading}
+            noMoreResults={this.props.noMoreResults}
+          />
         </div>
       );
     }
   }
+}
+
+const LoadIndicator = ({loading, noMoreResults}) => {
+  const loaderStyle = loading? style.loader : style.loaderHidden;
+
+  return noMoreResults ? 
+  <Typography className={style.message} variant="subheading" color="primary">
+    No More Results Available
+  </Typography>
+  : <CircularProgress classes={{root: loaderStyle}}/>;
 }

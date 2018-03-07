@@ -12,6 +12,7 @@ export const CreateInitialState = (): State => ({
   loading: false,
   pageSize: 10,
   pageIndex: null,
+  lastPageIndexReached: false,
   // Override with user config initial state (if exists).
   ...jfkService.config.initialState
 });
@@ -30,6 +31,13 @@ export const showDrawerUpdate = (showDrawer: boolean) => (prevState: State): Sta
   }
 };
 
+export const lastPageIndexReachedUpdate = (lastPageIndexReached: boolean) => (prevState: State): State => {
+  return {
+    ...prevState,
+    lastPageIndexReached,
+  }
+};
+
 export const suggestionsUpdate = (suggestionCollection: SuggestionCollection) => (prevState: State): State => {
   return {
     ...prevState,
@@ -41,6 +49,7 @@ export const preSearchUpdate = (filters: FilterCollection, pageIndex?: number) =
   return {
     ...prevState,
     loading: true,
+    lastPageIndexReached: false,
     suggestionCollection: null,
     filterCollection: filters,
     pageIndex: pageIndex || 0,

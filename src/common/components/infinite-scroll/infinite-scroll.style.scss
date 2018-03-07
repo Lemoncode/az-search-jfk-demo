@@ -1,12 +1,20 @@
 .container {
   flex: 1 1 auto;
-  display: flex;  
+  display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  overflow-y: auto;
 }
 
-.loader, .button {
+.loader,
+.message {
+  &-hidden {
+    @extend .loader;
+
+    visibility: hidden;
+  }
+
   flex: 0 1 auto;
-  margin: 2rem;
+  margin: 2rem !important;
 }
