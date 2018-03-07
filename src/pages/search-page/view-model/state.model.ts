@@ -4,9 +4,8 @@ import { FacetCollection } from "./facet.model";
 import { FilterCollection } from "./filter.model";
 import { SuggestionCollection } from "./suggestion.model";
 
-export interface ViewState {
+export interface State {
   searchValue: string;
-  activeService: Service;
   itemCollection: ItemCollection;
   facetCollection: FacetCollection;
   filterCollection: FilterCollection;

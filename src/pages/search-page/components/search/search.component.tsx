@@ -12,22 +12,18 @@ const style = require("./search.style.scss");
 
 interface SearchProps {
   value: string;
-  onSearchSubmit: (value: string) => void;
+  onSearchSubmit: () => void;
   onSearchUpdate: (value: string) => void;
   resultCount?: number;
   suggestionCollection?: SuggestionCollection;
   className?: string;
 }
 
-const handleOnSearchSubmit = (props: SearchProps) => () => {
-  props.onSearchSubmit(props.value);
-}
-
-const captureEnter = (props) => (e) => {
-  if (e.key === "Enter") {
-    props.onSearchSubmit(props.value);
+const captureEnter = (props) => (event => {
+  if (event.key === "Enter") {
+    props.onSearchSubmit();
   }
-}
+});
 
 const SearchAutocompleteInput = ({searchValue, suggestionCollection, onSearchUpdate, onKeyPress}) => (
   <AutocompleteInputComponent className={style.input}
@@ -72,7 +68,7 @@ const SearchComponent: React.StatelessComponent<SearchProps> = (props) => {
           onSearchUpdate={props.onSearchUpdate}
           onKeyPress={captureEnter(props)}
         />
-        <SearchButton onClick={handleOnSearchSubmit(props)} />
+        <SearchButton onClick={props.onSearchSubmit} />
       </div>
       {
         props.resultCount !== null ?

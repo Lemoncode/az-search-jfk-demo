@@ -14,7 +14,7 @@ import {
   FacetCollection,
   FacetValue,
   Facet,
-  ViewState,
+  State,
   FilterCollection,
   Filter,
 } from "../../view-model";
@@ -58,7 +58,7 @@ const mapSearchResponseForFacets = (response: AzResponse, baseFacets: FacetColle
     ).filter(f => f && !isArrayEmpty(f.values));
 };
 
-export const mapSearchResponseToState = (state: ViewState, response: AzResponse, config: ServiceConfig): ViewState => {
+export const mapSearchResponseToState = (state: State, response: AzResponse, config: ServiceConfig): State => {
   const viewFacets = isArrayEmpty(state.facetCollection) ? config.initialState.facetCollection : 
   state.facetCollection; 
   return {
@@ -101,7 +101,7 @@ const mapViewFacetToPayloadFacet = (viewFacet: Facet): AzPayloadFacet => {
   };
 };
 
-export const mapStateToSearchPayload = (state: ViewState, config: ServiceConfig): AzPayload => {
+export const mapStateToSearchPayload = (state: State, config: ServiceConfig): AzPayload => {
   const viewFacets = isArrayEmpty(state.facetCollection) ? config.initialState.facetCollection : 
     state.facetCollection;
   return {

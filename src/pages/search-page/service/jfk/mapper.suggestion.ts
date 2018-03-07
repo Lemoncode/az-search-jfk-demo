@@ -1,7 +1,7 @@
 import { isArrayEmpty } from "../../../../util";
 import { ServiceConfig, MapperToPayload } from "../../service";
 import { AzResponse, AzPayload } from "../../../../az-api";
-import { Suggestion, ViewState } from "../../view-model";
+import { Suggestion, State } from "../../view-model";
 
 
 // [Suggestion] FROM AzApi TO view model.
@@ -12,7 +12,7 @@ const mapSuggestionResponse = (suggestion: any): Suggestion => {
   } : null;
 };
 
-export const mapSuggestionResponseToState = (state: ViewState, response: AzResponse, config: ServiceConfig): ViewState => {
+export const mapSuggestionResponseToState = (state: State, response: AzResponse, config: ServiceConfig): State => {
   return {
     ...state,
     suggestionCollection: isArrayEmpty(response.value) ? null :
@@ -23,7 +23,7 @@ export const mapSuggestionResponseToState = (state: ViewState, response: AzRespo
 
 // [Suggestion] FROM view model TO AzApi.
 
-export const mapStateToSuggestionPayload = (state: ViewState, config: ServiceConfig): AzPayload => {
+export const mapStateToSuggestionPayload = (state: State, config: ServiceConfig): AzPayload => {
   return state.searchValue ? {
     ...config.suggestionConfig.defaultPayload,
     search: state.searchValue,

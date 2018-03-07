@@ -79,11 +79,17 @@ const renderSuggestionCollection = (params) => {
 
 const handleItemToString = item => (item ? item.toString() : "");
 
-const AutocompleteInputComponent: React.StatelessComponent<AutocompleteInputProps> = props => {
+const handleInputValueChange = props => newValue => {
+  if (newValue !== props.searchValue) {
+    props.onSearchUpdate(newValue); 
+  }
+}
+
+export const AutocompleteInputComponent: React.StatelessComponent<AutocompleteInputProps> = props => {
   return (
     <Downshift      
       selectedItem={props.searchValue}
-      onInputValueChange={newValue => props.onSearchUpdate(newValue)}
+      onInputValueChange={handleInputValueChange(props)}
       itemToString={handleItemToString}
     >
       {({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex }) => {
@@ -114,5 +120,3 @@ const AutocompleteInputComponent: React.StatelessComponent<AutocompleteInputProp
     </Downshift>
   );
 };
-
-export { AutocompleteInputComponent };

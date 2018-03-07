@@ -6,7 +6,7 @@ export const CreateService = (config: ServiceConfig): Service => {
   const {searchConfig, suggestionConfig} = config;
   const searchApi = CreateAzApi(searchConfig.apiConfig, searchConfig.responseConfig);
   const suggestionApi = CreateAzApi(suggestionConfig.apiConfig, suggestionConfig.responseConfig);
-  const throwInvalidPayload = () => {throw "[SERVICE] Invalid Payload";}
+  const throwInvalidPayload = () => {throw "Invalid Payload";}
   
   return {
     config,
@@ -22,7 +22,7 @@ export const CreateService = (config: ServiceConfig): Service => {
           return config.searchConfig.mapResponseToState(updatedState, response, config);
         };
       } catch (e) {
-        throw Error(e);
+        throw e;
       }
     },
 
@@ -37,7 +37,7 @@ export const CreateService = (config: ServiceConfig): Service => {
           return config.suggestionConfig.mapResponseToState(updatedState, response, config);
         };
       } catch (e) {
-        throw Error(e);
+        throw e;
       }
     },
   };

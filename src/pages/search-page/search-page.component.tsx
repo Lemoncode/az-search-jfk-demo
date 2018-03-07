@@ -25,7 +25,7 @@ interface SearchPageProps {
   suggestionCollection?: SuggestionCollection;
   resultCount?: number;
   loading: boolean;
-  onSearchSubmit: (value: string) => void;
+  onSearchSubmit: () => void;
   onSearchUpdate: (value: string) => void;
   onFilterUpdate: (newFilter: Filter) => void;
   onDrawerClose: () => void;
