@@ -1,7 +1,7 @@
 import { jfkService, StateReducer  } from "./service";
 import { State, SuggestionCollection, FilterCollection } from "./view-model";
 
-export const initialState: State = {
+export const CreateInitialState = (): State => ({
   searchValue: null,
   itemCollection: null,
   facetCollection: null,
@@ -14,7 +14,7 @@ export const initialState: State = {
   pageIndex: null,
   // Override with user config initial state (if exists).
   ...jfkService.config.initialState
-};
+});
 
 export const searchValueUpdate = (searchValue: string) => (prevState: State): State => {
   return {
@@ -38,7 +38,6 @@ export const suggestionsUpdate = (suggestionCollection: SuggestionCollection) =>
 };
 
 export const preSearchUpdate = (filters: FilterCollection, pageIndex?: number) => (prevState: State) => {
-console.log("Search reset Suggestion");    
   return {
     ...prevState,
     loading: true,

@@ -6,7 +6,7 @@ import { Service, StateReducer } from "./service";
 import { jfkService  } from "./service";
 import { isArrayEmpty } from "../../util";
 import {
-  initialState,
+  CreateInitialState,
   searchValueUpdate,
   showDrawerUpdate,
   suggestionsUpdate,
@@ -22,7 +22,7 @@ class SearchPageContainer extends React.Component<{}, State> {
   constructor(props) {
     super(props);
 
-    this.state = initialState;
+    this.state = CreateInitialState();
   }
 
   // *** DRAWER LOGIC ***
@@ -126,7 +126,6 @@ class SearchPageContainer extends React.Component<{}, State> {
 
   // TODO: Snackbar implementation.
   private informMessage = (message: string) => {
-    
     console.log(message);
   }
 
