@@ -1,7 +1,8 @@
 import * as React from "react";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import * as throttle from 'lodash.throttle';
 import { SearchPageComponent } from "./search-page.component";
-import { State, FilterCollection, Filter } from "./view-model";
+import { State, FilterCollection, Filter, Item } from "./view-model";
 import { Service, StateReducer } from "./service";
 import { jfkService  } from "./service";
 import { isArrayEmpty } from "../../util";
@@ -17,9 +18,10 @@ import {
   postSearchErrorKeep,
   lastPageIndexReachedUpdate,
 } from "./search-page.container.state";
+import { detailPath } from "../detail-page";
 
 
-class SearchPageContainer extends React.Component<{}, State> {
+class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>, State> {
   constructor(props) {
     super(props);
 
@@ -127,6 +129,15 @@ class SearchPageContainer extends React.Component<{}, State> {
   }, 250, {leading: true, trailing: true});
   
 
+  // *** MISC ***
+
+  private handleOnItemClick = (item: Item) => {
+    this.props.history.push(
+      detailPath, 
+      {metadata: item.metadata}
+    );
+  }
+
   // TODO: Snackbar implementation.
   private informMessage = (message: string) => {
     console.log(message);
@@ -146,6 +157,7 @@ class SearchPageContainer extends React.Component<{}, State> {
           filterCollection={this.state.filterCollection}
           onFilterUpdate={this.handleFilterUpdate}
           itemCollection={this.state.itemCollection}
+          onItemClick={this.handleOnItemClick}
           resultCount={this.state.resultCount}
           facetCollection={this.state.facetCollection}
           onMenuClick={this.handleMenuClick}
@@ -160,4 +172,4 @@ class SearchPageContainer extends React.Component<{}, State> {
   }
 }
 
-export { SearchPageContainer };
+export const SearchPageContainer = withRouter(SearchPageInnerContainer);

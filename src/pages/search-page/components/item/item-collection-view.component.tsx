@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ItemComponent } from "./item.component";
-import { ItemCollection } from "../../view-model";
+import { ItemCollection, Item } from "../../view-model";
 import { infiniteScroll } from "../../../../common/components/infinite-scroll";
 
 const style = require("./item-collection-view.style.scss");
@@ -8,6 +8,7 @@ const style = require("./item-collection-view.style.scss");
 
 interface ItemViewProps {
   items?: ItemCollection;
+  onClick?: (item: Item) => void;
 }
 
 class ItemCollectionViewClass extends React.Component<ItemViewProps, {}> {
@@ -20,7 +21,7 @@ class ItemCollectionViewClass extends React.Component<ItemViewProps, {}> {
       <div className={style.container}>
         { this.props.items ? 
           this.props.items.map((child, index) => (
-            <ItemComponent item={child} key={index} />
+            <ItemComponent item={child} onClick={this.props.onClick} key={index} />
           ))
         : null }
       </div>
