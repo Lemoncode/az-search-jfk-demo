@@ -20,6 +20,6 @@ Azure Search demo based on declassified JFK Files.
    You can open a browser and navigate to the following route:
 
    ```cmd
-   http://localhost:8081
+   http://localhost:8082
    ```
 
