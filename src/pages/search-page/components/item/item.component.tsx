@@ -8,17 +8,19 @@ import Typography from "material-ui/Typography";
 import Chip from 'material-ui/Chip';
 import StarIcon from "material-ui-icons/Star";
 
-
 const style = require("./item.style.scss");
 
 
 interface ItemProps {
   item: Item;
+  onClick?: (item: Item) => void;
 }
 
 interface State {
   expanded: boolean;
 }
+
+const handleOnClick = ({item, onClick}) => () => onClick? onClick(item) : null;
 
 const ratingStars = (item: Item) => ((item.rating >= 1.0) ? 
   Array(Math.floor(item.rating)).fill(0).map((item, index) => (
@@ -26,20 +28,23 @@ const ratingStars = (item: Item) => ((item.rating >= 1.0) ?
   )) : null
 );
 
-const ItemMedia: React.StatelessComponent<ItemProps> = ({ item }) => {
+const ItemMedia: React.StatelessComponent<ItemProps> = ({ item, onClick }) => {
   return (
     item.thumbnail ? 
     <CardMedia className={style.itemMedia}
       component="img"
       src={item.thumbnail}        
       title={item.title}
+      onClick={handleOnClick({ item, onClick })}
     /> : null
   );
 }
 
-const ItemCaption: React.StatelessComponent<ItemProps> = ({ item }) => {
+const ItemCaption: React.StatelessComponent<ItemProps> = ({ item, onClick }) => {
   return (
-    <CardContent classes={{root: style.itemCaption}}>
+    <CardContent classes={{root: style.itemCaption}}
+      onClick={handleOnClick({ item, onClick })}
+    >
       <Typography variant="headline" component="h2">
         {item.title} 
         <span className={style.subtitle}>
@@ -108,12 +113,12 @@ class ItemComponent extends React.Component<ItemProps, State> {
   }
     
   public render() {
-    const {item} = this.props;
+    const {item, onClick} = this.props;
 
     return (
       <Card classes={{root:style.item}} elevation={8}>
-        <ItemMedia item={item} />
-        <ItemCaption item={item} />
+        <ItemMedia item={item} onClick={onClick} />
+        <ItemCaption item={item} onClick={onClick} />
         <CardActions classes={{root: style.itemActions}}>
           <div className={style.itemRating}>
             {ratingStars(item)}

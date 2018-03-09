@@ -34,6 +34,7 @@ const mapResultToItem = (result: any): Item => {
     excerpt: "",
     rating: 0,
     extraFields: [result.tags],
+    metadata: result.metadata,
   } : null;
 };
 

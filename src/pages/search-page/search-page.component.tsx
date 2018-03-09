@@ -10,6 +10,7 @@ import {
   FilterCollection,
   Filter,
   SuggestionCollection,
+  Item,
 } from "./view-model";
 import { Service } from "./service";
 
@@ -29,6 +30,7 @@ interface SearchPageProps {
   onSearchSubmit: () => void;
   onSearchUpdate: (value: string) => void;
   onFilterUpdate: (newFilter: Filter) => void;
+  onItemClick: (item: Item) => void;
   onDrawerClose: () => void;
   onMenuClick: () => void;
   onLoadMore: () => void;
@@ -68,6 +70,7 @@ class SearchPageComponent extends React.Component<SearchPageProps, {}> {
           />
           <ItemCollectionViewComponent
              items={this.props.itemCollection}
+             onClick={this.props.onItemClick}
              loading={this.props.loading}
              onLoadMore={this.props.onLoadMore}
              noMoreResults={this.props.noMoreResults}

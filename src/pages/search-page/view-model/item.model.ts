@@ -4,7 +4,8 @@ export interface Item {
   thumbnail?: string;
   excerpt?: string;
   rating?: number;
-  extraFields?: string[];
+  extraFields?: any[];
+  metadata?: any;
 }
 
 export type ItemCollection = Item[];

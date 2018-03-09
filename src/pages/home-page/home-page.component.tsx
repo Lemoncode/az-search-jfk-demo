@@ -1,9 +1,11 @@
 import * as React from "react";
 import { Link } from 'react-router-dom';
+import { searchPath } from "../search-page";
 import Button from 'material-ui/Button';
 import Typography from "material-ui/Typography";
 
 const style = require("./home-page.style.scss");
+
 
 export const HomePageComponent: React.StatelessComponent<{}> = () => {
   return (
@@ -13,7 +15,7 @@ export const HomePageComponent: React.StatelessComponent<{}> = () => {
       </Typography>
       <br />
       <div className={style.buttonGroup}>
-        <Link to="/search">
+        <Link to={searchPath}>
           <Button variant="raised" color="primary">Search Page</Button>
         </Link>
       </div>
