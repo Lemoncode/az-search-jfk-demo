@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link } from 'react-router-dom';
+import { HocrComponent } from "./components/hocr";
 
 const style = require("./detail-page.style.scss");
 
@@ -14,9 +15,7 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
 
   public render() {
     return (
-      <div>
-        {this.props.hocr || "No Data"}
-      </div>
+      <HocrComponent hocr={this.props.hocr} />
     );
   }
 }

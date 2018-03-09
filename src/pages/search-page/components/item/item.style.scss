@@ -6,10 +6,11 @@
     height: 26rem;
     object-fit: cover;
     object-position: center;
+    cursor: pointer;
   }
 
   &-caption {
-    //
+    cursor: pointer;
   }
 
   &-rating {
