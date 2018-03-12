@@ -7,8 +7,8 @@ const style = require("./hocr.style.scss");
  * HOCR-Proofreader third party wrapper for React.
  */
 
-const layoutContainerId = "hocrLayoutContainerId";
-const editorContainerId = "hocrEditorContainerId";
+const layoutContainerId = "hocr-layout-container-id";
+const editorContainerId = "hocr-editor-container-id";
 
 
 interface HocrProps {
@@ -39,7 +39,6 @@ export class HocrComponent extends React.Component<HocrProps, {}> {
         </div>
         <div className={style.editorContainer} id={editorContainerId}>
         </div>
-        {/* {(this.props.hocr || "No Data").slice(0, 100)} */}
       </div>
     );
   }

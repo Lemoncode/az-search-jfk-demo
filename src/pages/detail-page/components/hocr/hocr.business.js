@@ -1,5 +1,7 @@
 'use strict';
 
+import style from "./hocr.business.style.css";
+import editorStyleURL from "./hocr.business.editor.style.css";
 
 
 export var Util = {
@@ -73,7 +75,7 @@ export function HocrProofreader(config) {
     this.layoutContainer.appendChild(this.layoutSvg);
     this.layoutContainer.style.overflow = 'scroll';
 
-    this.editorIframe = Util.createElem('iframe', {'class': 'editor', 'frameborder': 0});
+    this.editorIframe = Util.createElem('iframe', {'id': 'hocr-editor-id', 'class': 'editor', 'frameborder': 0});
 
     var editorContainer = document.getElementById(config.editorContainer);
     editorContainer.appendChild(this.editorIframe);
@@ -102,7 +104,7 @@ export function HocrProofreader(config) {
 }
 
 HocrProofreader.prototype.setHocr = function (hocr, baseUrl) {
-    this.hocrBaseUrl = baseUrl;
+    this.hocrBaseUrl = baseUrl || "";
     var hocrDoc = this.editorIframe.contentDocument;
 
     // TODO: use baseUrl for images/components in hOCR - use <base>?
@@ -126,9 +128,9 @@ HocrProofreader.prototype.setHocr = function (hocr, baseUrl) {
         self.onHover(hocrDoc.elementFromPoint(self.mousePosition.x, self.mousePosition.y), true);
     });
 
-    this.editorStylesheet = Util.createElem('link', {'type': 'text/css', 'rel': 'stylesheet', 'href': 'editor.css'});
+    this.editorStylesheet = Util.createElem('link', {'type': 'text/css', 'rel': 'stylesheet', 'href': editorStyleURL});
     hocrDoc.head.appendChild(this.editorStylesheet);
-
+    
     hocrDoc.body.contentEditable = true;
 
     this.setPage('first');
