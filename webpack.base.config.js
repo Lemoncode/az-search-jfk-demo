@@ -19,10 +19,35 @@ module.exports = {
 
   module: {
     rules: [
+      // *** Loading pipe for HOCR CSS. No CSS Modules ***
+      {
+        test: /\.css$/,
+        include: [/hocr/],
+        exclude: [/hocr\.business\.editor\.style/],
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+          },
+        ]
+      },
+      // *** Loading pipe for HOCR iFrame Editor CSS. ***
+      {
+        test: /\.css$/,
+        include: [/hocr\.business\.editor\.style/],
+        use: [
+          // {
+          //   loader: "style-loader/url",
+          // },
+          {
+            loader: "file-loader",              
+          },
+        ]
+      },
       // *** Loading pipe for Typescript ***
       {
         test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/],
         loader: 'awesome-typescript-loader',
         options: {
           useBabel: true,

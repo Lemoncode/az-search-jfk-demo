@@ -8,7 +8,7 @@ const basePath = __dirname;
 
 module.exports = function () {
   return webpackMerge(commonConfig, {
-    devtool: "cheap-module-source-map",
+    devtool: "none",
 
     output: {
       path: path.join(basePath, "dist"),
@@ -17,25 +17,6 @@ module.exports = function () {
 
     module: {
       rules: [
-        // *** Loading pipe for CSS ***
-        {
-          test: /\.css$/,
-          exclude: [/node_modules/],
-          loader: ExtractTextPlugin.extract({
-            fallback: "style-loader",
-            use: [
-              {
-                loader: "css-loader",
-                options: {
-                  modules: true,
-                  camelCase: true,
-                  importLoaders: 1,
-                  localIdentName: "[local]__[name]___[hash:base64:5]"
-                }
-              },
-            ]
-          })
-        },
         // *** Loading pipe for vendor CSS. No CSS Modules here ***
         {
           test: /\.css$/,
@@ -49,7 +30,7 @@ module.exports = function () {
             ]
           })
         },
-        // *** Loading pipe for user SASS stylesheets ***
+        // *** Loading pipe for SASS stylesheets ***
         {
           test: /\.scss$/,
           exclude: [/node_modules/],
@@ -82,7 +63,7 @@ module.exports = function () {
         "process.env": {
           DEBUG_TRACES: false
         }
-      })     
+      })
     ],
   });
 };

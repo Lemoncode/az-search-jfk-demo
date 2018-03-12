@@ -1,13 +1,32 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "modules": false,
-        "targets": {
-          "node": "current"
-        }
-      }
-    ]
-  ]
+  "env": {
+    "production": {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "node": "current",
+              "uglify": true
+            }
+          }
+        ]
+      ]
+    },
+    "development": {
+      "presets": [
+        [
+          "env",
+          {
+            "modules": false,
+            "targets": {
+              "node": "current"
+            }
+          }
+        ]
+      ]
+    }
+  }
+
+  
 }
