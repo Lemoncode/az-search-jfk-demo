@@ -1,5 +1,10 @@
 /* *** EDITOR.CSS *** */
 
+body {
+  font-family: Times New Roman, serif;
+  font-size: 13pt;
+}
+
 div.ocr_page {
   border-bottom: 3px dashed #3399ff;
   padding: 10px 0;
@@ -33,7 +38,3 @@ span.ocrx_word.highlight {
 span.ocrx_word.hover {
   background: #99cfff;
 }
-
-/* .ocr_line {
-  display: block;
-} */

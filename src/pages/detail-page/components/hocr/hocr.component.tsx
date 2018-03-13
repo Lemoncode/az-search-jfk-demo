@@ -10,36 +10,79 @@ const style = require("./hocr.style.scss");
 const layoutContainerId = "hocr-layout-container-id";
 const editorContainerId = "hocr-editor-container-id";
 
+type ZoomMode = "page-full" | "page-width" | "original";
+type LayoutMode = "image" | "text" | "both";
 
 interface HocrProps {
   hocr: string;
+  zoom: ZoomMode;
+  layout: LayoutMode;
+  renderWords?: boolean;
+  targetWords?: string[];
 }
 
-export class HocrComponent extends React.Component<HocrProps, {}> {
+interface HocrState {
+  hocrPR: any;
+}
+
+export class HocrComponent extends React.Component<HocrProps, HocrState> {
   constructor(props) {
     super(props);
+
+    this.state = {
+      hocrPR: null,
+    }
   }
 
   public componentDidMount() {
-    const hocrProofreader = new HocrProofreader({
-      layoutContainer: layoutContainerId,
-      editorContainer: editorContainerId,
-    });
-    hocrProofreader.setHocr(this.props.hocr);
+    this.setState({
+        ...this.state,
+        hocrPR: CreateHocr(this.props.hocr, this.props.targetWords),
+    }, () => updateHocr(this.state.hocrPR, this.props));
   }
 
-  public shouldComponentUpdate() {
-    return false;
+  public componentWillReceiveProps(nextProps: HocrProps) {
+    // TODO
+  }
+
+  public shouldComponentUpdate(nextProps, nextState) {
+    return this.props.layout !== nextProps.layout;
   }
 
   public render() {
-    return (
+  return (
       <div className={style.container}>
-        <div className={style.layoutContainer} id={layoutContainerId}>
+        <div className={getLayoutClassName(this.props.layout)} id={layoutContainerId}>
         </div>
-        <div className={style.editorContainer} id={editorContainerId}>
+        <div className={getEditorClassName(this.props.layout)} id={editorContainerId}>
         </div>
       </div>
     );
   }
+}
+
+const CreateHocr = (hocr: string, targetWords: string[] = null) => {
+    const hocrProofreader = new HocrProofreader({
+      layoutContainer: layoutContainerId,
+      editorContainer: editorContainerId,
+    });
+    hocrProofreader.setHocr(hocr || "", targetWords);
+    return hocrProofreader;
+}
+
+const updateHocr = (hocrPR: any, props: HocrProps) => {
+  if (hocrPR) {
+    // hocrPR.setZoom(props.zoom);
+    // hocrPR.toggleLayoutWords(props.renderWords);    
+  }
+}
+
+const getLayoutClassName = (layout: LayoutMode) => {
+  return layout !== "text" ? 
+      style.layoutContainer : style.layoutContainerHidden;
+}
+
+const getEditorClassName = (layout: LayoutMode) => {
+  return layout !== "image" ? 
+      style.editorContainer : style.editorContainerHidden;
 }

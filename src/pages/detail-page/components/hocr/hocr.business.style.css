@@ -42,6 +42,11 @@
   stroke-width: 3;
 }
 
+.layout .rects rect.ocrx_word.highlight {
+  fill: yellow;
+  opacity: 0.5;
+}
+
 .editor {
   width: 100%;
   height: 100%;

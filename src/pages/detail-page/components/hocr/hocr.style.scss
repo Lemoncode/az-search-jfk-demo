@@ -9,18 +9,18 @@
 
 .layout-container {
   flex: 1 1 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
   margin: 1rem;
+
+  &-hidden {
+    display: none;
+  }
 }
 
 .editor-container {
   flex: 1 1 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: stretch;
   margin: 1rem;
+
+  &-hidden {
+    display: none;
+  }
 }

@@ -5,31 +5,6 @@ import editorStyleURL from "./hocr.business.editor.style.css";
 
 
 export var Util = {
-    onReady: function (callback) {
-        if (document.readyState != 'loading') callback();
-        else document.addEventListener('DOMContentLoaded', callback);
-    },
-
-    get: function (url, callback) {
-        var request = new XMLHttpRequest();
-        request.open('GET', url);
-        request.onload = function () {
-            if (request.status >= 200 && request.status < 400) {
-                callback(null, request.responseText);
-            } else {
-                callback(new Error('Error loading url "' + url + '": HTTP error: ' + request.status + ' ' + request.statusText));
-            }
-        };
-        request.onerror = function () {
-            callback(new Error('Error loading url "' + url + '": HTTP connection error'));
-        };
-        request.send();
-    },
-
-    handleError: function (err) {
-        alert(err.message); // TODO
-    },
-
     createElem: function (name, attributes) {
         var node = document.createElement(name);
         for (var name in attributes) {
@@ -99,11 +74,11 @@ export function HocrProofreader(config) {
 
     // init some defaults:
     this.currentPage = null;
-    this.toggleLayoutImage();
+    this.toggleLayoutWords(false);
     this.setZoom('page-width');
 }
 
-HocrProofreader.prototype.setHocr = function (hocr, baseUrl) {
+HocrProofreader.prototype.setHocr = function (hocr, highlightWords = null, startPage = "auto", baseUrl = "") {
     this.hocrBaseUrl = baseUrl || "";
     var hocrDoc = this.editorIframe.contentDocument;
 
@@ -130,11 +105,65 @@ HocrProofreader.prototype.setHocr = function (hocr, baseUrl) {
 
     this.editorStylesheet = Util.createElem('link', {'type': 'text/css', 'rel': 'stylesheet', 'href': editorStyleURL});
     hocrDoc.head.appendChild(this.editorStylesheet);
-    
     hocrDoc.body.contentEditable = true;
 
-    this.setPage('first');
+    const firstOccurrence = this.setHightlightWords(highlightWords);
+
+    if (startPage === "auto" && firstOccurrence) {
+      const firstOccurrencePage = firstOccurrence.page || 0;
+      const firstOccurrenceNode = firstOccurrence.node || null;
+      this.setPage(firstOccurrencePage);
+      setTimeout(() => {
+        firstOccurrenceNode.scrollIntoView({ behavior: "instant", block: "start" });
+      }, 100);      
+    } else {
+      this.setPage(startPage || 'first');
+    }    
+
+    // scroll the page into view if we start on a different page
+    // note this isnt working in a modal when not visible
+    //hocrDoc.body.children[page].scrollIntoView({ behavior: "instant", block: "start" });
 };
+
+HocrProofreader.prototype.setHightlightWords = function (highlightWords = null) {
+  this.highlightWords = highlightWords.map(w => w.toLowerCase());
+  if (!this.highlightWords || this.highlightWords.length <= 0) return null;
+
+  let firstOccurrence = undefined;
+  const hocrDoc = this.editorIframe.contentDocument;
+  [...hocrDoc.body.children].forEach((page, index) => {
+    const { found, targetNode } = this.setHightlightWordsInPage(page, highlightWords);
+    if (found && firstOccurrence === undefined) {
+      firstOccurrence = {
+        page: index,
+        node: targetNode,
+      }
+    }
+  })
+
+  return firstOccurrence;  
+}
+
+HocrProofreader.prototype.setHightlightWordsInPage = function (page, highlightWords = null) {
+  let firstOccurrence = {
+    found: false,
+    targetNode: undefined  
+  };
+  const words = page.getElementsByClassName('ocrx_word');
+  [...words].forEach(wordNode => {
+    if (this.highlightWords.indexOf(wordNode.innerText.toLowerCase()) >= 0) {
+      wordNode.classList.add('highlight');
+      if (!firstOccurrence.targetNode) {
+        firstOccurrence.found = true;
+        firstOccurrence.targetNode = wordNode;
+      }
+    } else {
+      wordNode.classList.remove('highlight');
+    }
+  });
+
+  return firstOccurrence;
+}
 
 HocrProofreader.prototype.getHocr = function () {
     var hocrDoc = this.editorIframe.contentDocument;
@@ -180,13 +209,13 @@ HocrProofreader.prototype.setZoom = function (zoom) {
     }
 };
 
-HocrProofreader.prototype.toggleLayoutImage = function () {
-    if (!this.layoutWords.style.display || this.layoutWords.style.display === 'block') {
-        this.layoutWords.style.display = 'none';
-        this.layoutImage.style.display = 'block';
+HocrProofreader.prototype.toggleLayoutWords = function (renderWords) {
+    if (renderWords) {
+      this.layoutWords.style.display = 'block';
+      this.layoutImage.style.display = 'none';
     } else {
-        this.layoutWords.style.display = 'block';
-        this.layoutImage.style.display = 'none';
+      this.layoutWords.style.display = 'none';
+      this.layoutImage.style.display = 'block';  
     }
 };
 
@@ -207,6 +236,11 @@ HocrProofreader.prototype.setPage = function (page) {
         backwards = true;
         skipCurrent = true;
     }
+    else // assume it is a number
+    {
+        pageNode = hocrDoc.body.children[page];
+    }
+
 
     while (pageNode && (skipCurrent || !pageNode.classList.contains('ocr_page'))) {
         pageNode = backwards ? pageNode.previousElementSibling : pageNode.nextElementSibling;
@@ -320,6 +354,13 @@ HocrProofreader.prototype.renderNodesRecursive = function (node, options, parent
                 'height': options.bbox[3] - options.bbox[1],
                 'class': className
             });
+
+            if (this.highlightWords && this.highlightWords.length && className === 'ocrx_word' &&
+                this.highlightWords.indexOf(node.innerText.toLowerCase()) >= 0) {
+                node.classList.add("highlight");
+                rectNode.classList.add("highlight");
+            }
+
             parentRectsNode.appendChild(rectNode);
 
             // cross-link both nodes:

@@ -6,6 +6,7 @@ const style = require("./detail-page.style.scss");
 
 interface DetailPageProps {
   hocr: string;
+  targetWords: string[];
 }
 
 export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
@@ -15,7 +16,12 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
 
   public render() {
     return (
-      <HocrComponent hocr={this.props.hocr} />
+      <HocrComponent
+        hocr={this.props.hocr}
+        zoom={"original"}
+        layout={"both"}
+        targetWords={this.props.targetWords}
+      />
     );
   }
 }
