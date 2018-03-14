@@ -23,7 +23,7 @@ module.exports = {
       {
         test: /\.css$/,
         include: [/hocr/],
-        exclude: [/hocr\.business\.editor\.style/],
+        exclude: [/hocr-business\.editor\.style/],
         use: [
           "style-loader",
           {
@@ -34,7 +34,7 @@ module.exports = {
       // *** Loading pipe for HOCR iFrame Editor CSS. ***
       {
         test: /\.css$/,
-        include: [/hocr\.business\.editor\.style/],
+        include: [/hocr-business\.editor\.style/],
         use: [
           // {
           //   loader: "style-loader/url",

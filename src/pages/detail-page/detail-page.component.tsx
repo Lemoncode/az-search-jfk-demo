@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link } from 'react-router-dom';
-import { HocrComponent } from "./components/hocr";
+import { HocrProofreaderComponent } from "../../common/components/hocr-proofreader";
+import { HocrPreviewComponent } from "../../common/components/hocr-preview";
 
 const style = require("./detail-page.style.scss");
 
@@ -16,12 +17,18 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
 
   public render() {
     return (
-      <HocrComponent
-        hocr={this.props.hocr}
-        zoom={"original"}
-        layout={"both"}
-        targetWords={this.props.targetWords}
-      />
+      <div>
+        <HocrProofreaderComponent
+          hocr={this.props.hocr}
+          zoom={"original"}
+          layout={"both"}
+          targetWords={this.props.targetWords}
+        />
+        <HocrPreviewComponent
+          hocr={this.props.hocr}
+          targetWords={this.props.targetWords}
+        />
+      </div>
     );
   }
 }

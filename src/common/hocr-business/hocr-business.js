@@ -1,7 +1,7 @@
 'use strict';
 
-import style from "./hocr.business.style.css";
-import editorStyleURL from "./hocr.business.editor.style.css";
+import style from "./hocr-business.style.css";
+import editorStyleURL from "./hocr-business.editor.style.css";
 
 
 export var Util = {
@@ -48,10 +48,9 @@ export function HocrProofreader(config) {
 
     this.layoutContainer = document.getElementById(config.layoutContainer);
     this.layoutContainer.appendChild(this.layoutSvg);
-    this.layoutContainer.style.overflow = 'scroll';
+    // this.layoutContainer.style.overflow = 'scroll';
 
     this.editorIframe = Util.createElem('iframe', {'id': 'hocr-editor-id', 'class': 'editor', 'frameborder': 0});
-
     var editorContainer = document.getElementById(config.editorContainer);
     editorContainer.appendChild(this.editorIframe);
 
@@ -129,7 +128,7 @@ HocrProofreader.prototype.setHightlightWords = function (highlightWords = null) 
   let firstOccurrence = undefined;
   const hocrDoc = this.editorIframe.contentDocument;
   [...hocrDoc.body.children].forEach((page, index) => {
-    const { found, targetNode } = this.setHightlightWordsInPage(page, highlightWords);
+    const { found, targetNode } = this.setHightlightWordsInPage(page);
     if (found && firstOccurrence === undefined) {
       firstOccurrence = {
         page: index,
@@ -141,14 +140,14 @@ HocrProofreader.prototype.setHightlightWords = function (highlightWords = null) 
   return firstOccurrence;  
 }
 
-HocrProofreader.prototype.setHightlightWordsInPage = function (page, highlightWords = null) {
+HocrProofreader.prototype.setHightlightWordsInPage = function (page,ç) {
   let firstOccurrence = {
     found: false,
     targetNode: undefined  
   };
   const words = page.getElementsByClassName('ocrx_word');
   [...words].forEach(wordNode => {
-    if (this.highlightWords.indexOf(wordNode.innerText.toLowerCase()) >= 0) {
+    if (this.isAHighlightWord(wordNode.innerText)) {
       wordNode.classList.add('highlight');
       if (!firstOccurrence.targetNode) {
         firstOccurrence.found = true;
@@ -160,6 +159,10 @@ HocrProofreader.prototype.setHightlightWordsInPage = function (page, highlightWo
   });
 
   return firstOccurrence;
+}
+
+HocrProofreader.prototype.isAHighlightWord = function (word) {
+  return this.highlightWords.indexOf(word.toLowerCase()) >= 0;    
 }
 
 HocrProofreader.prototype.getHocr = function () {
@@ -352,9 +355,10 @@ HocrProofreader.prototype.renderNodesRecursive = function (node, options, parent
                 'class': className
             });
 
+            // Add highlight classname (only for layout rects, editor nodes already tagged).
             if (this.highlightWords && this.highlightWords.length && className === 'ocrx_word' &&
-                this.highlightWords.indexOf(node.innerText.toLowerCase()) >= 0) {
-                node.classList.add("highlight");
+                this.isAHighlightWord(node.innerText)) {
+                //node.classList.add("highlight");
                 rectNode.classList.add("highlight");
             }
 
@@ -443,8 +447,6 @@ HocrProofreader.prototype.onHover = function (target, isEditorContainer) {
         } else {
           this.scrollIntoViewIfNeeded(linkedNode, this.editorIframe.contentDocument.documentElement);
         }
-        // var linkedContainer = isEditorContainer ? this.layoutContainer : this.editorIframe.contentDocument.documentElement;
-        // this.scrollIntoViewIfNeeded(linkedNode, linkedContainer);
     }
 };
 

@@ -1,47 +1,47 @@
 import * as React from "react";
-import { HocrProofreader } from "./hocr.business";
+import { HocrProofreader } from "../../hocr-business/hocr-business.js";
 
-const style = require("./hocr.style.scss");
+const style = require("./hocr-proofreader.style.scss");
 
 /**
  * HOCR-Proofreader third party wrapper for React.
  */
 
-const layoutContainerId = "hocr-layout-container-id";
-const editorContainerId = "hocr-editor-container-id";
+const layoutContainerId = "hocr-proofreader-layout-container-id";
+const editorContainerId = "hocr-proofreader-editor-container-id";
 
 type ZoomMode = "page-full" | "page-width" | "original";
 type LayoutMode = "image" | "text" | "both";
 
-interface HocrProps {
+interface HocrProofreaderProps {
   hocr: string;
-  zoom: ZoomMode;
   layout: LayoutMode;
+  zoom: ZoomMode;  
   renderWords?: boolean;
   targetWords?: string[];
 }
 
-interface HocrState {
-  hocrPR: any;
+interface HocrProofreaderState {
+  hocrProofreader: any;
 }
 
-export class HocrComponent extends React.Component<HocrProps, HocrState> {
+export class HocrProofreaderComponent extends React.Component<HocrProofreaderProps, HocrProofreaderState> {
   constructor(props) {
     super(props);
 
     this.state = {
-      hocrPR: null,
+      hocrProofreader: null,
     }
   }
 
   public componentDidMount() {
     this.setState({
         ...this.state,
-        hocrPR: CreateHocr(this.props.hocr, this.props.targetWords),
-    }, () => updateHocr(this.state.hocrPR, this.props));
+        hocrProofreader: CreateHocrProofreader(this.props.hocr, this.props.targetWords),
+    }, () => updateHocr(this.state.hocrProofreader, this.props));
   }
 
-  public componentWillReceiveProps(nextProps: HocrProps) {
+  public componentWillReceiveProps(nextProps: HocrProofreaderProps) {
     // TODO
   }
 
@@ -59,30 +59,30 @@ export class HocrComponent extends React.Component<HocrProps, HocrState> {
       </div>
     );
   }
-}
+};
 
-const CreateHocr = (hocr: string, targetWords: string[] = null) => {
+const CreateHocrProofreader = (hocr: string, targetWords: string[] = null) => {
     const hocrProofreader = new HocrProofreader({
       layoutContainer: layoutContainerId,
       editorContainer: editorContainerId,
     });
     hocrProofreader.setHocr(hocr || "", targetWords);
     return hocrProofreader;
-}
+};
 
-const updateHocr = (hocrPR: any, props: HocrProps) => {
+const updateHocr = (hocrPR: any, props: HocrProofreaderProps) => {
   if (hocrPR) {
     hocrPR.setZoom(props.zoom);
     hocrPR.toggleLayoutWords(props.renderWords);    
   }
-}
+};
 
 const getLayoutClassName = (layout: LayoutMode) => {
-  return layout !== "text" ? 
-      style.layoutContainer : style.layoutContainerHidden;
-}
+  return (layout === "image" || layout === "both") ?
+    style.layoutContainer : style.layoutContainerHidden;
+};
 
 const getEditorClassName = (layout: LayoutMode) => {
-  return layout !== "image" ? 
+  return (layout === "text" || layout === "both") ? 
       style.editorContainer : style.editorContainerHidden;
-}
+};

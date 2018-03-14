@@ -10,6 +10,8 @@
 .layout-container {
   flex: 1 1 50%;
   margin: 1rem;
+  overflow: auto;
+  scroll-behavior: smooth;
 
   &-hidden {
     display: none;
