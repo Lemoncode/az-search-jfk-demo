@@ -113,16 +113,13 @@ HocrProofreader.prototype.setHocr = function (hocr, highlightWords = null, start
       const firstOccurrencePage = firstOccurrence.page || 0;
       const firstOccurrenceNode = firstOccurrence.node || null;
       this.setPage(firstOccurrencePage);
-      setTimeout(() => {
+      setImmediate(() => {
         firstOccurrenceNode.scrollIntoView({ behavior: "instant", block: "start" });
-      }, 100);      
+        this.scrollSVGIntoView(firstOccurrenceNode.linkedNode);
+      });
     } else {
       this.setPage(startPage || 'first');
     }    
-
-    // scroll the page into view if we start on a different page
-    // note this isnt working in a modal when not visible
-    //hocrDoc.body.children[page].scrollIntoView({ behavior: "instant", block: "start" });
 };
 
 HocrProofreader.prototype.setHightlightWords = function (highlightWords = null) {
@@ -441,8 +438,13 @@ HocrProofreader.prototype.onHover = function (target, isEditorContainer) {
         this.hoverTreeNodes(linkedNode, true);
         this.hoveredNode = target;
 
-        var linkedContainer = isEditorContainer ? this.layoutContainer : this.editorIframe.contentDocument.documentElement;
-        this.scrollIntoViewIfNeeded(linkedNode, linkedContainer);
+        if (isEditorContainer) {
+          this.scrollSVGIntoView(linkedNode);
+        } else {
+          this.scrollIntoViewIfNeeded(linkedNode, this.editorIframe.contentDocument.documentElement);
+        }
+        // var linkedContainer = isEditorContainer ? this.layoutContainer : this.editorIframe.contentDocument.documentElement;
+        // this.scrollIntoViewIfNeeded(linkedNode, linkedContainer);
     }
 };
 
@@ -484,4 +486,25 @@ HocrProofreader.prototype.scrollIntoViewIfNeeded = function (node, scrollParentN
             node.scrollIntoView({behavior: 'smooth', block: 'end'});
         }
     }
+};
+
+HocrProofreader.prototype.scrollSVGIntoView = function (node) {
+  if(!node || !this.layoutContainer || !this.layoutSvg) return;
+  
+  // Calculate node positioning within its layout parent.
+  const vBox = this.layoutSvg.getAttribute('viewBox').split(" ");
+  const originalWidth = vBox[2];
+  const originalHeight = vBox[3];
+  const nodeLeft = parseInt(node.getAttribute('x'));
+  const nodeTop = parseInt(node.getAttribute('y'));
+  const nodeCetroidLeft = nodeLeft + (parseInt(node.getAttribute('width')) / 2);
+  const nodeCetroidTop = nodeTop + (parseInt(node.getAttribute('height')) / 2);
+  const nodeCentroidPosX = nodeCetroidLeft / originalWidth;
+  const nodeCentroidPosY = nodeCetroidTop / originalHeight;
+
+  // Calculate scroll desired position of the layout container to reveal
+  // the node right in the middle (aprox).
+  const scrollLeft = this.layoutContainer.scrollWidth * nodeCentroidPosX - (this.layoutContainer.clientWidth / 2); 
+  const scrollTop = this.layoutContainer.scrollHeight * nodeCentroidPosY - (this.layoutContainer.clientHeight / 2);
+  this.layoutContainer.scrollTo({left: scrollLeft, top: scrollTop});
 };

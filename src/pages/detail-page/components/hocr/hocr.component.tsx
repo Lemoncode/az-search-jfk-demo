@@ -72,8 +72,8 @@ const CreateHocr = (hocr: string, targetWords: string[] = null) => {
 
 const updateHocr = (hocrPR: any, props: HocrProps) => {
   if (hocrPR) {
-    // hocrPR.setZoom(props.zoom);
-    // hocrPR.toggleLayoutWords(props.renderWords);    
+    hocrPR.setZoom(props.zoom);
+    hocrPR.toggleLayoutWords(props.renderWords);    
   }
 }
 
