@@ -29,9 +29,21 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, {}> 
   public render() {
     const config: HocrPreviewConfig = {
       hocr: this.props.hocr,
+      pageIndex: "auto",
       targetWords: this.props.targetWords,
-      pageIndex: 0,
-      onlyTargetWords: false,     
+      caseSensitiveComparison: false,
+      onlyTargetWords: true,
+      styles: {
+        area: style.area,
+        paragraph: style.par,
+        line: style.line,
+        word: style.word,
+        highlight: style.highlight,
+        page: style.page,
+        background: style.background,
+        image: style.image,
+        placeholders: style.placeholders,
+      }
     };
 
     return (

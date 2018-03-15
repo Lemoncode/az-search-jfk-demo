@@ -7,20 +7,60 @@
   scroll-behavior: auto;
 }
 
-.hocr-preview {
-  &-page {
-    //
-  }
+.page {
+  //
+}
 
-  &-background {
-    //
-  }
+.background {
+  fill: none;
+}
 
-  &-image {
-    //
-  }
+.image {
+  display: block;
+}
 
-  &-placeholders {
-    //
+.placeholders {
+  display: block;
+}
+
+@mixin default-rect {
+  fill: none;
+  pointer-events: fill;
+}
+
+.area {
+  @include default-rect();
+}
+
+.par {
+  @include default-rect();
+}
+
+.line {
+  @include default-rect();
+
+  &:hover {
+    stroke: #505050;
+    stroke-width: 1;
+    stroke-dasharray: 10, 10;
   }
 }
+
+.word {
+  @include default-rect();
+
+  &.highlight {
+    fill: yellow;
+    opacity: 0.5;
+  }
+
+  &:hover {
+    fill: #99cfff;
+    opacity: 0.5;
+    stroke: #007eff;
+    stroke-width: 3;
+    stroke-dasharray: 0;
+  }
+}
+
+

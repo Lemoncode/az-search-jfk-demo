@@ -36,9 +36,6 @@ module.exports = {
         test: /\.css$/,
         include: [/hocr-business\.editor\.style/],
         use: [
-          // {
-          //   loader: "style-loader/url",
-          // },
           {
             loader: "file-loader",              
           },

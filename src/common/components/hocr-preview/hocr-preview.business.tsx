@@ -1,156 +1,153 @@
 import * as React from "react";
+import { 
+  PageIndex,
+  WordComparator,
+  HocrStyleMap,
+  parseHocr,
+  CreateWordComparator,
+  parsePageIndex,
+  getNodeId,
+  getNodeOptions,
+  resolveNodeEntity,  
+} from "./hocr-preview.utils";
 
-const style = require("./hocr-preview.style.scss");
 
+export interface HocrPreviewStyleMap extends HocrStyleMap {
+  page: string;
+  background: string;
+  image: string;
+  placeholders: string;
+}
 
 export interface HocrPreviewConfig {
   hocr: string;
-  pageIndex: number;
+  pageIndex: PageIndex;
   targetWords?: string[];
+  caseSensitiveComparison?: boolean;
   onlyTargetWords?: boolean;
-}
+  styles?: HocrPreviewStyleMap;
+};
 
 export const render = (config: HocrPreviewConfig) => {
   if (!config.hocr) return null;
 
-  const domParser = new DOMParser();
-  const doc = domParser.parseFromString(config.hocr, "text/html");
-  
-  if (!doc || config.pageIndex < 0 ||
-    !checkPageIndexInRange(doc, config.pageIndex)) return null;
+  const doc = parseHocr(config.hocr);
+  if (!doc) return null;
 
-  return renderPage(doc.body.children[config.pageIndex],
-    config.targetWords, config.onlyTargetWords);
+  const wordCompare = CreateWordComparator(config.targetWords, config.caseSensitiveComparison);
+  
+  const parsedPageIndex = parsePageIndex(doc, config.pageIndex, wordCompare);
+  if (parsedPageIndex !== null) {
+    const pageToRender = doc.body.children[parsedPageIndex];
+    return renderPage(pageToRender, wordCompare, config.onlyTargetWords, config.styles);
+  } else {
+    return null;
+  }
 };
 
-const checkPageIndexInRange = (doc: Document, pageIndex: number) => {
-  return doc.body && doc.body.children && (pageIndex < doc.body.children.length);
-}
-
-const renderPage = (pageNode: Element, targetWords: string[], onlyTargetWords: boolean) => {
+const renderPage = (pageNode: Element, wordCompare: WordComparator, onlyTargetWords: boolean, 
+  styleMap: HocrPreviewStyleMap) => {
   if (!pageNode) return null;
 
-  const targetWordsLowerCase = targetWords.map(w => w.toLowerCase());
-  const nodeRenderer = CreateNodeRenderer(pageNode, targetWordsLowerCase);
+  const nodeRenderer = CreateNodeRenderer(pageNode, wordCompare, styleMap);
   const pageOptions = getNodeOptions(pageNode);
-
+  const pageNodes = nodeRenderer.render(onlyTargetWords);
+  
   return (
     <svg
-      className={style.hocrPreviewPage}
+      className={styleMap && styleMap.page}
       viewBox={pageOptions.bbox.join(" ")}
     >
-      <rect className={style.hocrPreviewBackground}
+      <rect className={styleMap && styleMap.background}
         x="0" y="0" width="100%" height="100%"/>
-      <image className={style.hocrPreviewImage}
+      <image className={styleMap && styleMap.image}
         x="0" y="0" width="100%" height="100%"
         xlinkHref={pageOptions.image}/>
-      <g className={style.hocrPreviewPlaceholders}>
-        {nodeRenderer.render(onlyTargetWords)}
+      <g className={styleMap && styleMap.placeholders}>
+        {pageNodes}
       </g>
     </svg>
   );  
-}
+};
 
-
-
-const CreateNodeRenderer = (rootNode: Element, targetWords: string[]) => {
+const CreateNodeRenderer = (rootNode: Element, wordCompare: WordComparator, styleMap: HocrStyleMap) => {
 
   const render = (onlyTargetWords: boolean) => {
     return onlyTargetWords ? renderOnlyTargets(rootNode) : renderAll(rootNode);
   };
 
   const renderAll = (node: Element) => {
-    return Array.from(node.children).map(child => {
-      const className = getNodeClassName(child);
-      if (className === "ocrx_word") {
-        const targetNode = isTarget(child.textContent);
-        return renderSvgRect(child, targetNode ? `${className} highlight` : className);
-      } else if (className && child.children && child.children.length) {
-        return renderSvgGroup(child, className);
+    return Array.from(node.children).map((child, index) => {
+      const {entity, className} = getNodeInfo(child);
+      if (entity === "word") {
+        const isTarget = wordCompare && wordCompare(child.textContent);
+        return renderSvgRect(child, isTarget ? `${className} ${getStyle("highlight")}` : className, index);
+      } else if (entity && child.children && child.children.length) {
+        return renderSvgGroup(child, className, index);
       } else {
         return null;
       }
-    }).filter(n => n).join("");
+    })
+    .filter(n => n);
   };
 
   const renderOnlyTargets = (node: Element) => {
-    return Array.from(node.children).map(child => {
-      const className = getNodeClassName(child);
-      if (className === "ocrx_word" && isTarget(child.textContent)) {
-        return renderSvgRect(child, `${className} highlight`);
+    if (!wordCompare) return null; 
+
+    return Array.from(node.children).map((child, index) => {
+      const {entity, className} = getNodeInfo(child);
+      if (entity === "word" && wordCompare(child.textContent)) {
+        return renderSvgRect(child, `${className} ${getStyle("highlight")}`, index);
       } else if (child.children && child.children.length) {
         return renderOnlyTargets(child);
       } else {
         return null;
       }
-    }).filter(n => n).join("");
+    })
+    .filter(n => n);
   };
 
-  const renderSvgRect = (node: Element, className: string) => {
-    const id = getNodeId(node);
+  const renderSvgRect = (node: Element, className: string, index: number) => {
+    const id = getNodeId(node, "preview");
     const nodeOptions = getNodeOptions(node);
-    return (
+    return (nodeOptions && nodeOptions.bbox) ? 
+    (
       <rect
         className={className}
+        key={index}
         id={id}
         x={nodeOptions.bbox[0]}
         y={nodeOptions.bbox[1]}
         width={nodeOptions.bbox[2] - nodeOptions.bbox[0]}
         height={nodeOptions.bbox[3] - nodeOptions.bbox[1]}
       />
-    );
-  }
+    ) : null;
+  };
   
-  const renderSvgGroup = (node: Element, className: string) => {
-    const id = getNodeId(node);
+  const renderSvgGroup = (node: Element, className: string, index: number) => {
     return (
-      <g className={className} id={id}>
+      <g className={className} key={index}>
+        {renderSvgRect(node, className, index)}
         {renderAll(node)}
       </g>
     );
+  };
+
+  const getNodeInfo = (node: Element) => {
+    const entity = resolveNodeEntity(node);
+    const className = getStyle(entity);
+
+    return {
+      entity,
+      className,
+    };
   }
 
-  const isTarget = isTargetWord(targetWords);
+  const getStyle = (entity: string) => {
+    return styleMap ? styleMap[entity] : null;
+  }
 
   return {
     render,
   };
 };
-
-const supportedClassNames = ["ocr_area", "ocr_par", "ocr_line", "ocrx_word"];
-
-const getNodeClassName = (node: Element): string => {
-  supportedClassNames.forEach(className => {
-    if (node.classList.contains(className)) return className;
-  });
-
-  return null;
-};
-
-const getNodeId = (node: Element): string => {
-  const id = node.getAttribute("id");
-  return id ? `${id}-preview` : "";
-}
-
-const optionArrayFields = ['bbox', 'baseline', 'scan_res'];
-
-const getNodeOptions = (node: Element): any => {
-  const optionsStr = node["title"] ? node["title"] : "";
-  const regex = /(?:^|;)\s*(\w+)\s+(?:([^;"']+?)|"((?:\\"|[^"])+?)"|'((?:\\'|[^'])+?)')\s*(?=;|$)/g;
-  let match;
-  
-  let options = {};
-  while (match = regex.exec(optionsStr)) {
-      const name = match[1];
-      let value = match[4] || match[3] || match[2];
-      if (optionArrayFields.indexOf(name) !== -1) {
-          value = value.split(/\s+/);
-      }
-      options[name] = value;
-  }
-  return options;
-};
-
-const isTargetWord = (targetWords: string[]) => (word: string): boolean => {
-  return targetWords.indexOf(word.toLowerCase()) >= 0;  
-}

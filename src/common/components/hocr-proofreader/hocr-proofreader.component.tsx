@@ -1,5 +1,5 @@
 import * as React from "react";
-import { HocrProofreader } from "../../hocr-business/hocr-business.js";
+import { HocrProofreader } from "./hocr-business.js";
 
 const style = require("./hocr-proofreader.style.scss");
 
