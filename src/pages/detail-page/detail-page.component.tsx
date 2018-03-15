@@ -26,7 +26,10 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
         />
         <HocrPreviewComponent
           hocr={this.props.hocr}
+          pageIndex="auto"
+          zoomMode="original"
           targetWords={this.props.targetWords}
+          scrollToNodeId="word_1_14_56"
         />
       </div>
     );

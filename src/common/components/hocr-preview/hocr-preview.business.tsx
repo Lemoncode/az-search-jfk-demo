@@ -11,6 +11,7 @@ import {
   resolveNodeEntity,  
 } from "./hocr-preview.utils";
 
+type ZoomMode = "page-full" | "page-width" | "original";
 
 export interface HocrPreviewStyleMap extends HocrStyleMap {
   page: string;
@@ -19,44 +20,51 @@ export interface HocrPreviewStyleMap extends HocrStyleMap {
   placeholders: string;
 }
 
-export interface HocrPreviewConfig {
+export interface HocrPreviewProps {
   hocr: string;
   pageIndex: PageIndex;
+  zoomMode: ZoomMode;
   targetWords?: string[];
   caseSensitiveComparison?: boolean;
   onlyTargetWords?: boolean;
+  scrollToNodeId?: string;
   styles?: HocrPreviewStyleMap;
 };
 
-export const render = (config: HocrPreviewConfig) => {
-  if (!config.hocr) return null;
+export const previewIdSuffix = "preview";
+export const activePageId = "hocr-preview-active-page";
 
-  const doc = parseHocr(config.hocr);
+export const render = (props: HocrPreviewProps) => {
+  if (!props.hocr) return null;
+
+  const doc = parseHocr(props.hocr);
   if (!doc) return null;
 
-  const wordCompare = CreateWordComparator(config.targetWords, config.caseSensitiveComparison);
+  const wordCompare = CreateWordComparator(props.targetWords, props.caseSensitiveComparison);
   
-  const parsedPageIndex = parsePageIndex(doc, config.pageIndex, wordCompare);
+  const parsedPageIndex = parsePageIndex(doc, props.pageIndex, wordCompare);
   if (parsedPageIndex !== null) {
     const pageToRender = doc.body.children[parsedPageIndex];
-    return renderPage(pageToRender, wordCompare, config.onlyTargetWords, config.styles);
+    return renderPage(pageToRender, props.zoomMode, wordCompare, props.onlyTargetWords, props.styles);
   } else {
     return null;
   }
 };
 
-const renderPage = (pageNode: Element, wordCompare: WordComparator, onlyTargetWords: boolean, 
-  styleMap: HocrPreviewStyleMap) => {
+const renderPage = (pageNode: Element, zoomMode: ZoomMode, wordCompare: WordComparator,
+  onlyTargetWords: boolean, styleMap: HocrPreviewStyleMap) => {
   if (!pageNode) return null;
 
   const nodeRenderer = CreateNodeRenderer(pageNode, wordCompare, styleMap);
   const pageOptions = getNodeOptions(pageNode);
   const pageNodes = nodeRenderer.render(onlyTargetWords);
-  
+  pageOptions.bbox;
   return (
     <svg
       className={styleMap && styleMap.page}
+      id={activePageId}
       viewBox={pageOptions.bbox.join(" ")}
+      style={getZoomStyle(zoomMode, pageOptions.bbox)}
     >
       <rect className={styleMap && styleMap.background}
         x="0" y="0" width="100%" height="100%"/>
@@ -69,6 +77,15 @@ const renderPage = (pageNode: Element, wordCompare: WordComparator, onlyTargetWo
     </svg>
   );  
 };
+
+const getZoomStyle = (zoomMode: ZoomMode, bbox: any) => {
+  return {
+    width: (zoomMode === "original") ? `${(bbox[2]-bbox[0])}px` : "",
+    height: (zoomMode === "original") ? `${(bbox[3]-bbox[1])}px` : "",
+    maxWidth: (zoomMode !== "original") ? "100%" : "",
+    maxHeight: (zoomMode === "page-full") ? "100%" : "",
+  }
+}
 
 const CreateNodeRenderer = (rootNode: Element, wordCompare: WordComparator, styleMap: HocrStyleMap) => {
 
@@ -108,7 +125,7 @@ const CreateNodeRenderer = (rootNode: Element, wordCompare: WordComparator, styl
   };
 
   const renderSvgRect = (node: Element, className: string, index: number) => {
-    const id = getNodeId(node, "preview");
+    const id = getNodeId(node, previewIdSuffix);
     const nodeOptions = getNodeOptions(node);
     return (nodeOptions && nodeOptions.bbox) ? 
     (

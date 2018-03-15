@@ -1,9 +1,9 @@
 .container {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  height: 500px;
   margin: 0;
-  overflow: hidden;
+  overflow: scroll;
   scroll-behavior: auto;
 }
 

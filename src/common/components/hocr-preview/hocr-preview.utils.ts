@@ -73,7 +73,7 @@ const firstOcurrencePage = (doc: Document, wordComparator: WordComparator) => {
 };
 
 const areWordsInPage = (page: Element, wordComparator: WordComparator): boolean => {
-  const pageWords = page.getElementsByClassName('ocrx_word');
+  const pageWords = page.getElementsByClassName(hocrEntityMap.word);
   return Array.from(pageWords).some((word, index) => {
     return wordComparator(word.textContent);
   })
@@ -81,8 +81,10 @@ const areWordsInPage = (page: Element, wordComparator: WordComparator): boolean 
 
 export const getNodeId = (node: Element, suffix: string): string => {
   const id = node.getAttribute("id");
-  return id ? `${id}-${suffix}` : "";
+  return id && suffix ? composeIdSuffix(id, suffix) : "";
 };
+
+export const composeIdSuffix = (id: string, suffix: string): string => `${id}-${suffix}`;
 
 const optionArrayFields = ['bbox', 'baseline', 'scan_res'];
 
@@ -102,3 +104,21 @@ export const getNodeOptions = (node: Element): any => {
   }
   return options;
 };
+
+export const calculateNodeShiftInContainer = (nodeId: string, containerId: string) => {
+  const target = document.getElementById(nodeId);
+  const container = document.getElementById(containerId);
+  if (!target || !container) return null;
+  
+  const cbbox = container.getAttribute('viewBox').split(" ").map(n => parseInt(n));
+  const originalWidth = cbbox[2] - cbbox[0];
+  const originalHeight = cbbox[3] - cbbox[1];
+  const targetLeft = parseInt(target.getAttribute('x')) - cbbox[0];
+  const targetTop = parseInt(target.getAttribute('y')) - cbbox[1];
+  const targetCentroidLeft = targetLeft + (parseInt(target.getAttribute('width')) / 2);
+  const targetCentroidTop = targetTop + (parseInt(target.getAttribute('height')) / 2);
+  const targetCentroidPosX = targetCentroidLeft / originalWidth;
+  const targetCentroidPosY = targetCentroidTop / originalHeight;
+
+  return {x: targetCentroidPosX, y: targetCentroidPosY};
+}
