@@ -70,6 +70,7 @@ class SearchPageComponent extends React.Component<SearchPageProps, {}> {
           />
           <ItemCollectionViewComponent
              items={this.props.itemCollection}
+             searchValue={this.props.searchValue}
              onClick={this.props.onItemClick}
              loading={this.props.loading}
              onLoadMore={this.props.onLoadMore}

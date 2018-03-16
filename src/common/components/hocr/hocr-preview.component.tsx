@@ -14,6 +14,7 @@ import {
   HocrPageStyleMap,
   HocrPageComponent
 } from "./hocr-page.component";
+import { cnc } from "../../../util";
 
 const style = require("./hocr-preview.style.scss");
 
@@ -32,7 +33,9 @@ export interface HocrPreviewProps {
   caseSensitiveComparison?: boolean;
   onlyTargetWords?: boolean;
   focusToNodeId?: string;
+  disabelScroll?: boolean;
   styleMap?: HocrPageStyleMap;
+  onWordHover?: (wordId: string) => void;
 };
 
 interface HocrPreviewState {
@@ -128,7 +131,9 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
 
   public render() {
     return (
-      <div className={style.container} ref={this.saveContainerRef}>
+      <div className={cnc(style.container, this.props.disabelScroll && style.noScrollable )}
+       ref={this.saveContainerRef}
+      >
         <HocrPageComponent
           pageNode={this.state.pageNode}
           wordCompare={this.state.wordCompare}
@@ -136,6 +141,7 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
           zoomMode={this.props.zoomMode}
           onlyTargetWords={this.props.onlyTargetWords}
           styleMap={this.props.styleMap}
+          onWordHover={this.props.onWordHover}
         />
       </div>
     );

@@ -41,6 +41,7 @@ interface HocrPageProps {
   zoomMode?: ZoomMode;
   onlyTargetWords?: boolean;
   styleMap?: HocrPageStyleMap;
+  onWordHover?: (wordId: string) => void;
 }
 
 export const HocrPageComponent: React.StatelessComponent<HocrPageProps> = (props) => {
@@ -67,6 +68,7 @@ export const HocrPageComponent: React.StatelessComponent<HocrPageProps> = (props
           idSuffix={props.idSuffix}
           onlyTargetWords={props.onlyTargetWords}
           styleMap={props.styleMap}
+          onWordHover={props.onWordHover}
         />
       </g>
     </svg>

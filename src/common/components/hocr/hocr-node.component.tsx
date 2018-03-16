@@ -4,7 +4,8 @@ import {
   HocrStyleMap,
   getNodeId,
   getNodeOptions,
-  resolveNodeEntity,  
+  resolveNodeEntity,
+  composeId,  
 } from "./hocr-utils";
 
 const style = require("./hocr-node.style.scss");
@@ -16,6 +17,7 @@ interface HocrNodeProps {
   idSuffix: string;
   onlyTargetWords?: boolean;
   styleMap?: HocrStyleMap;
+  onWordHover?: (wordId: string) => void;
 }
 
 export const defaultNodeStyles: HocrStyleMap = {
@@ -37,21 +39,24 @@ export const HocrNodeComponent: React.StatelessComponent<HocrNodeProps> = (props
   if (!props.rootNode) return null;
   
   const mStyleMap = mergeNodeStyle(props.styleMap);
-  const nodeRenderer = CreateNodeRenderer(props.rootNode, props.wordCompare, mStyleMap, props.idSuffix);
+  const nodeRenderer = CreateNodeRenderer(props.rootNode, props.wordCompare, mStyleMap,
+    props.idSuffix, props.onWordHover);
   
   return props.onlyTargetWords ? 
     nodeRenderer.renderOnlyTargets(props.rootNode) :
     nodeRenderer.renderAll(props.rootNode);
 }
 
-const CreateNodeRenderer = (rootNode: Element, wordCompare: WordComparator, styleMap: HocrStyleMap, idSuffix: string) => {
+const CreateNodeRenderer = (rootNode: Element, wordCompare: WordComparator,
+  styleMap: HocrStyleMap, idSuffix: string, onWordHover: (wordId: string) => void) => {
 
   const renderAll = (node: Element) => {
     return Array.from(node.children).map((child, index) => {
       const {entity, className} = getNodeInfo(child);
       if (entity === "word") {
         const isTarget = wordCompare && wordCompare(child.textContent);
-        return renderSvgRect(child, isTarget ? `${className} ${getStyle("highlight")}` : className, index);
+        const composedClassName = isTarget ? `${className} ${getStyle("highlight")}` : className;
+        return renderSvgRect(child, composedClassName, index, onWordHover);
       } else if (entity && child.children && child.children.length) {
         return renderSvgGroup(child, className, index);
       } else {
@@ -67,7 +72,8 @@ const CreateNodeRenderer = (rootNode: Element, wordCompare: WordComparator, styl
     return Array.from(node.children).map((child, index) => {
       const {entity, className} = getNodeInfo(child);
       if (entity === "word" && wordCompare(child.textContent)) {
-        return renderSvgRect(child, `${className} ${getStyle("highlight")}`, index);
+        const composedClassName = `${className} ${getStyle("highlight")}`;
+        return renderSvgRect(child, composedClassName, index, onWordHover);
       } else if (child.children && child.children.length) {
         return renderOnlyTargets(child);
       } else {
@@ -77,19 +83,21 @@ const CreateNodeRenderer = (rootNode: Element, wordCompare: WordComparator, styl
     .filter(n => n);
   };
 
-  const renderSvgRect = (node: Element, className: string, index: number) => {
-    const id = getNodeId(node, idSuffix);
+  const renderSvgRect = (node: Element, className: string, index: number, onHover?) => {
+    const id = getNodeId(node);
+    const suffixedId = composeId(id, idSuffix);
     const nodeOptions = getNodeOptions(node);
     return (nodeOptions && nodeOptions.bbox) ? 
     (
       <rect
         className={className}
         key={index}
-        id={id}
+        id={suffixedId}
         x={nodeOptions.bbox[0]}
         y={nodeOptions.bbox[1]}
         width={nodeOptions.bbox[2] - nodeOptions.bbox[0]}
         height={nodeOptions.bbox[3] - nodeOptions.bbox[1]}
+        onMouseEnter={onHover ? () => onHover(id) : () => {}}
       />
     ) : null;
   };

@@ -18,17 +18,18 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
   public render() {
     return (
       <div>
-        <HocrProofreaderComponent
+        {/* <HocrProofreaderComponent
           hocr={this.props.hocr}
           zoom={"original"}
           layout={"both"}
           targetWords={this.props.targetWords}
-        />
+        /> */}
         <HocrPreviewComponent
           hocr={this.props.hocr}
           pageIndex="auto"
           zoomMode="original"
           targetWords={this.props.targetWords}
+          onWordHover={wId => console.log(wId)}
         />
       </div>
     );

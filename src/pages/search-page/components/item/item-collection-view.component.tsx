@@ -8,6 +8,7 @@ const style = require("./item-collection-view.style.scss");
 
 interface ItemViewProps {
   items?: ItemCollection;
+  searchValue?: string;
   onClick?: (item: Item) => void;
 }
 
@@ -21,7 +22,12 @@ class ItemCollectionViewClass extends React.Component<ItemViewProps, {}> {
       <div className={style.container}>
         { this.props.items ? 
           this.props.items.map((child, index) => (
-            <ItemComponent item={child} onClick={this.props.onClick} key={index} />
+            <ItemComponent
+              item={child}
+              searchValue={this.props.searchValue}
+              onClick={this.props.onClick}
+              key={index}
+            />
           ))
         : null }
       </div>

@@ -7,13 +7,16 @@ import Collapse from "material-ui/transitions/Collapse";
 import Typography from "material-ui/Typography";
 import Chip from 'material-ui/Chip';
 import StarIcon from "material-ui-icons/Star";
+import { HocrPreviewComponent } from "../../../../common/components/hocr";
 
 const style = require("./item.style.scss");
 
 
 interface ItemProps {
   item: Item;
+  searchValue?: string;
   onClick?: (item: Item) => void;
+  hocrPreview?: boolean;
 }
 
 interface State {
@@ -28,7 +31,7 @@ const ratingStars = (item: Item) => ((item.rating >= 1.0) ?
   )) : null
 );
 
-const ItemMedia: React.StatelessComponent<ItemProps> = ({ item, onClick }) => {
+const ItemMediaThumbnail: React.StatelessComponent<ItemProps> = ({ item, onClick }) => {
   return (
     item.thumbnail ? 
     <CardMedia className={style.itemMedia}
@@ -37,6 +40,31 @@ const ItemMedia: React.StatelessComponent<ItemProps> = ({ item, onClick }) => {
       title={item.title}
       onClick={handleOnClick({ item, onClick })}
     /> : null
+  );
+}
+
+const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, searchValue, onClick }) => {
+  return (
+    <div className={style.itemMedia}
+     onClick={handleOnClick({ item, onClick })}
+    >
+      <HocrPreviewComponent
+        hocr={item.metadata}
+        pageIndex="auto"
+        zoomMode="original"
+        targetWords={searchValue.split(" ")}
+        onlyTargetWords={true}
+        disabelScroll={true}
+      />
+    </div>
+  );
+}
+
+const ItemMedia: React.StatelessComponent<ItemProps> = ({ item, searchValue, onClick, hocrPreview }) => {
+  return (
+    hocrPreview ? 
+      <ItemMediaHocrPreview item={item} searchValue={searchValue} onClick={onClick} /> :
+      <ItemMediaThumbnail item={item} onClick={onClick} />
   );
 }
 
@@ -113,11 +141,11 @@ class ItemComponent extends React.Component<ItemProps, State> {
   }
     
   public render() {
-    const {item, onClick} = this.props;
+    const {item, searchValue, onClick} = this.props;
 
     return (
       <Card classes={{root:style.item}} elevation={8}>
-        <ItemMedia item={item} onClick={onClick} />
+        <ItemMedia item={item} searchValue={searchValue} onClick={onClick} />
         <ItemCaption item={item} onClick={onClick} />
         <CardActions classes={{root: style.itemActions}}>
           <div className={style.itemRating}>

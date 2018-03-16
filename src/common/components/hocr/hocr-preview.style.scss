@@ -1,8 +1,13 @@
 .container {
   display: block;
-  width: 50%;
-  height: 500px;
+  width: 100%;
+  height: 100%;
   margin: 0;
   overflow: scroll;
-  scroll-behavior: auto;
+  scroll-behavior: smooth;
+
+  &.no-scrollable {
+    overflow: hidden;
+    scroll-behavior: unset;
+  }
 }
