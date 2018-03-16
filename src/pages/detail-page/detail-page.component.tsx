@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link } from 'react-router-dom';
-import { HocrProofreaderComponent } from "../../common/components/hocr-proofreader";
-import { HocrPreviewComponent } from "../../common/components/hocr-preview";
+import { HocrProofreaderComponent } from "../../common/components/hocr-thirdparty";
+import { HocrPreviewComponent } from "../../common/components/hocr";
 
 const style = require("./detail-page.style.scss");
 
@@ -29,7 +29,6 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
           pageIndex="auto"
           zoomMode="original"
           targetWords={this.props.targetWords}
-          scrollToNodeId="word_1_14_56"
         />
       </div>
     );

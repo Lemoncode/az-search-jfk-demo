@@ -1,6 +1,11 @@
 export type PageIndex = number | "auto";
 export type WordComparator = (word: string) => boolean;
 
+export interface WordPosition {
+  pageIndex: number;
+  firstOcurrenceId: string;
+}
+
 export interface HocrStyleMap {
   area: string;
   paragraph: string;
@@ -50,11 +55,17 @@ export const parseHocr = (hocr: string): Document => {
   return domParser.parseFromString(hocr, "text/html");
 }
 
-export const parsePageIndex = (doc: Document, pageIndex: PageIndex, wordComparator: WordComparator): number => {
+export const parseWordPosition = (doc: Document, pageIndex: PageIndex,
+  wordComparator: WordComparator): WordPosition => {
   if (typeof pageIndex === "number") {
-    return (pageIndex < 0 || !checkPageIndexInRange(doc, pageIndex)) ? 0 : pageIndex;
+    const validatedPageIndex = (pageIndex < 0 || !checkPageIndexInRange(doc, pageIndex)) ? 0 : pageIndex;
+    const firstOcurrenceId = wordIdInPage(doc.body.children[validatedPageIndex], wordComparator);
+    return { 
+      pageIndex: validatedPageIndex,
+      firstOcurrenceId,
+    };
   } else {  // Auto page index based on the first ocurrence of a target word.
-    return wordComparator ? firstOcurrencePage(doc, wordComparator) : 0;
+    return findFirstOcurrencePosition(doc, wordComparator);
   }  
 };
 
@@ -62,29 +73,39 @@ const checkPageIndexInRange = (doc: Document, pageIndex: number) => {
   return doc.body && doc.body.children && (pageIndex < doc.body.children.length);
 };
 
-const firstOcurrencePage = (doc: Document, wordComparator: WordComparator) => {
-  let foundIndex = 0;
-  Array.from(doc.body.children).some((page, index) => {
-    const found = areWordsInPage(page, wordComparator);
-    if (found) foundIndex = index;
-    return found;
-  });
-  return foundIndex;
+const findFirstOcurrencePosition = (doc: Document, wordComparator: WordComparator): WordPosition => {
+  let pos = {pageIndex: 0, firstOcurrenceId: null};
+  if (wordComparator) {
+    Array.from(doc.body.children).some((page, index) => {
+      const foundId = wordIdInPage(page, wordComparator);
+      if (foundId) {
+        pos.pageIndex = index;
+        pos.firstOcurrenceId = foundId;
+      }
+      return Boolean(foundId);
+    });
+  }  
+  return pos;
 };
 
-const areWordsInPage = (page: Element, wordComparator: WordComparator): boolean => {
+const wordIdInPage = (page: Element, wordComparator: WordComparator): string => {
   const pageWords = page.getElementsByClassName(hocrEntityMap.word);
-  return Array.from(pageWords).some((word, index) => {
-    return wordComparator(word.textContent);
+  let id = null;
+  Array.from(pageWords).some((word, index) => {
+    const comparison = wordComparator(word.textContent);
+    if (comparison) id = getNodeId(word);
+    return comparison;
   })
+  return id;
 };
 
-export const getNodeId = (node: Element, suffix: string): string => {
-  const id = node.getAttribute("id");
-  return id && suffix ? composeIdSuffix(id, suffix) : "";
+export const getNodeId = (node: Element, suffix: string = ""): string => {
+  return composeId(node.getAttribute("id"), suffix);
 };
 
-export const composeIdSuffix = (id: string, suffix: string): string => `${id}-${suffix}`;
+export const composeId = (id: string, suffix: string = ""): string => {
+  return [id, suffix].filter(s => s).join("-");
+};
 
 const optionArrayFields = ['bbox', 'baseline', 'scan_res'];
 

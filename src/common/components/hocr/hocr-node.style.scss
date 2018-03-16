@@ -1,28 +1,3 @@
-.container {
-  display: block;
-  width: 50%;
-  height: 500px;
-  margin: 0;
-  overflow: scroll;
-  scroll-behavior: auto;
-}
-
-.page {
-  //
-}
-
-.background {
-  fill: none;
-}
-
-.image {
-  display: block;
-}
-
-.placeholders {
-  display: block;
-}
-
 @mixin default-rect {
   fill: none;
   pointer-events: fill;
