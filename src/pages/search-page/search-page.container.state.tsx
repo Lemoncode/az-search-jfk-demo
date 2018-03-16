@@ -4,6 +4,7 @@ import { State, SuggestionCollection, FilterCollection } from "./view-model";
 export const CreateInitialState = (): State => ({
   searchValue: null,
   itemCollection: null,
+  targetWords: null,
   facetCollection: null,
   filterCollection: null,
   suggestionCollection: null,
@@ -57,10 +58,12 @@ export const preSearchUpdate = (filters: FilterCollection, pageIndex?: number) =
 };
 
 export const postSearchSuccessUpdate = (stateReducer: StateReducer) => (prevState: State): State => {
+// TODO: remove.
   return {
     ...stateReducer<State>(prevState),
     loading: false,
     suggestionCollection: null,
+    targetWords: prevState.searchValue ? prevState.searchValue.split(" ") : null,
   }
 };
 
@@ -84,6 +87,7 @@ export const postSearchErrorReset = (rejectValue) => (prevState: State): State =
     filterCollection: null,
     suggestionCollection: null,
     pageIndex: null,
+    targetWords: null,
   }
 };
 

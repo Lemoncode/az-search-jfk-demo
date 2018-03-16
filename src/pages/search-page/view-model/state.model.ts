@@ -7,6 +7,7 @@ import { SuggestionCollection } from "./suggestion.model";
 export interface State {
   searchValue: string;
   itemCollection: ItemCollection;
+  targetWords: string[];
   facetCollection: FacetCollection;
   filterCollection: FilterCollection;
   suggestionCollection: SuggestionCollection;

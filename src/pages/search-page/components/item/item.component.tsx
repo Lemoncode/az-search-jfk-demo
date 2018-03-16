@@ -14,9 +14,9 @@ const style = require("./item.style.scss");
 
 interface ItemProps {
   item: Item;
-  searchValue?: string;
+  targetWords?: string[];
   onClick?: (item: Item) => void;
-  hocrPreview?: boolean;
+  simplePreview?: boolean;
 }
 
 interface State {
@@ -43,7 +43,7 @@ const ItemMediaThumbnail: React.StatelessComponent<ItemProps> = ({ item, onClick
   );
 }
 
-const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, searchValue, onClick }) => {
+const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, targetWords, onClick }) => {
   return (
     <div className={style.itemMedia}
      onClick={handleOnClick({ item, onClick })}
@@ -52,7 +52,7 @@ const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, searc
         hocr={item.metadata}
         pageIndex="auto"
         zoomMode="original"
-        targetWords={searchValue.split(" ")}
+        targetWords={targetWords}
         onlyTargetWords={true}
         disabelScroll={true}
       />
@@ -60,11 +60,11 @@ const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, searc
   );
 }
 
-const ItemMedia: React.StatelessComponent<ItemProps> = ({ item, searchValue, onClick, hocrPreview }) => {
+const ItemMedia: React.StatelessComponent<ItemProps> = ({ item, targetWords, onClick, simplePreview }) => {
   return (
-    hocrPreview ? 
-      <ItemMediaHocrPreview item={item} searchValue={searchValue} onClick={onClick} /> :
-      <ItemMediaThumbnail item={item} onClick={onClick} />
+    simplePreview ? 
+      <ItemMediaThumbnail item={item} onClick={onClick} /> :
+      <ItemMediaHocrPreview item={item} targetWords={targetWords} onClick={onClick} />
   );
 }
 
@@ -141,11 +141,11 @@ class ItemComponent extends React.Component<ItemProps, State> {
   }
     
   public render() {
-    const {item, searchValue, onClick} = this.props;
+    const {item, targetWords, onClick} = this.props;
 
     return (
       <Card classes={{root:style.item}} elevation={8}>
-        <ItemMedia item={item} searchValue={searchValue} onClick={onClick} />
+        <ItemMedia item={item} targetWords={targetWords} onClick={onClick} />
         <ItemCaption item={item} onClick={onClick} />
         <CardActions classes={{root: style.itemActions}}>
           <div className={style.itemRating}>

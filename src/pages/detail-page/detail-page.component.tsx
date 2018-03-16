@@ -17,7 +17,7 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
 
   public render() {
     return (
-      <div>
+      <div className={style.container}>
         {/* <HocrProofreaderComponent
           hocr={this.props.hocr}
           zoom={"original"}
@@ -29,7 +29,7 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
           pageIndex="auto"
           zoomMode="original"
           targetWords={this.props.targetWords}
-          onWordHover={wId => console.log(wId)}
+          onWordHover={wId => console.log(wId) /* TODO: REMOVE TEMPORARY*/}
         />
       </div>
     );

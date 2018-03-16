@@ -16,7 +16,7 @@ export const HomePageComponent: React.StatelessComponent<{}> = () => {
       <br />
       <div className={style.buttonGroup}>
         <Link to={searchPath}>
-          <Button variant="raised" color="primary">Search Page</Button>
+          <Button variant="raised" color="primary" autoFocus={true}>Search Page</Button>
         </Link>
       </div>
     </div>

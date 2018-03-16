@@ -160,6 +160,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           filterCollection={this.state.filterCollection}
           onFilterUpdate={this.handleFilterUpdate}
           itemCollection={this.state.itemCollection}
+          targetWords={this.state.targetWords}
           onItemClick={this.handleOnItemClick}
           resultCount={this.state.resultCount}
           facetCollection={this.state.facetCollection}

@@ -21,6 +21,7 @@ interface SearchPageProps {
   showDrawer: boolean;
   searchValue: string;
   itemCollection: ItemCollection;
+  targetWords?: string[]
   facetCollection: FacetCollection;
   filterCollection: FilterCollection;
   suggestionCollection?: SuggestionCollection;
@@ -70,7 +71,7 @@ class SearchPageComponent extends React.Component<SearchPageProps, {}> {
           />
           <ItemCollectionViewComponent
              items={this.props.itemCollection}
-             searchValue={this.props.searchValue}
+             targetWords={this.props.targetWords}
              onClick={this.props.onItemClick}
              loading={this.props.loading}
              onLoadMore={this.props.onLoadMore}

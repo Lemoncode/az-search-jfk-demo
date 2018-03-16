@@ -3,7 +3,7 @@ export type WordComparator = (word: string) => boolean;
 
 export interface WordPosition {
   pageIndex: number;
-  firstOcurrenceId: string;
+  firstOcurrenceNode: Element;
 }
 
 export interface HocrStyleMap {
@@ -59,10 +59,10 @@ export const parseWordPosition = (doc: Document, pageIndex: PageIndex,
   wordComparator: WordComparator): WordPosition => {
   if (typeof pageIndex === "number") {
     const validatedPageIndex = (pageIndex < 0 || !checkPageIndexInRange(doc, pageIndex)) ? 0 : pageIndex;
-    const firstOcurrenceId = wordIdInPage(doc.body.children[validatedPageIndex], wordComparator);
+    const firstOcurrenceNode = wordIdInPage(doc.body.children[validatedPageIndex], wordComparator);
     return { 
       pageIndex: validatedPageIndex,
-      firstOcurrenceId,
+      firstOcurrenceNode,
     };
   } else {  // Auto page index based on the first ocurrence of a target word.
     return findFirstOcurrencePosition(doc, wordComparator);
@@ -74,29 +74,29 @@ const checkPageIndexInRange = (doc: Document, pageIndex: number) => {
 };
 
 const findFirstOcurrencePosition = (doc: Document, wordComparator: WordComparator): WordPosition => {
-  let pos = {pageIndex: 0, firstOcurrenceId: null};
+  let pos: WordPosition = {pageIndex: 0, firstOcurrenceNode: null};
   if (wordComparator) {
     Array.from(doc.body.children).some((page, index) => {
-      const foundId = wordIdInPage(page, wordComparator);
-      if (foundId) {
+      const foundNode = wordIdInPage(page, wordComparator);
+      if (foundNode) {
         pos.pageIndex = index;
-        pos.firstOcurrenceId = foundId;
+        pos.firstOcurrenceNode = foundNode;
       }
-      return Boolean(foundId);
+      return Boolean(foundNode);
     });
   }  
   return pos;
 };
 
-const wordIdInPage = (page: Element, wordComparator: WordComparator): string => {
+const wordIdInPage = (page: Element, wordComparator: WordComparator): Element => {
   const pageWords = page.getElementsByClassName(hocrEntityMap.word);
-  let id = null;
+  let wordNode = null;
   Array.from(pageWords).some((word, index) => {
     const comparison = wordComparator(word.textContent);
-    if (comparison) id = getNodeId(word);
+    if (comparison) wordNode = word;
     return comparison;
   })
-  return id;
+  return wordNode;
 };
 
 export const getNodeId = (node: Element, suffix: string = ""): string => {
@@ -106,6 +106,11 @@ export const getNodeId = (node: Element, suffix: string = ""): string => {
 export const composeId = (id: string, suffix: string = ""): string => {
   return [id, suffix].filter(s => s).join("-");
 };
+
+export const getNodeInElementById = (id: string, rootNode: Element) => {
+  if (!rootNode || !rootNode.children || !rootNode.children.length || !id) return null;
+  return Array.from(rootNode.children).find(n => n.getAttribute("id") === id);
+}
 
 const optionArrayFields = ['bbox', 'baseline', 'scan_res'];
 
@@ -126,20 +131,33 @@ export const getNodeOptions = (node: Element): any => {
   return options;
 };
 
-export const calculateNodeShiftInContainer = (nodeId: string, containerId: string) => {
-  const target = document.getElementById(nodeId);
-  const container = document.getElementById(containerId);
+const bboxToPosSize = (bbox) => ({
+  x: bbox[0],
+  y: bbox[1],
+  width: bbox[2] - bbox[0],
+  height: bbox[3] - bbox[1]
+})
+
+export const calculateNodeShiftInContainer = (target: Element, container: Element) => {
   if (!target || !container) return null;
   
-  const cbbox = container.getAttribute('viewBox').split(" ").map(n => parseInt(n));
-  const originalWidth = cbbox[2] - cbbox[0];
-  const originalHeight = cbbox[3] - cbbox[1];
-  const targetLeft = parseInt(target.getAttribute('x')) - cbbox[0];
-  const targetTop = parseInt(target.getAttribute('y')) - cbbox[1];
-  const targetCentroidLeft = targetLeft + (parseInt(target.getAttribute('width')) / 2);
-  const targetCentroidTop = targetTop + (parseInt(target.getAttribute('height')) / 2);
-  const targetCentroidPosX = targetCentroidLeft / originalWidth;
-  const targetCentroidPosY = targetCentroidTop / originalHeight;
+  const tOptions = getNodeOptions(target);
+  const cOptions = getNodeOptions(container);
+  if (!tOptions || !cOptions) return null;
+  
+  const tBbox = tOptions.bbox;
+  const cBbox = cOptions.bbox;
+  if (!tBbox || !cBbox) return null;
 
-  return {x: targetCentroidPosX, y: targetCentroidPosY};
+  const t = bboxToPosSize(tBbox);
+  const c = bboxToPosSize(cBbox);
+
+  const shiftX = t.x - c.x;
+  const shiftY = t.y - c.y;
+  const shiftCentroidX = shiftX + (t.width / 2);
+  const shiftCentroidY = shiftY + (t.height / 2);
+  const shiftCentroidXPercentage = shiftCentroidX / c.width;
+  const shiftCentroidYPercentage = shiftCentroidY / c.height;
+
+  return {x: shiftCentroidXPercentage, y: shiftCentroidYPercentage};
 }

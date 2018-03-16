@@ -7,7 +7,8 @@ import {
   CreateWordComparator,
   WordComparator,
   parseWordPosition,
-  getNodeId
+  getNodeId,
+  getNodeInElementById
 } from "./hocr-utils";
 import {
   ZoomMode,
@@ -32,7 +33,7 @@ export interface HocrPreviewProps {
   targetWords?: string[];
   caseSensitiveComparison?: boolean;
   onlyTargetWords?: boolean;
-  focusToNodeId?: string;
+  scrollToNodeId?: string;
   disabelScroll?: boolean;
   styleMap?: HocrPageStyleMap;
   onWordHover?: (wordId: string) => void;
@@ -41,7 +42,7 @@ export interface HocrPreviewProps {
 interface HocrPreviewState {
   pageNode: Element;
   wordCompare: WordComparator;
-  scrollToId: string;
+  scrollToNode: Element;
 }
 
 export class HocrPreviewComponent extends React.Component<HocrPreviewProps, HocrPreviewState> {
@@ -57,13 +58,11 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
     this.containerRef = node;
   }
 
-  private scrollToNodeId = (nodeId: string) => {
-    if (this.containerRef && nodeId) {
+  private scrollToNode = (node: Element) => {
+    if (this.containerRef && node && this.state.pageNode) {
       // Calculate scroll shift to reveal node right in the
       // center of the container.
-      const targetId = composeId(nodeId, idSuffix);
-      const pageNodeId = getNodeId(this.state.pageNode, idSuffix);
-      const shift = calculateNodeShiftInContainer(targetId, pageNodeId);
+      const shift = calculateNodeShiftInContainer(node, this.state.pageNode);
       if (shift) {
         const {x, y} = shift;
         const scrollLeft = this.containerRef.scrollWidth * x - (this.containerRef.clientWidth / 2); 
@@ -74,29 +73,32 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
   }
 
   private calculateWholeState = (props: HocrPreviewProps): HocrPreviewState => {
-    let state = {
+    let state: HocrPreviewState = {
       pageNode: null,
       wordCompare: null,
-      scrollToId: null,
+      scrollToNode: null,
     };
 
     if (props.hocr) {
       const doc = parseHocr(props.hocr);
       const wordCompare = CreateWordComparator(props.targetWords, props.caseSensitiveComparison);
-      const {pageIndex, firstOcurrenceId} = parseWordPosition(doc, props.pageIndex, wordCompare);
+      const {pageIndex, firstOcurrenceNode} = parseWordPosition(doc, props.pageIndex, wordCompare);
       if (pageIndex !== null) {
         const pageNode = doc.body.children[pageIndex];
-        const scrollToId = this.props.focusToNodeId || firstOcurrenceId;
-        state = {pageNode, wordCompare, scrollToId};
+        let scrollToNode = firstOcurrenceNode;
+        if(this.props.scrollToNodeId) { // User has preference to scroll over its desired node.
+          scrollToNode = getNodeInElementById(this.props.scrollToNodeId, pageNode);
+        }        
+        state = {pageNode, wordCompare, scrollToNode};
       }
     }
     return state;
   };
 
-  private setStateForScrollToId = (scrollToId: string) => {
+  private setStateForScrollToNode = (scrollToId: string) => {
     this.setState({
       ...this.state,
-      scrollToId,
+      scrollToNode: getNodeInElementById(this.props.scrollToNodeId, this.state.pageNode),
     })
   }
 
@@ -105,7 +107,7 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
   public componentDidMount() {
     // Scroll to reveal target node if needed.
     // This will be done only once, when component is mounted.
-    this.scrollToNodeId(this.state.scrollToId);
+    this.scrollToNode(this.state.scrollToNode);
   }
 
   public componentWillReceiveProps(nextProps: HocrPreviewProps) {
@@ -118,14 +120,14 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
         ...this.state,
         ...this.calculateWholeState(nextProps),
       });
-    } else if ( this.props.focusToNodeId != nextProps.focusToNodeId ) {
-      this.setStateForScrollToId(nextProps.focusToNodeId);
+    } else if ( this.props.scrollToNodeId != nextProps.scrollToNodeId ) {
+      this.setStateForScrollToNode(nextProps.scrollToNodeId);
     }     
   }
 
-  public componentDidUpdate(prevProps, prevState) {
-    if (this.state.scrollToId !== prevProps.scrollToId) {
-      this.scrollToNodeId(this.state.scrollToId);        
+  public componentDidUpdate(prevProps: HocrPreviewProps, prevState: HocrPreviewState) {
+    if (this.state.scrollToNode !== prevState.scrollToNode) {
+      this.scrollToNode(this.state.scrollToNode);        
     }
   }
 
