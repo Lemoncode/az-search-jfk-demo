@@ -53,7 +53,7 @@ const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, targe
         pageIndex="auto"
         zoomMode="original"
         targetWords={targetWords}
-        onlyTargetWords={true}
+        renderOnlyTargetWords={true}
         disabelScroll={true}
       />
     </div>

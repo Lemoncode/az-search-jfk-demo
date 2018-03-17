@@ -1,18 +1,18 @@
-@mixin default-rect {
+@mixin default-fill {
   fill: none;
   pointer-events: fill;
 }
 
 .area {
-  @include default-rect();
+  @include default-fill();
 }
 
 .par {
-  @include default-rect();
+  @include default-fill();
 }
 
 .line {
-  @include default-rect();
+  @include default-fill();
 
   &:hover {
     stroke: #ff6600;
@@ -22,11 +22,17 @@
 }
 
 .word {
-  @include default-rect();
+  @include default-fill();
 
-  &.highlight {
+  &.target {
     fill: yellow;
     opacity: 0.5;
+  }
+
+  // TODO
+  &.highlight {
+    // fill: yellow;
+    // opacity: 0.5;
   }
 
   &:hover {

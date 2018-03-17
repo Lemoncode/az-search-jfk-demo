@@ -18,19 +18,19 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
   public render() {
     return (
       <div className={style.container}>
-        <HocrProofreaderComponent
+        {/* <HocrProofreaderComponent
           hocr={this.props.hocr}
           zoom={"original"}
           layout={"both"}
           targetWords={this.props.targetWords}
-        />
-        {/* <HocrPreviewComponent
+        /> */}
+        <HocrPreviewComponent
           hocr={this.props.hocr}
           pageIndex="auto"
           zoomMode="original"
           targetWords={this.props.targetWords}
           onWordHover={wId => console.log(wId) /* TODO: REMOVE TEMPORARY*/}
-        /> */}
+        />
       </div>
     );
   }

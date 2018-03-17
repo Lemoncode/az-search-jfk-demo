@@ -6,15 +6,8 @@ export interface WordPosition {
   firstOcurrenceNode: Element;
 }
 
-export interface HocrStyleMap {
-  area: string;
-  paragraph: string;
-  line: string;
-  word: string;
-  highlight: string;
-};
 
-export const hocrEntityMap = {
+const hocrEntityMap = {
   area: "ocr_carea",
   paragraph: "ocr_par",
   line: "ocr_line",
@@ -30,15 +23,6 @@ export const resolveNodeEntity = (node: Element): string => {
   });
 
   return entity;
-};
-
-export const CreateNodeClassNameResolver = (classNameMapper: HocrStyleMap) =>{
-  return {
-    
-    get(className: string): boolean {
-      return classNameMapper.word === className;
-    }
-  }  
 };
 
 export const CreateWordComparator = (targetWords: string[], caseSensitive: boolean = false) => {
@@ -107,9 +91,9 @@ export const composeId = (id: string, suffix: string = ""): string => {
   return [id, suffix].filter(s => s).join("-");
 };
 
-export const getNodeInElementById = (id: string, rootNode: Element) => {
-  if (!rootNode || !rootNode.children || !rootNode.children.length || !id) return null;
-  return Array.from(rootNode.children).find(n => n.getAttribute("id") === id);
+export const getNodeById = (parentNode: Element, id: string) => {
+  if (!parentNode || !parentNode.children || !parentNode.children.length || !id) return null;
+  return Array.from(parentNode.children).find(n => n.getAttribute("id") === id);
 }
 
 const optionArrayFields = ['bbox', 'baseline', 'scan_res'];
@@ -131,7 +115,7 @@ export const getNodeOptions = (node: Element): any => {
   return options;
 };
 
-const bboxToPosSize = (bbox) => ({
+export const bboxToPosSize = (bbox) => ({
   x: bbox[0],
   y: bbox[1],
   width: bbox[2] - bbox[0],

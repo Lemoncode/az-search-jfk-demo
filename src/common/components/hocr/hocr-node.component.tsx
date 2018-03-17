@@ -1,132 +1,128 @@
 import * as React from "react";
+import { injectDefaultNodeStyle } from "./hocr-node.style";
+import { HocrUserStyleMap } from "./hocr-common.style";
 import { 
   WordComparator,
-  HocrStyleMap,
   getNodeId,
   getNodeOptions,
   resolveNodeEntity,
-  composeId,  
-} from "./hocr-utils";
+  composeId,
+  bboxToPosSize,  
+} from "./hocr-common.util";
+import { cnc } from "../../../util";
 
-const style = require("./hocr-node.style.scss");
+
+/**
+ * HOCR Node SVG
+ */
+
+interface SvgRectProps {
+  node: Element;
+  className: string;
+  idSuffix: string;
+  onHover?: (id: string) => void; 
+}
+
+const SvgRectComponent: React.StatelessComponent<SvgRectProps> = (props) => {
+  const nodeOptions = getNodeOptions(props.node);
+  if (!nodeOptions || !nodeOptions.bbox) return null;
+  
+  const nodePosSize = bboxToPosSize(nodeOptions.bbox);
+  const id = getNodeId(props.node);
+  const suffixedId = composeId(id, props.idSuffix);
+  
+  return (
+    <rect
+      className={props.className}
+      id={suffixedId}
+      x={nodePosSize.x}
+      y={nodePosSize.y}
+      width={nodePosSize.width}
+      height={nodePosSize.height}
+      onMouseEnter={props.onHover && (() => props.onHover(id))}
+    />
+  );
+}
+
+interface SvgGroupProps {
+  className: string;
+}
+
+const SvgGroupComponent: React.StatelessComponent<SvgGroupProps> = (props) => {
+  return (
+    <g className={props.className}>
+      {props.children}
+    </g>
+  );
+};
 
 
-interface HocrNodeProps {
-  rootNode: Element;
+/**
+ * HOCR Node
+ */
+
+export interface HocrNodeProps {
+  node: Element;
+  key?: number;
   wordCompare: WordComparator;
   idSuffix: string;
-  onlyTargetWords?: boolean;
-  styleMap?: HocrStyleMap;
+  renderOnlyTargetWords?: boolean;
+  userStyle?: HocrUserStyleMap;
   onWordHover?: (wordId: string) => void;
 }
 
-export const defaultNodeStyles: HocrStyleMap = {
-  area: style.area,
-  paragraph: style.par,
-  line: style.line,
-  word: style.word,
-  highlight: style.highlight,  
-}
-
-const mergeNodeStyle = (inputStyles: HocrStyleMap) => {
-  return {
-    ...defaultNodeStyles,
-    ...inputStyles,
-  };
+interface HocrGroupProps extends HocrNodeProps {
+  entity: string;
 }
 
 export const HocrNodeComponent: React.StatelessComponent<HocrNodeProps> = (props) => {
-  if (!props.rootNode) return null;
+  const entity = resolveNodeEntity(props.node);
+  if (!entity) return null;
   
-  const mStyleMap = mergeNodeStyle(props.styleMap);
-  const nodeRenderer = CreateNodeRenderer(props.rootNode, props.wordCompare, mStyleMap,
-    props.idSuffix, props.onWordHover);
-  
-  return props.onlyTargetWords ? 
-    nodeRenderer.renderOnlyTargets(props.rootNode) :
-    nodeRenderer.renderAll(props.rootNode);
+  return (entity === "word") ? 
+    <HocrWordComponent {...props}/> : 
+    <HocrGroupComponent {...props} entity={entity}/>
 }
 
-const CreateNodeRenderer = (rootNode: Element, wordCompare: WordComparator,
-  styleMap: HocrStyleMap, idSuffix: string, onWordHover: (wordId: string) => void) => {
+const HocrWordComponent: React.StatelessComponent<HocrNodeProps> = (props) => {
+  const isTarget = props.wordCompare && props.wordCompare(props.node.textContent);
+  const shouldRenderSvg = (!props.renderOnlyTargetWords || (props.renderOnlyTargetWords && isTarget));
+  
+  return shouldRenderSvg ?
+    <SvgRectComponent 
+      node={props.node}
+      className={cnc(props.userStyle["word"], isTarget && props.userStyle["target"])}
+      idSuffix={props.idSuffix}
+      onHover={props.onWordHover}
+    />
+  : null;
+}
 
-  const renderAll = (node: Element) => {
-    return Array.from(node.children).map((child, index) => {
-      const {entity, className} = getNodeInfo(child);
-      if (entity === "word") {
-        const isTarget = wordCompare && wordCompare(child.textContent);
-        const composedClassName = isTarget ? `${className} ${getStyle("highlight")}` : className;
-        return renderSvgRect(child, composedClassName, index, onWordHover);
-      } else if (entity && child.children && child.children.length) {
-        return renderSvgGroup(child, className, index);
-      } else {
-        return null;
-      }
-    })
-    .filter(n => n);
-  };
+const HocrGroupComponent: React.StatelessComponent<HocrGroupProps> = (props) => {
+  const shouldRenderSvg = !props.renderOnlyTargetWords;
+  const childrenComponents = getNodeChildrenComponents(props);
 
-  const renderOnlyTargets = (node: Element) => {
-    if (!wordCompare) return null; 
+  return shouldRenderSvg ? 
+    <SvgGroupComponent className={props.userStyle[props.entity]}>
+      <SvgRectComponent
+        node={props.node}
+        className={props.userStyle[props.entity]}
+        idSuffix={props.idSuffix}
+      />
+      {childrenComponents}
+    </SvgGroupComponent>
+  : <>{childrenComponents}</>;
+}
 
-    return Array.from(node.children).map((child, index) => {
-      const {entity, className} = getNodeInfo(child);
-      if (entity === "word" && wordCompare(child.textContent)) {
-        const composedClassName = `${className} ${getStyle("highlight")}`;
-        return renderSvgRect(child, composedClassName, index, onWordHover);
-      } else if (child.children && child.children.length) {
-        return renderOnlyTargets(child);
-      } else {
-        return null;
-      }
-    })
-    .filter(n => n);
-  };
 
-  const renderSvgRect = (node: Element, className: string, index: number, onHover?) => {
-    const id = getNodeId(node);
-    const suffixedId = composeId(id, idSuffix);
-    const nodeOptions = getNodeOptions(node);
-    return (nodeOptions && nodeOptions.bbox) ? 
-    (
-      <rect
-        className={className}
+export const getNodeChildrenComponents = (props: HocrNodeProps) => {
+  return (props.node.children && props.node.children.length) ? 
+    Array.from(props.node.children).map((child, index) => 
+      <HocrNodeComponent
+        {...props}
+        node={child}
         key={index}
-        id={suffixedId}
-        x={nodeOptions.bbox[0]}
-        y={nodeOptions.bbox[1]}
-        width={nodeOptions.bbox[2] - nodeOptions.bbox[0]}
-        height={nodeOptions.bbox[3] - nodeOptions.bbox[1]}
-        onMouseEnter={onHover ? () => onHover(id) : () => {}}
+        userStyle={injectDefaultNodeStyle(props.userStyle)}
       />
     ) : null;
-  };
-  
-  const renderSvgGroup = (node: Element, className: string, index: number) => {
-    return (
-      <g className={className} key={index}>
-        {renderSvgRect(node, className, index)}
-        {renderAll(node)}
-      </g>
-    );
-  };
-
-  const getNodeInfo = (node: Element) => {
-    const entity = resolveNodeEntity(node);
-    const className = getStyle(entity);
-
-    return {
-      entity,
-      className,
-    };
-  }
-
-  const getStyle = (entity: string) => {
-    return styleMap ? styleMap[entity] : null;
-  }
-
-  return {
-    renderAll,
-    renderOnlyTargets,
-  };
-};
+}

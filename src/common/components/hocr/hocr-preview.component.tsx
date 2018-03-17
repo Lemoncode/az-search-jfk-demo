@@ -1,23 +1,19 @@
 import * as React from "react";
+import { ZoomMode, HocrPageComponent } from "./hocr-page.component";
+import { HocrUserStyleMap } from "./hocr-common.style";
 import {
   calculateNodeShiftInContainer,
-  composeId,
   PageIndex,
   parseHocr,
   CreateWordComparator,
   WordComparator,
   parseWordPosition,
-  getNodeId,
-  getNodeInElementById
-} from "./hocr-utils";
-import {
-  ZoomMode,
-  HocrPageStyleMap,
-  HocrPageComponent
-} from "./hocr-page.component";
+  getNodeById,
+} from "./hocr-common.util";
 import { cnc } from "../../../util";
 
-const style = require("./hocr-preview.style.scss");
+
+const styleFile = require("./hocr-preview.style.scss");
 
 const idSuffix = "preview";
 
@@ -32,10 +28,10 @@ export interface HocrPreviewProps {
   zoomMode: ZoomMode;
   targetWords?: string[];
   caseSensitiveComparison?: boolean;
-  onlyTargetWords?: boolean;
-  scrollToNodeId?: string;
+  renderOnlyTargetWords?: boolean;
+  scrollToId?: string;
   disabelScroll?: boolean;
-  styleMap?: HocrPageStyleMap;
+  userStyle?: HocrUserStyleMap;
   onWordHover?: (wordId: string) => void;
 };
 
@@ -86,8 +82,8 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
       if (pageIndex !== null) {
         const pageNode = doc.body.children[pageIndex];
         let scrollToNode = firstOcurrenceNode;
-        if(this.props.scrollToNodeId) { // User has preference to scroll over its desired node.
-          scrollToNode = getNodeInElementById(this.props.scrollToNodeId, pageNode);
+        if(this.props.scrollToId) { // User has preference to scroll over its desired node.
+          scrollToNode = getNodeById(pageNode, this.props.scrollToId);
         }        
         state = {pageNode, wordCompare, scrollToNode};
       }
@@ -98,7 +94,7 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
   private setStateForScrollToNode = (scrollToId: string) => {
     this.setState({
       ...this.state,
-      scrollToNode: getNodeInElementById(this.props.scrollToNodeId, this.state.pageNode),
+      scrollToNode: getNodeById(this.state.pageNode, this.props.scrollToId),
     })
   }
 
@@ -120,8 +116,8 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
         ...this.state,
         ...this.calculateWholeState(nextProps),
       });
-    } else if ( this.props.scrollToNodeId != nextProps.scrollToNodeId ) {
-      this.setStateForScrollToNode(nextProps.scrollToNodeId);
+    } else if ( this.props.scrollToId != nextProps.scrollToId ) {
+      this.setStateForScrollToNode(nextProps.scrollToId);
     }     
   }
 
@@ -133,16 +129,16 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
 
   public render() {
     return (
-      <div className={cnc(style.container, this.props.disabelScroll && style.noScrollable )}
+      <div className={cnc(styleFile.container, this.props.disabelScroll && styleFile.noScrollable )}
        ref={this.saveContainerRef}
       >
         <HocrPageComponent
-          pageNode={this.state.pageNode}
+          node={this.state.pageNode}
           wordCompare={this.state.wordCompare}
           idSuffix={idSuffix}
           zoomMode={this.props.zoomMode}
-          onlyTargetWords={this.props.onlyTargetWords}
-          styleMap={this.props.styleMap}
+          renderOnlyTargetWords={this.props.renderOnlyTargetWords}
+          userStyle={this.props.userStyle}
           onWordHover={this.props.onWordHover}
         />
       </div>
