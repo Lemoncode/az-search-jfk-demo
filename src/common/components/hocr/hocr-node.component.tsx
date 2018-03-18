@@ -1,6 +1,6 @@
 import * as React from "react";
 import { injectDefaultNodeStyle } from "./hocr-node.style";
-import { HocrUserStyleMap } from "./hocr-common.style";
+import { HocrPreviewStyleMap } from "./hocr-common.style";
 import { 
   WordComparator,
   getNodeId,
@@ -40,6 +40,7 @@ const SvgRectComponent: React.StatelessComponent<SvgRectProps> = (props) => {
       width={nodePosSize.width}
       height={nodePosSize.height}
       onMouseEnter={props.onHover && (() => props.onHover(id))}
+      onMouseLeave={props.onHover && (() => props.onHover(null))}
     />
   );
 }
@@ -67,7 +68,7 @@ export interface HocrNodeProps {
   wordCompare: WordComparator;
   idSuffix: string;
   renderOnlyTargetWords?: boolean;
-  userStyle?: HocrUserStyleMap;
+  userStyle?: HocrPreviewStyleMap;
   onWordHover?: (wordId: string) => void;
 }
 
@@ -108,6 +109,7 @@ const HocrGroupComponent: React.StatelessComponent<HocrGroupProps> = (props) => 
         node={props.node}
         className={props.userStyle[props.entity]}
         idSuffix={props.idSuffix}
+        onHover={null}
       />
       {childrenComponents}
     </SvgGroupComponent>

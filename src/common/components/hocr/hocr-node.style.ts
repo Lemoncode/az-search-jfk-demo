@@ -1,4 +1,4 @@
-import { HocrUserStyleMap } from "./hocr-common.style";
+import { HocrPreviewStyleMap } from "./hocr-common.style";
 
 const style = require("./hocr-node.style.scss");
 
@@ -20,7 +20,7 @@ export const defaultNodeStyle: HocrNodeStyleMap = {
   highlight: style.highlight,  
 }
 
-export const injectDefaultNodeStyle = (userStyle: HocrUserStyleMap): HocrUserStyleMap => {
+export const injectDefaultNodeStyle = (userStyle: HocrPreviewStyleMap): HocrPreviewStyleMap => {
   return {
     ...defaultNodeStyle,
     ...userStyle,

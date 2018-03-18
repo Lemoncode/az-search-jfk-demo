@@ -17,7 +17,7 @@
   &:hover {
     stroke: #ff6600;
     stroke-width: 1;
-    stroke-dasharray: 10, 10;
+    stroke-dasharray: 2, 2;
   }
 }
 
@@ -29,13 +29,8 @@
     opacity: 0.5;
   }
 
-  // TODO
+  &:hover,
   &.highlight {
-    // fill: yellow;
-    // opacity: 0.5;
-  }
-
-  &:hover {
     fill: #99cfff;
     opacity: 0.5;
     stroke: #007eff;

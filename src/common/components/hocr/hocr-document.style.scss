@@ -1,0 +1,57 @@
+.container {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.viewport {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+.page {
+  //border-bottom: 3px dashed #3399ff;
+  margin: 1rem 0.25rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: white;
+    
+}
+
+.area {
+  padding-left: 10px;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    border-left: 3px solid #3399ff;
+  }
+}
+
+.paragraph {
+  border: 1px solid transparent;
+
+  &:hover {
+    border: 1px dashed #3399ff;
+  }
+}
+
+.line {
+  word-wrap: normal;
+  
+  &:hover {
+    background: #cce5ff;
+  }
+}
+
+.word {
+  &.target {
+    background: yellow;
+  }
+
+  &:hover {
+    background: #99cfff;
+  }
+}

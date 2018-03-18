@@ -1,4 +1,11 @@
-import { HocrPageStyleMap } from "./hocr-page.style";
-import { HocrNodeStyleMap } from "./hocr-node.style";
+import { HocrPageStyleMap, injectDefaultPageStyle } from "./hocr-page.style";
+import { HocrNodeStyleMap, injectDefaultNodeStyle } from "./hocr-node.style";
 
-export interface HocrUserStyleMap extends HocrPageStyleMap, HocrNodeStyleMap {};
+export interface HocrPreviewStyleMap extends HocrPageStyleMap, HocrNodeStyleMap {};
+
+export const injectDefaultPreviewStyle = (userStyle: HocrPreviewStyleMap): HocrPreviewStyleMap => {
+  return {
+    ...injectDefaultPageStyle(userStyle),
+    ...injectDefaultNodeStyle(userStyle),
+  };
+}

@@ -1,4 +1,4 @@
-import { HocrUserStyleMap } from "./hocr-common.style";
+import { HocrPreviewStyleMap } from "./hocr-common.style";
 
 const style = require("./hocr-page.style.scss");
 
@@ -17,7 +17,7 @@ export const defaultPageStyle: HocrPageStyleMap = {
   placeholders: style.placeholders,
 }
 
-export const injectDefaultPageStyle = (userStyle: HocrUserStyleMap): HocrUserStyleMap => {
+export const injectDefaultPageStyle = (userStyle: HocrPreviewStyleMap): HocrPreviewStyleMap => {
   return {
     ...defaultPageStyle,
     ...userStyle,

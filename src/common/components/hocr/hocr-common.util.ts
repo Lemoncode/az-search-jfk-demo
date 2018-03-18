@@ -8,6 +8,7 @@ export interface WordPosition {
 
 
 const hocrEntityMap = {
+  page: "ocr_page",
   area: "ocr_carea",
   paragraph: "ocr_par",
   line: "ocr_line",
@@ -92,8 +93,7 @@ export const composeId = (id: string, suffix: string = ""): string => {
 };
 
 export const getNodeById = (parentNode: Element, id: string) => {
-  if (!parentNode || !parentNode.children || !parentNode.children.length || !id) return null;
-  return Array.from(parentNode.children).find(n => n.getAttribute("id") === id);
+  return parentNode.querySelector(`#${id}`);
 }
 
 const optionArrayFields = ['bbox', 'baseline', 'scan_res'];
@@ -115,33 +115,53 @@ export const getNodeOptions = (node: Element): any => {
   return options;
 };
 
-export const bboxToPosSize = (bbox) => ({
+
+export interface PosSize {
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+}
+
+export const bboxToPosSize = (bbox: number[]): PosSize => ({
   x: bbox[0],
   y: bbox[1],
   width: bbox[2] - bbox[0],
   height: bbox[3] - bbox[1]
 })
 
-export const calculateNodeShiftInContainer = (target: Element, container: Element) => {
-  if (!target || !container) return null;
-  
-  const tOptions = getNodeOptions(target);
-  const cOptions = getNodeOptions(container);
-  if (!tOptions || !cOptions) return null;
-  
-  const tBbox = tOptions.bbox;
-  const cBbox = cOptions.bbox;
-  if (!tBbox || !cBbox) return null;
+export const getPosSizeFromDOMNode = (node: Element): PosSize => {
+  if (node) {
+    return {
+      x: parseInt(node.getAttribute("x")),
+      y: parseInt(node.getAttribute("y")),
+      width: parseInt(node.getAttribute("width")),
+      height: parseInt(node.getAttribute("height")),
+    };
+  }
+  return null;
+}
 
-  const t = bboxToPosSize(tBbox);
-  const c = bboxToPosSize(cBbox);
+export const getPosSizeFromViewBoxNode = (node: Element): PosSize => {
+  const viewBox = node.getAttribute("viewBox");
+  if (!viewBox) return null;
+  return bboxToPosSize(viewBox.split(" ").map(n => parseInt(n)));
+}
 
-  const shiftX = t.x - c.x;
-  const shiftY = t.y - c.y;
-  const shiftCentroidX = shiftX + (t.width / 2);
-  const shiftCentroidY = shiftY + (t.height / 2);
-  const shiftCentroidXPercentage = shiftCentroidX / c.width;
-  const shiftCentroidYPercentage = shiftCentroidY / c.height;
+export const getPosSizeFromBBoxNode = (node: Element): PosSize => {
+  if (!node) return null;
+  const nodeOptions = getNodeOptions(node);
+  if (!nodeOptions || !nodeOptions.bbox) return null;
+  return bboxToPosSize(nodeOptions.bbox);
+}
+
+export const calculateNodeShiftInContainer = (target: PosSize, container: PosSize) => {
+  const shiftX = target.x - container.x;
+  const shiftY = target.y - container.y;
+  const shiftCentroidX = shiftX + (target.width / 2);
+  const shiftCentroidY = shiftY + (target.height / 2);
+  const shiftCentroidXPercentage = shiftCentroidX / container.width;
+  const shiftCentroidYPercentage = shiftCentroidY / container.height;
 
   return {x: shiftCentroidXPercentage, y: shiftCentroidYPercentage};
 }

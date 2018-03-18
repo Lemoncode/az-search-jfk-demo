@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link } from 'react-router-dom';
 import { HocrProofreaderComponent } from "../../common/components/hocr-thirdparty";
-import { HocrPreviewComponent } from "../../common/components/hocr";
+import { HocrPreviewComponent, HocrDocumentComponent, PageIndex } from "../../common/components/hocr";
 
 const style = require("./detail-page.style.scss");
 
@@ -10,9 +10,42 @@ interface DetailPageProps {
   targetWords: string[];
 }
 
-export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
+interface DetailPageState {
+  docIdHighlighted: string;
+  previewIdHightlighted: string;
+  previewPageIndex: PageIndex;
+}
+
+export class DetailPageComponent extends React.Component<DetailPageProps, DetailPageState> {
   constructor(props) {
     super(props);
+
+    this.state = {
+      docIdHighlighted: null,
+      previewIdHightlighted: null,
+      previewPageIndex: "auto",
+    }
+  }
+
+  private handleDocumentWordHover = (id: string) => {
+    this.setState({
+      ...this.state,
+      previewIdHightlighted: id,
+    })
+  }
+
+  private handleDocumentPageHover = (index: number) => {
+    this.setState({
+      ...this.state,
+      previewPageIndex: index,
+    })
+  }
+
+  private handlePreviewWordHover = (id: string) => {
+    this.setState({
+      ...this.state,
+      docIdHighlighted: id,
+    })
   }
 
   public render() {
@@ -25,12 +58,23 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
           targetWords={this.props.targetWords}
         /> */}
         <HocrPreviewComponent
+          className={style.hocrPreview}
           hocr={this.props.hocr}
-          pageIndex="auto"
           zoomMode="original"
+          pageIndex={this.state.previewPageIndex}
+          autoFocusId={this.state.previewIdHightlighted}
           targetWords={this.props.targetWords}
-          onWordHover={wId => console.log(wId) /* TODO: REMOVE TEMPORARY*/}
+          onWordHover={this.handlePreviewWordHover}
         />
+        <HocrDocumentComponent
+          className={style.hocrDocument}
+          hocr={this.props.hocr}
+          targetWords={this.props.targetWords}
+          autoFocusId={this.state.docIdHighlighted}
+          onWordHover={this.handleDocumentWordHover}
+          onPageHover={this.handleDocumentPageHover}
+        />
+
       </div>
     );
   }

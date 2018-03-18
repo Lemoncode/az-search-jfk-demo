@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ZoomMode, HocrPageComponent } from "./hocr-page.component";
-import { HocrUserStyleMap } from "./hocr-common.style";
+import { HocrPreviewStyleMap, injectDefaultPreviewStyle } from "./hocr-common.style";
 import {
   calculateNodeShiftInContainer,
   PageIndex,
@@ -9,11 +9,15 @@ import {
   WordComparator,
   parseWordPosition,
   getNodeById,
+  PosSize,
+  getPosSizeFromViewBoxNode,
+  getPosSizeFromBBoxNode,
+  composeId,
+  getPosSizeFromDOMNode,
 } from "./hocr-common.util";
 import { cnc } from "../../../util";
 
-
-const styleFile = require("./hocr-preview.style.scss");
+const style = require("./hocr-preview.style.scss");
 
 const idSuffix = "preview";
 
@@ -29,81 +33,97 @@ export interface HocrPreviewProps {
   targetWords?: string[];
   caseSensitiveComparison?: boolean;
   renderOnlyTargetWords?: boolean;
-  scrollToId?: string;
+  autoFocusId?: string;
+  highlightId?: string;
   disabelScroll?: boolean;
-  userStyle?: HocrUserStyleMap;
+  userStyle?: HocrPreviewStyleMap;
   onWordHover?: (wordId: string) => void;
+  className?: string;
 };
 
 interface HocrPreviewState {
   pageNode: Element;
+  pagePosSize: PosSize;
   wordCompare: WordComparator;
-  scrollToNode: Element;
+  autoFocusNode: Element;
+  autoFocusPosSize: PosSize;
+  safeStyle?: HocrPreviewStyleMap;
 }
 
 export class HocrPreviewComponent extends React.Component<HocrPreviewProps, HocrPreviewState> {
   constructor(props) {
     super(props);
 
-    this.state = this.calculateWholeState(props);
-  }
-
-  private containerRef = null;
-
-  private saveContainerRef = (node) => {
-    this.containerRef = node;
-  }
-
-  private scrollToNode = (node: Element) => {
-    if (this.containerRef && node && this.state.pageNode) {
-      // Calculate scroll shift to reveal node right in the
-      // center of the container.
-      const shift = calculateNodeShiftInContainer(node, this.state.pageNode);
-      if (shift) {
-        const {x, y} = shift;
-        const scrollLeft = this.containerRef.scrollWidth * x - (this.containerRef.clientWidth / 2); 
-        const scrollTop = this.containerRef.scrollHeight * y - (this.containerRef.clientHeight / 2);
-        this.containerRef.scrollTo({left: scrollLeft, top: scrollTop});
-      }      
+    this.state = {
+      ...this.calculateStateFromProps(props),
+      safeStyle: injectDefaultPreviewStyle(props.userStyle),
     }
   }
 
-  private calculateWholeState = (props: HocrPreviewProps): HocrPreviewState => {
-    let state: HocrPreviewState = {
-      pageNode: null,
-      wordCompare: null,
-      scrollToNode: null,
-    };
+  private viewportRef = null;
 
-    if (props.hocr) {
-      const doc = parseHocr(props.hocr);
-      const wordCompare = CreateWordComparator(props.targetWords, props.caseSensitiveComparison);
-      const {pageIndex, firstOcurrenceNode} = parseWordPosition(doc, props.pageIndex, wordCompare);
+  private saveViewportRef = (node) => {
+    this.viewportRef = node;
+  }
+
+  private scrollTo = (targetPosSize: PosSize) => {    
+    if (!this.viewportRef || !targetPosSize || !this.state.pagePosSize) return;
+    
+    const shift = calculateNodeShiftInContainer(targetPosSize, this.state.pagePosSize);
+    if (!shift) return;
+
+    const {x, y} = shift;
+    const scrollLeft = this.viewportRef.scrollWidth * x - (this.viewportRef.clientWidth / 2); 
+    const scrollTop = this.viewportRef.scrollHeight * y - (this.viewportRef.clientHeight / 2);
+    this.viewportRef.scrollTo({left: scrollLeft, top: scrollTop});
+  }
+
+  private resetHighlight = (node: Element) => {
+    if (node) node.classList.remove(this.state.safeStyle["highlight"]);
+  }
+
+  private setHighlight = (node: Element) => {
+    if (node) node.classList.add(this.state.safeStyle["highlight"]);
+  }
+
+  private autoFocusToNode = (nodeId: string) => {
+    this.resetHighlight(this.state.autoFocusNode);
+    if (nodeId) {      
+      const focusNode = getNodeById(this.viewportRef, composeId(nodeId, idSuffix));
+      this.setHighlight(focusNode);
+      this.scrollTo(getPosSizeFromDOMNode(focusNode));
+      this.setState({
+        ...this.state,
+        autoFocusNode: focusNode,
+      });
+    }
+  }
+
+  private calculateStateFromProps = (newProps: HocrPreviewProps): HocrPreviewState => {    
+    if (newProps.hocr) {
+      const doc = parseHocr(newProps.hocr);
+      const wordCompare = CreateWordComparator(newProps.targetWords, newProps.caseSensitiveComparison);
+      let pageIndex = newProps.pageIndex;
+      let autoFocusNode = null;
+      if (pageIndex === "auto") {
+        const wordPosition = parseWordPosition(doc, newProps.pageIndex, wordCompare);
+        pageIndex = wordPosition.pageIndex;
+        autoFocusNode = wordPosition.firstOcurrenceNode;
+      }
+
       if (pageIndex !== null) {
         const pageNode = doc.body.children[pageIndex];
-        let scrollToNode = firstOcurrenceNode;
-        if(this.props.scrollToId) { // User has preference to scroll over its desired node.
-          scrollToNode = getNodeById(pageNode, this.props.scrollToId);
-        }        
-        state = {pageNode, wordCompare, scrollToNode};
+        const pagePosSize = getPosSizeFromBBoxNode(pageNode);
+        const autoFocusPosSize = getPosSizeFromBBoxNode(autoFocusNode);
+        return {pageNode, pagePosSize, wordCompare, autoFocusNode, autoFocusPosSize};
       }
     }
-    return state;
   };
-
-  private setStateForScrollToNode = (scrollToId: string) => {
-    this.setState({
-      ...this.state,
-      scrollToNode: getNodeById(this.state.pageNode, this.props.scrollToId),
-    })
-  }
 
   // *** Lifecycle ***
 
   public componentDidMount() {
-    // Scroll to reveal target node if needed.
-    // This will be done only once, when component is mounted.
-    this.scrollToNode(this.state.scrollToNode);
+    this.scrollTo(this.state.autoFocusPosSize); // Initial scroll on mount.
   }
 
   public componentWillReceiveProps(nextProps: HocrPreviewProps) {
@@ -114,33 +134,52 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
     ) {
       this.setState({
         ...this.state,
-        ...this.calculateWholeState(nextProps),
+        ...this.calculateStateFromProps(nextProps),
       });
-    } else if ( this.props.scrollToId != nextProps.scrollToId ) {
-      this.setStateForScrollToNode(nextProps.scrollToId);
-    }     
+    } else if ( this.props.userStyle != nextProps.userStyle ) {
+      this.setState({
+        ...this.state,
+        safeStyle: injectDefaultPreviewStyle(nextProps.userStyle),
+      });
+    } else if ( this.props.autoFocusId != nextProps.autoFocusId ) {
+      this.autoFocusToNode(nextProps.autoFocusId);
+    };
   }
 
-  public componentDidUpdate(prevProps: HocrPreviewProps, prevState: HocrPreviewState) {
-    if (this.state.scrollToNode !== prevState.scrollToNode) {
-      this.scrollToNode(this.state.scrollToNode);        
-    }
+  public shouldComponentUpdate(nextProps: HocrPreviewProps, nextState: HocrPreviewState) {
+    const shouldUpdate = ( 
+      this.props.hocr !== nextProps.hocr ||
+      this.props.pageIndex !== nextProps.pageIndex ||
+      this.props.zoomMode !== nextProps.zoomMode ||
+      this.props.targetWords !== nextProps.targetWords ||
+      this.props.caseSensitiveComparison !== nextProps.caseSensitiveComparison ||
+      this.props.renderOnlyTargetWords !== nextProps.renderOnlyTargetWords ||
+      this.props.disabelScroll !== nextProps.disabelScroll ||
+      this.props.userStyle !== nextProps.userStyle ||
+      this.props.onWordHover !== nextProps.onWordHover ||
+      this.props.className !== nextProps.className ||
+      this.state.pageNode !== nextState.pageNode ||
+      this.state.wordCompare !== nextState.wordCompare
+    );
+    return shouldUpdate;
   }
 
   public render() {
     return (
-      <div className={cnc(styleFile.container, this.props.disabelScroll && styleFile.noScrollable )}
-       ref={this.saveContainerRef}
-      >
-        <HocrPageComponent
-          node={this.state.pageNode}
-          wordCompare={this.state.wordCompare}
-          idSuffix={idSuffix}
-          zoomMode={this.props.zoomMode}
-          renderOnlyTargetWords={this.props.renderOnlyTargetWords}
-          userStyle={this.props.userStyle}
-          onWordHover={this.props.onWordHover}
-        />
+      <div className={cnc(style.container, this.props.className)}>
+        <div className={cnc(style.viewport, this.props.disabelScroll && style.noScrollable )}
+        ref={this.saveViewportRef}
+        >
+          <HocrPageComponent
+            node={this.state.pageNode}
+            wordCompare={this.state.wordCompare}
+            idSuffix={idSuffix}
+            zoomMode={this.props.zoomMode}
+            renderOnlyTargetWords={this.props.renderOnlyTargetWords}
+            userStyle={this.state.safeStyle}
+            onWordHover={this.props.onWordHover}
+          />
+        </div>
       </div>
     );
   }

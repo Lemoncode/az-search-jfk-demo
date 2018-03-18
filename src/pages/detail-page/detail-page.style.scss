@@ -1,12 +1,24 @@
 .container {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: row;
+  justify-content: center;
   align-items: stretch;
 
   // TODO: TEMPORARY, REMOVE IT.
   width: 100vw;
   height: 100vh;
-  padding: 2rem;
+}
+
+.hocr-preview {
+  flex: 1 1 auto;
+  width: 50%;
   box-sizing: border-box;
+  padding: 1rem;
+}
+
+.hocr-document {
+  flex: 1 1 auto;
+  width: 50%;
+  box-sizing: border-box;
+  padding: 1rem;
 }
