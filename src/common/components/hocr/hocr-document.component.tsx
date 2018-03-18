@@ -56,7 +56,11 @@ export class HocrDocumentComponent extends React.Component<HocrDocumentProps, Ho
   }
 
   private scrollTo = (node: Element) => {
-    if (node) node.scrollIntoView({behavior: 'smooth', block: 'start'});
+    if (node) {
+      const verticalShift = node.getBoundingClientRect().top - this.viewportRef.getBoundingClientRect().top;
+      const scrollTop = this.viewportRef.scrollTop + verticalShift - (this.viewportRef.clientHeight / 2);
+      this.viewportRef.scrollTop = scrollTop;
+    }
   }
   
   private resetHighlight = (node: Element) => {

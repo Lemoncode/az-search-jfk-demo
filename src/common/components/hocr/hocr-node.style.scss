@@ -15,9 +15,9 @@
   @include default-fill();
 
   &:hover {
-    stroke: #ff6600;
-    stroke-width: 1;
-    stroke-dasharray: 2, 2;
+    stroke: #ffac30;
+    stroke-width: 1.5;
+    stroke-dasharray: 0;
   }
 }
 

@@ -42,16 +42,19 @@
   word-wrap: normal;
   
   &:hover {
-    background: #cce5ff;
+    background: hsla(36, 100%, 59%, 0.1);
+    outline: solid 1px #ffac30;
   }
 }
 
 .word {
   &.target {
-    background: yellow;
+    background: yellow
   }
 
-  &:hover {
+  &:hover,
+  &.highlight {
     background: #99cfff;
+    outline: solid 3px #007eff;
   }
 }
