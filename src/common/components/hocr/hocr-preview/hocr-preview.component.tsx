@@ -23,6 +23,10 @@ const idSuffix = "preview";
 
 /**
  * HOCR-Preview
+ * Given an HOCR input string, it parses it and represents the document in graphic format, 
+ * showing the source image the text was extracted from. It shows a placeholder for each
+ * recognised word and provides the necessary wiring and events to be connected to a 
+ * HocrDocumentComponent to create a whole proofreader.
  */
 
 export interface HocrPreviewProps {

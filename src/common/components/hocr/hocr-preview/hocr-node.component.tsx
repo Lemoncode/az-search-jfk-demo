@@ -14,6 +14,11 @@ import { cnc } from "../../../../util";
 
 /**
  * HOCR Node
+ * Generic component to graphically represent placeholders for the different entities parsed
+ * from the original HOCR input. Given an HOCR input, we can have pages, areas, paragraphs,
+ * lines or words, in that order, creating a tree of nodes. Branch nodes in the tree (area,
+ * paragraph and lines) will be rendered as SVG groups (<g>), the leafs of the tree (words)
+ * will be represented with a rectangle placeholder (<rect>). 
  */
 
 export interface HocrNodeProps {

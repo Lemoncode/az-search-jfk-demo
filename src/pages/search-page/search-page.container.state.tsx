@@ -58,7 +58,6 @@ export const preSearchUpdate = (filters: FilterCollection, pageIndex?: number) =
 };
 
 export const postSearchSuccessUpdate = (stateReducer: StateReducer) => (prevState: State): State => {
-// TODO: remove.
   return {
     ...stateReducer<State>(prevState),
     loading: false,

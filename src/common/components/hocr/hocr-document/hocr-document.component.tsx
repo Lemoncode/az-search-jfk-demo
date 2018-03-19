@@ -14,7 +14,11 @@ const style = require("./hocr-document.style.scss");
 
 
 /**
- * HOCR Document
+ * HOCR Document.
+ * Given an HOCR input string, it parses it and represents the document in text format.
+ * It allows user to navigate through document pages, highlighting the hovered items, and
+ * also provides the necessary wiring and events to be connected to a HocrPreviewComponent
+ * to create a whole proofreader.
  */
 
 export interface HocrDocumentProps {

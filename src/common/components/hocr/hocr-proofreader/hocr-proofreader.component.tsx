@@ -96,3 +96,9 @@ export class HocrProofreaderComponent extends React.PureComponent<HocrProofreade
 // in the state eventhough a setState is called with the new index. If we store the
 // index in a private variable, it works. For some reason, it seems that setState
 // got interrupted.
+// Although not exactly the same, some related issues:
+// https://github.com/facebook/react/issues/10906
+// https://github.com/facebook/react/issues/11164
+// https://github.com/facebook/react/issues/11152
+// setState inside an event handler may lead to some issues. I read somewhere that
+// React has to wait for the event to finish, so maybe the setState is skipped.
