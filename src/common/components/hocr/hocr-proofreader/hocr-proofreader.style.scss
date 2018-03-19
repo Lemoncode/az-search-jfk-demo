@@ -16,4 +16,8 @@
   width: 50%;
   box-sizing: border-box;
   padding: 1rem;
+
+  &-hidden {
+    display: none;
+  }
 }
