@@ -1,8 +1,7 @@
 import * as React from "react";
-import { getNodeId, getNodeOptions } from "./hocr-common.util";
-import { HocrNodeProps, HocrNodeComponent, getNodeChildrenComponents } from "./hocr-node.component";
-import { injectDefaultPageStyle } from "./hocr-page.style";
-import { HocrPreviewStyleMap } from "./hocr-common.style";
+import { getNodeId, getNodeOptions, WordComparator } from "../util/common-util";
+import { HocrNodeProps, getNodeChildrenComponents } from "./hocr-node.component";
+import { HocrPageStyleMap } from "./hocr-page.style";
 
 
 /**
@@ -11,44 +10,32 @@ import { HocrPreviewStyleMap } from "./hocr-common.style";
 
 export type ZoomMode = "page-full" | "page-width" | "original";
 
-interface HocrPageProps extends HocrNodeProps {
+export interface HocrPageProps extends HocrNodeProps {
   zoomMode?: ZoomMode;
 }
 
-export class HocrPageComponent extends React.Component<HocrPageProps, {}> {
+export class HocrPageComponent extends React.PureComponent<HocrPageProps, {}> {
   constructor(props) {
     super(props);
-  }
-  
-  public shouldComponentUpdate(nextProps: HocrPageProps) {
-    return (
-      this.props.node !== nextProps.node ||
-      this.props.wordCompare !== nextProps.wordCompare ||
-      this.props.idSuffix !== nextProps.idSuffix ||
-      this.props.renderOnlyTargetWords !== nextProps.renderOnlyTargetWords ||
-      this.props.userStyle !== nextProps.userStyle ||
-      this.props.onWordHover !== nextProps.onWordHover
-    );
   }
 
   public render() {
     if (!this.props.node) return null;
-    const safeStyle = injectDefaultPageStyle(this.props.userStyle);
     const pageOptions = getNodeOptions(this.props.node);
 
     return (
       <svg
-        className={safeStyle.page}
+        className={this.props.userStyle.page}
         id={getNodeId(this.props.node, this.props.idSuffix)}
         viewBox={pageOptions.bbox.join(" ")}
         style={getZoomStyle(this.props.zoomMode || "original", pageOptions.bbox)}
       >
-        <rect className={safeStyle.background}
+        <rect className={this.props.userStyle.background}
           x="0" y="0" width="100%" height="100%"/>
-        <image className={safeStyle.image}
+        <image className={this.props.userStyle.image}
           x="0" y="0" width="100%" height="100%"
           xlinkHref={pageOptions.image}/>
-        <g className={safeStyle.placeholders}>
+        <g className={this.props.userStyle.placeholders}>
           {getNodeChildrenComponents(this.props)}
         </g>
       </svg>

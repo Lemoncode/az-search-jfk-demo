@@ -142,12 +142,6 @@ export const getPosSizeFromDOMNode = (node: Element): PosSize => {
   return null;
 }
 
-export const getPosSizeFromViewBoxNode = (node: Element): PosSize => {
-  const viewBox = node.getAttribute("viewBox");
-  if (!viewBox) return null;
-  return bboxToPosSize(viewBox.split(" ").map(n => parseInt(n)));
-}
-
 export const getPosSizeFromBBoxNode = (node: Element): PosSize => {
   if (!node) return null;
   const nodeOptions = getNodeOptions(node);

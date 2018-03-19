@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ZoomMode, HocrPageComponent } from "./hocr-page.component";
-import { HocrPreviewStyleMap, injectDefaultPreviewStyle } from "./hocr-common.style";
+import { HocrPreviewStyleMap, injectDefaultPreviewStyle } from "./hocr-preview.style";
 import {
   calculateNodeShiftInContainer,
   PageIndex,
@@ -10,12 +10,11 @@ import {
   parseWordPosition,
   getNodeById,
   PosSize,
-  getPosSizeFromViewBoxNode,
   getPosSizeFromBBoxNode,
   composeId,
   getPosSizeFromDOMNode,
-} from "./hocr-common.util";
-import { cnc } from "../../../util";
+} from "../util/common-util";
+import { cnc } from "../../../../util";
 
 const style = require("./hocr-preview.style.scss");
 

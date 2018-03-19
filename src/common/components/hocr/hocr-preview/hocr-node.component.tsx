@@ -1,6 +1,6 @@
 import * as React from "react";
-import { injectDefaultNodeStyle } from "./hocr-node.style";
-import { HocrPreviewStyleMap } from "./hocr-common.style";
+import { HocrPreviewStyleMap } from "./hocr-preview.style";
+import { SvgRectComponent, SvgGroupComponent } from "./hocr-svg.component";
 import { 
   WordComparator,
   getNodeId,
@@ -8,54 +8,8 @@ import {
   resolveNodeEntity,
   composeId,
   bboxToPosSize,  
-} from "./hocr-common.util";
-import { cnc } from "../../../util";
-
-
-/**
- * HOCR Node SVG
- */
-
-interface SvgRectProps {
-  node: Element;
-  className: string;
-  idSuffix: string;
-  onHover?: (id: string) => void; 
-}
-
-const SvgRectComponent: React.StatelessComponent<SvgRectProps> = (props) => {
-  const nodeOptions = getNodeOptions(props.node);
-  if (!nodeOptions || !nodeOptions.bbox) return null;
-  
-  const nodePosSize = bboxToPosSize(nodeOptions.bbox);
-  const id = getNodeId(props.node);
-  const suffixedId = composeId(id, props.idSuffix);
-  
-  return (
-    <rect
-      className={props.className}
-      id={suffixedId}
-      x={nodePosSize.x}
-      y={nodePosSize.y}
-      width={nodePosSize.width}
-      height={nodePosSize.height}
-      onMouseEnter={props.onHover && (() => props.onHover(id))}
-      onMouseLeave={props.onHover && (() => props.onHover(null))}
-    />
-  );
-}
-
-interface SvgGroupProps {
-  className: string;
-}
-
-const SvgGroupComponent: React.StatelessComponent<SvgGroupProps> = (props) => {
-  return (
-    <g className={props.className}>
-      {props.children}
-    </g>
-  );
-};
+} from "../util/common-util";
+import { cnc } from "../../../../util";
 
 
 /**
@@ -116,7 +70,6 @@ const HocrGroupComponent: React.StatelessComponent<HocrGroupProps> = (props) => 
   : <>{childrenComponents}</>;
 }
 
-
 export const getNodeChildrenComponents = (props: HocrNodeProps) => {
   return (props.node.children && props.node.children.length) ? 
     Array.from(props.node.children).map((child, index) => 
@@ -124,7 +77,7 @@ export const getNodeChildrenComponents = (props: HocrNodeProps) => {
         {...props}
         node={child}
         key={index}
-        userStyle={injectDefaultNodeStyle(props.userStyle)}
+        userStyle={props.userStyle}
       />
     ) : null;
 }

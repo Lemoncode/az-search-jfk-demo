@@ -1,3 +1,3 @@
-export * from "./hocr-preview.component";
-export * from "./hocr-document.component";
-export { PageIndex } from "./hocr-common.util";
+export * from "./hocr-preview";
+export * from "./hocr-document";
+export { PageIndex } from "./util/common-util";
