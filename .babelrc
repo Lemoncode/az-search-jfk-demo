@@ -5,10 +5,11 @@
         [
           "env",
           {
+            "modules": false,
             "targets": {
-              "node": "current",
-              "uglify": true
-            }
+              "browsers": "edge 13"
+            },
+            "forceAllTransforms": true
           }
         ]
       ]
@@ -27,6 +28,4 @@
       ]
     }
   }
-
-  
 }
