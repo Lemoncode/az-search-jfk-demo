@@ -18,7 +18,7 @@ import {
   postSearchErrorKeep,
   lastPageIndexReachedUpdate,
 } from "./search-page.container.state";
-import { detailPath } from "../detail-page";
+import { detailPath, DetailRouteState } from "../detail-page";
 
 
 class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>, State> {
@@ -134,7 +134,10 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
   private handleOnItemClick = (item: Item) => {
     this.props.history.push(
       detailPath, 
-      {metadata: item.metadata}
+      {
+        hocr: item.metadata,
+        targetWords: this.state.searchValue ? this.state.searchValue.split(" ") : null,
+      } as DetailRouteState
     );
   }
 
@@ -157,6 +160,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           filterCollection={this.state.filterCollection}
           onFilterUpdate={this.handleFilterUpdate}
           itemCollection={this.state.itemCollection}
+          targetWords={this.state.targetWords}
           onItemClick={this.handleOnItemClick}
           resultCount={this.state.resultCount}
           facetCollection={this.state.facetCollection}

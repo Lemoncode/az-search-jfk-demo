@@ -1,0 +1,19 @@
+.container {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.hocr-preview {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 1rem;
+}
+
+.hocr-document {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 1rem;
+}

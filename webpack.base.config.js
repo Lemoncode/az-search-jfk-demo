@@ -22,7 +22,7 @@ module.exports = {
       // *** Loading pipe for Typescript ***
       {
         test: /\.(ts|tsx)$/,
-        exclude: /node_modules/,
+        exclude: [/node_modules/],
         loader: 'awesome-typescript-loader',
         options: {
           useBabel: true,
