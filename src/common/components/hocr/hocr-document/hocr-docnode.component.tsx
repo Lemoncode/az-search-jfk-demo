@@ -22,16 +22,17 @@ const HocrDocNodeComponent: React.StatelessComponent<HocrDocNodeProps> = (props)
   const entity = resolveNodeEntity(props.node);
   const isTarget = (entity === "word") && props.wordCompare && props.wordCompare(props.node.textContent);
   const className = cnc(props.userStyle[entity], isTarget && props.userStyle["target"]);
-  const nodeType = resolveTypeFromEntity(entity);
+  const NodeType = resolveTypeFromEntity(entity);
   const nodeProps = {
       className,
       id: props.node.id,
       index: props.index,
     ...resolveEventHandlersFromEntity(entity, props),
   }
-  const reactElement = React.createElement(nodeType, nodeProps, nodeChildren);
 
-  return (nodeType === "span") ? 
+  const reactElement = <NodeType {...nodeProps}>{nodeChildren}</NodeType>
+
+  return (NodeType === "span") ? 
     <>{reactElement}{" "}</>  // Add literal whitespace to span ending.
     : reactElement;
 }
