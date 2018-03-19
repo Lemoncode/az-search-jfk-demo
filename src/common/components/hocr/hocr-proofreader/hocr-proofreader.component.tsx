@@ -17,6 +17,7 @@ interface HocrProofreaderProps {
   hocr: string;
   targetWords: string[];
   zoomMode?: ZoomMode;
+  showText?: boolean;
   previewStyle?: HocrPreviewStyleMap;
   documentStyle?: HocrDocumentStyleMap;
   className?: string;
@@ -77,7 +78,7 @@ export class HocrProofreaderComponent extends React.PureComponent<HocrProofreade
           userStyle={this.props.previewStyle}
         />
         <HocrDocumentComponent
-          className={style.hocrDocument}
+          className={this.props.showText ? style.hocrDocument : style.hocrDocumentHidden}
           hocr={this.props.hocr}
           targetWords={this.props.targetWords}
           autoFocusId={this.state.docIdHighlighted}
