@@ -15,7 +15,7 @@
     "build:prod": "npm run clean && cross-env BABEL_ENV=production webpack -p --config=webpack.prod.config.js",
     "gh:reset": "rimraf %npm_package_config_build% && git worktree prune && git branch -D gh-pages && git push -d %npm_package_config_remote% gh-pages",
     "gh:init": "git worktree add -B gh-pages %npm_package_config_build% && npm run clean",
-    "gh:deploy": "npm run build:prod && cd %npm_package_config_build% && git add --all && git commit -m \"%npm_package_config_msg%\" && git push %npm_package_config_remote% gh-pages",
+    "gh:deploy": "npm run build:prod && cd %npm_package_config_build% && git add --all && git commit -m \"%npm_package_config_msg%\" && git push %npm_package_config_remote% gh-pages"
   },
   "author": "Javier Calzado",
   "license": "ISC",
