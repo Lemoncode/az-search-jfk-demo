@@ -4,6 +4,8 @@ import { FacetCollection } from "./facet.model";
 import { FilterCollection } from "./filter.model";
 import { SuggestionCollection } from "./suggestion.model";
 
+export type ResultViewMode = "grid" | "graph";
+
 export interface State {
   searchValue: string;
   itemCollection: ItemCollection;
@@ -13,6 +15,7 @@ export interface State {
   suggestionCollection: SuggestionCollection;
   resultCount: number;
   showDrawer: boolean;
+  resultViewMode: ResultViewMode; 
   loading: boolean;
   pageSize: number;
   pageIndex: number;

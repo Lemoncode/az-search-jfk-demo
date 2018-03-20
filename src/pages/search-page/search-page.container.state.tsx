@@ -1,8 +1,9 @@
 import { jfkService, StateReducer  } from "./service";
-import { State, SuggestionCollection, FilterCollection } from "./view-model";
+import { State, SuggestionCollection, FilterCollection, ResultViewMode } from "./view-model";
 
 export const CreateInitialState = (): State => ({
   searchValue: null,
+  resultViewMode: "grid",
   itemCollection: null,
   targetWords: null,
   facetCollection: null,
@@ -29,6 +30,13 @@ export const showDrawerUpdate = (showDrawer: boolean) => (prevState: State): Sta
   return {
     ...prevState,
     showDrawer,
+  }
+};
+
+export const resultViewModeUpdate = (resultViewMode: ResultViewMode) => (prevState: State): State => {
+  return {
+    ...prevState,
+    resultViewMode,
   }
 };
 

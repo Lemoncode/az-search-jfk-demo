@@ -4,17 +4,20 @@
   justify-content: space-between;
   align-items: center;
 
-  &-menu-button {
-    //
+  &-left {
+    // Entry point.
   }
 
-  &-search {
-    margin: 0 2rem;
+  &-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
   }
+}
 
-  & a {
-    color: inherit;
-  }
+.toolbar-link {
+  color: inherit;
 }
 
 .logo-container {

@@ -11,14 +11,17 @@ import {
   Filter,
   SuggestionCollection,
   Item,
+  ResultViewMode,
 } from "./view-model";
 import { Service } from "./service";
+import { GraphViewComponent } from "./components/graph";
 
 const style = require("./search-page.style.scss");
 
 interface SearchPageProps {
   activeService: Service;
   showDrawer: boolean;
+  resultViewMode: ResultViewMode;
   searchValue: string;
   itemCollection: ItemCollection;
   targetWords?: string[]
@@ -35,52 +38,61 @@ interface SearchPageProps {
   onDrawerClose: () => void;
   onMenuClick: () => void;
   onLoadMore: () => void;
+  onChangeResultViewMode: (newMode: ResultViewMode) => void;
 }
 
-class SearchPageComponent extends React.Component<SearchPageProps, {}> {
-  constructor(props) {
-    super(props);
-  }
+const DrawerAreaComponent = (props: SearchPageProps) => (
+  <DrawerComponent
+    className={style.drawerContainer}
+    activeService={props.activeService}
+    show={props.showDrawer}
+    onClose={props.onDrawerClose}
+  >
+    <SearchComponent
+      value={props.searchValue}
+      onSearchSubmit={props.onSearchSubmit}
+      onSearchUpdate={props.onSearchUpdate}
+      suggestionCollection={props.suggestionCollection}
+      resultCount={props.resultCount}
+    />
+    <FacetViewComponent
+      facets={props.facetCollection}
+      filters={props.filterCollection}
+      onFilterUpdate={props.onFilterUpdate}
+    />
+  </DrawerComponent>
+);
 
-  public render() {
-    return (
-      <div className={style.pageContainer}>
-        <DrawerComponent
-          className={style.drawerContainer}
-          activeService={this.props.activeService}
-          show={this.props.showDrawer}
-          onClose={this.props.onDrawerClose}
-        >
-          <SearchComponent
-            value={this.props.searchValue}
-            onSearchSubmit={this.props.onSearchSubmit}
-            onSearchUpdate={this.props.onSearchUpdate}
-            suggestionCollection={this.props.suggestionCollection}
-            resultCount={this.props.resultCount}
-          />
-          <FacetViewComponent
-            facets={this.props.facetCollection}
-            filters={this.props.filterCollection}
-            onFilterUpdate={this.props.onFilterUpdate}
-          />
-        </DrawerComponent>
-        <main className={style.mainContainer}>
-          <PageBarComponent
-            value={this.props.searchValue}
-            onMenuClick={this.props.onMenuClick}
-          />
-          <ItemCollectionViewComponent
-             items={this.props.itemCollection}
-             targetWords={this.props.targetWords}
-             onClick={this.props.onItemClick}
-             loading={this.props.loading}
-             onLoadMore={this.props.onLoadMore}
-             noMoreResults={this.props.noMoreResults}
-          />
-        </main>
-      </div>
-    );
-  }
+const ResultAreaComponent = (props: SearchPageProps) => {
+  
+  return (
+    props.resultViewMode === "grid" ?
+    <ItemCollectionViewComponent
+      items={props.itemCollection}
+      targetWords={props.targetWords}
+      onClick={props.onItemClick}
+      loading={props.loading}
+      onLoadMore={props.onLoadMore}
+      noMoreResults={props.noMoreResults}
+    /> :
+    <GraphViewComponent
+      searchValue={props.searchValue}
+    />
+  );
 }
+
+const SearchPageComponent = (props: SearchPageProps) => (
+  <div className={style.pageContainer}>
+    <DrawerAreaComponent {...props} />
+    <main className={style.mainContainer}>
+      <PageBarComponent
+        resultViewMode={props.resultViewMode}
+        onChangeResultViewMode={props.onChangeResultViewMode}
+        onMenuClick={props.onMenuClick}
+      />
+      <ResultAreaComponent {...props} />
+    </main>
+  </div>
+)
 
 export { SearchPageComponent };
