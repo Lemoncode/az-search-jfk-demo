@@ -7,6 +7,7 @@ import {
   GraphResponse
 } from "../../../../graph-api";
 import { cnc } from "../../../../util";
+import { loadGraph, resetGraph } from "./graph-view.business";
 
 const style = require("./graph-view.style.scss");
 
@@ -21,7 +22,9 @@ interface GraphViewState {
   graphDescriptor: GraphResponse;
 }
 
-export class GraphViewComponent extends React.PureComponent<GraphViewProps, GraphViewState> {
+const containerId = "fdGraphId";
+
+export class GraphViewComponent extends React.Component<GraphViewProps, GraphViewState> {
   constructor(props) {
     super(props);
 
@@ -31,19 +34,19 @@ export class GraphViewComponent extends React.PureComponent<GraphViewProps, Grap
     }
   }
 
-  private fetchGraphDescriptor = async () => {
-    if (!this.state.graphApi || !this.props.searchValue) return Promise.reject(null);
+  private fetchGraphDescriptor = async (searchValue: string) => {
+    if (!this.state.graphApi || !searchValue) return Promise.resolve(null);
 
     try {
-      const payload = {search: this.props.searchValue};
+      const payload = {search: searchValue};
       return await this.state.graphApi.runQuery(payload);
     } catch (e) {
       throw e;
     }
   };
 
-  private updateGraphDescriptor = () => {
-    this.fetchGraphDescriptor()
+  private updateGraphDescriptor = (searchValue: string) => {
+    this.fetchGraphDescriptor(searchValue)
       .then(graphDescriptor => this.setState({
         ...this.state,
         graphDescriptor, 
@@ -51,29 +54,45 @@ export class GraphViewComponent extends React.PureComponent<GraphViewProps, Grap
       .catch(e => console.log(e));
   }
 
-  private updateGraphApiAndDescriptor = () => {
+  private updateGraphApiAndDescriptor = (graphConfig: GraphConfig, searchValue: string) => {
     this.setState({
       ...this.state,
-      graphApi: CreateGraphApi(this.props.graphConfig || defaultGraphConfig),
-    }, this.updateGraphDescriptor);
+      graphApi: CreateGraphApi(graphConfig || defaultGraphConfig),
+    }, () => this.updateGraphDescriptor(searchValue));
   }
 
   public componentDidMount() {
-    this.updateGraphApiAndDescriptor();
+    this.updateGraphApiAndDescriptor(this.props.graphConfig, this.props.searchValue);
   };
 
   public componentWillReceiveProps(nextProps: GraphViewProps) {
     if (this.props.searchValue != nextProps.searchValue) {
-      this.updateGraphDescriptor();
+      this.updateGraphDescriptor(nextProps.searchValue);
     } else if (this.props.graphConfig != nextProps.graphConfig) {
-      this.updateGraphApiAndDescriptor();
+      this.updateGraphApiAndDescriptor(nextProps.graphConfig, nextProps.searchValue);
     }
+  }
+
+  public shouldComponentUpdate(nextProps: GraphViewProps, nextState: GraphViewState) {
+    return this.state.graphDescriptor != nextState.graphDescriptor
+  }
+
+  public componentDidUpdate(prevProps: GraphViewProps, prevState: GraphViewState) {
+    if (this.state.graphDescriptor != prevState.graphDescriptor) {
+      loadGraph(containerId, this.state.graphDescriptor);
+    }      
+  }
+
+  public componentWillUnmount() {
+    resetGraph(containerId);
   }
 
   public render() {
     return (
-      <div className={cnc(style.container, this.props.className)}>
-        {JSON.stringify(this.state.graphDescriptor)}
+      <div
+        className={cnc(style.container, this.props.className)}
+        id={containerId}
+      >
       </div>
     );
   }

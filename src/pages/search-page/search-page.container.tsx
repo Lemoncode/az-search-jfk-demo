@@ -143,7 +143,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
       detailPath, 
       {
         hocr: item.metadata,
-        targetWords: this.state.searchValue ? this.state.searchValue.split(" ") : null,
+        targetWords: this.state.activeSearch && this.state.activeSearch.split(" "),
       } as DetailRouteState
     );
   }
@@ -167,7 +167,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           filterCollection={this.state.filterCollection}
           onFilterUpdate={this.handleFilterUpdate}
           itemCollection={this.state.itemCollection}
-          targetWords={this.state.targetWords}
+          activeSearch={this.state.activeSearch}
           onItemClick={this.handleOnItemClick}
           resultCount={this.state.resultCount}
           facetCollection={this.state.facetCollection}

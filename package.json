@@ -20,6 +20,7 @@
   "author": "Javier Calzado",
   "license": "ISC",
   "dependencies": {
+    "d3": "4.13.0",
     "downshift": "^1.28.0",
     "lodash.throttle": "^4.1.1",
     "material-ui": "1.0.0-beta.33",
@@ -31,6 +32,7 @@
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
+    "@types/d3": "4.13.0",
     "@types/history": "^4.6.1",
     "@types/react": "~16.0.21",
     "@types/react-dom": "~16.0.2",

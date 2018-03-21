@@ -9,7 +9,7 @@ export type ResultViewMode = "grid" | "graph";
 export interface State {
   searchValue: string;
   itemCollection: ItemCollection;
-  targetWords: string[];
+  activeSearch: string;
   facetCollection: FacetCollection;
   filterCollection: FilterCollection;
   suggestionCollection: SuggestionCollection;

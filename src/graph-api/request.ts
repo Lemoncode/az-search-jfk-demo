@@ -21,13 +21,15 @@ const buildURL = (config: GraphConfig, payload: GraphPayload): string => {
 };
 
 
-export const CreateRequest = (config: GraphConfig, payload: GraphPayload): GraphRequest => ({
-  url: buildURL(config, payload),
-  options: {
-    method: config.method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    mode: "cors",
-  }
-});
+export const CreateRequest = (config: GraphConfig, payload: GraphPayload): GraphRequest => {
+  return {
+    url: buildURL(config, payload),
+    options: {
+      method: config.method,
+      headers: {
+        "Accept": "application/json",
+      },
+      mode: "cors"
+    }
+  };
+}

@@ -24,7 +24,7 @@ interface SearchPageProps {
   resultViewMode: ResultViewMode;
   searchValue: string;
   itemCollection: ItemCollection;
-  targetWords?: string[]
+  activeSearch?: string
   facetCollection: FacetCollection;
   filterCollection: FilterCollection;
   suggestionCollection?: SuggestionCollection;
@@ -69,14 +69,14 @@ const ResultAreaComponent = (props: SearchPageProps) => {
     props.resultViewMode === "grid" ?
     <ItemCollectionViewComponent
       items={props.itemCollection}
-      targetWords={props.targetWords}
+      activeSearch={props.activeSearch}
       onClick={props.onItemClick}
       loading={props.loading}
       onLoadMore={props.onLoadMore}
       noMoreResults={props.noMoreResults}
     /> :
     <GraphViewComponent
-      searchValue={props.searchValue}
+      searchValue={props.activeSearch}
     />
   );
 }
