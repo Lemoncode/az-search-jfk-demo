@@ -20,16 +20,20 @@ const buildURL = (config: GraphConfig, payload: GraphPayload): string => {
   ].filter(i => i).join("");
 };
 
+const defaultOptions: RequestInit = {
+  method: "GET",
+  headers: {
+    "Accept": "application/json",
+  },
+  mode: "cors"
+};
 
 export const CreateRequest = (config: GraphConfig, payload: GraphPayload): GraphRequest => {
   return {
     url: buildURL(config, payload),
     options: {
+      ...defaultOptions,
       method: config.method,
-      headers: {
-        "Accept": "application/json",
-      },
-      mode: "cors"
     }
   };
 }
