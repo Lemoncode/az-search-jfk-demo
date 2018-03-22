@@ -1,10 +1,11 @@
 import { jfkService, StateReducer  } from "./service";
-import { State, SuggestionCollection, FilterCollection } from "./view-model";
+import { State, SuggestionCollection, FilterCollection, ResultViewMode } from "./view-model";
 
 export const CreateInitialState = (): State => ({
   searchValue: null,
+  resultViewMode: "grid",
   itemCollection: null,
-  targetWords: null,
+  activeSearch: null,
   facetCollection: null,
   filterCollection: null,
   suggestionCollection: null,
@@ -29,6 +30,13 @@ export const showDrawerUpdate = (showDrawer: boolean) => (prevState: State): Sta
   return {
     ...prevState,
     showDrawer,
+  }
+};
+
+export const resultViewModeUpdate = (resultViewMode: ResultViewMode) => (prevState: State): State => {
+  return {
+    ...prevState,
+    resultViewMode,
   }
 };
 
@@ -62,7 +70,7 @@ export const postSearchSuccessUpdate = (stateReducer: StateReducer) => (prevStat
     ...stateReducer<State>(prevState),
     loading: false,
     suggestionCollection: null,
-    targetWords: prevState.searchValue ? prevState.searchValue.split(" ") : null,
+    activeSearch: prevState.searchValue ? prevState.searchValue : null,
   }
 };
 
@@ -86,7 +94,7 @@ export const postSearchErrorReset = (rejectValue) => (prevState: State): State =
     filterCollection: null,
     suggestionCollection: null,
     pageIndex: null,
-    targetWords: null,
+    activeSearch: null,
   }
 };
 

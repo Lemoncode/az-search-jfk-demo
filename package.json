@@ -15,11 +15,12 @@
     "build:prod": "npm run clean && cross-env BABEL_ENV=production webpack -p --config=webpack.prod.config.js",
     "gh:reset": "rimraf %npm_package_config_build% && git worktree prune && git branch -D gh-pages && git push -d %npm_package_config_remote% gh-pages",
     "gh:init": "git worktree add -B gh-pages %npm_package_config_build% && npm run clean",
-    "gh:deploy": "npm run build:prod && cd %npm_package_config_build% && git add --all && git commit -m \"%npm_package_config_msg%\" && git push %npm_package_config_remote% gh-pages",
+    "gh:deploy": "npm run build:prod && cd %npm_package_config_build% && git add --all && git commit -m \"%npm_package_config_msg%\" && git push %npm_package_config_remote% gh-pages"
   },
   "author": "Javier Calzado",
   "license": "ISC",
   "dependencies": {
+    "d3": "4.13.0",
     "downshift": "^1.28.0",
     "lodash.throttle": "^4.1.1",
     "material-ui": "1.0.0-beta.33",
@@ -31,6 +32,7 @@
     "react-router-dom": "^4.2.2"
   },
   "devDependencies": {
+    "@types/d3": "4.13.0",
     "@types/history": "^4.6.1",
     "@types/react": "~16.0.21",
     "@types/react-dom": "~16.0.2",

@@ -2,7 +2,7 @@ import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import * as throttle from 'lodash.throttle';
 import { SearchPageComponent } from "./search-page.component";
-import { State, FilterCollection, Filter, Item } from "./view-model";
+import { State, FilterCollection, Filter, Item, ResultViewMode } from "./view-model";
 import { Service, StateReducer } from "./service";
 import { jfkService  } from "./service";
 import { isArrayEmpty } from "../../util";
@@ -17,6 +17,7 @@ import {
   postSearchErrorReset,
   postSearchErrorKeep,
   lastPageIndexReachedUpdate,
+  resultViewModeUpdate,
 } from "./search-page.container.state";
 import { detailPath, DetailRouteState } from "../detail-page";
 
@@ -41,6 +42,12 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
   private handleMenuClick = () => {
     this.handleDrawerToggle();
   };
+
+  // *** VIEW MODE LOGIC ***
+
+  private handleResultViewMode = (resultViewMode: ResultViewMode) => {
+    this.setState(resultViewModeUpdate(resultViewMode));
+  }
 
 
   // *** SEARCH LOGIC ***
@@ -136,7 +143,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
       detailPath, 
       {
         hocr: item.metadata,
-        targetWords: this.state.searchValue ? this.state.searchValue.split(" ") : null,
+        targetWords: this.state.activeSearch && this.state.activeSearch.split(" "),
       } as DetailRouteState
     );
   }
@@ -160,7 +167,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           filterCollection={this.state.filterCollection}
           onFilterUpdate={this.handleFilterUpdate}
           itemCollection={this.state.itemCollection}
-          targetWords={this.state.targetWords}
+          activeSearch={this.state.activeSearch}
           onItemClick={this.handleOnItemClick}
           resultCount={this.state.resultCount}
           facetCollection={this.state.facetCollection}
@@ -170,6 +177,8 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           loading={this.state.loading}
           onLoadMore={this.handleLoadMore}
           noMoreResults={this.state.lastPageIndexReached}
+          resultViewMode={this.state.resultViewMode}
+          onChangeResultViewMode={this.handleResultViewMode}
         />
       </div>
     );
