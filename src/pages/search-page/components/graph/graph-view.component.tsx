@@ -1,4 +1,6 @@
 import * as React from "react";
+import { loadGraph, resetGraph } from "./graph-view.business";
+import { withTheme, WithTheme } from "material-ui/styles";
 import {
   GraphApi,
   CreateGraphApi,
@@ -7,11 +9,11 @@ import {
   GraphResponse
 } from "../../../../graph-api";
 import { cnc } from "../../../../util";
-import { loadGraph, resetGraph } from "./graph-view.business";
+
 
 const style = require("./graph-view.style.scss");
 
-interface GraphViewProps {
+interface GraphViewProps extends WithTheme {
   searchValue: string;
   graphConfig?: GraphConfig;
   className?: string;
@@ -24,10 +26,10 @@ interface GraphViewState {
 
 const containerId = "fdGraphId";
 
-export class GraphViewComponent extends React.Component<GraphViewProps, GraphViewState> {
+class GraphView extends React.Component<GraphViewProps, GraphViewState> {
   constructor(props) {
     super(props);
-
+  
     this.state = {
       graphApi: CreateGraphApi(defaultGraphConfig),
       graphDescriptor: null,
@@ -79,7 +81,7 @@ export class GraphViewComponent extends React.Component<GraphViewProps, GraphVie
 
   public componentDidUpdate(prevProps: GraphViewProps, prevState: GraphViewState) {
     if (this.state.graphDescriptor != prevState.graphDescriptor) {
-      loadGraph(containerId, this.state.graphDescriptor);
+      loadGraph(containerId, this.state.graphDescriptor, this.props.theme);
     }      
   }
 
@@ -97,3 +99,5 @@ export class GraphViewComponent extends React.Component<GraphViewProps, GraphVie
     );
   }
 }
+
+export const GraphViewComponent = withTheme()(GraphView);
