@@ -15,6 +15,7 @@ module.exports = {
   entry: {
     app: ['./app.tsx',],
     vendor: [
+      'babel-polyfill',
       'material-ui',
       'material-ui-icons',
       'material-ui-pickers',
