@@ -5,11 +5,7 @@
         [
           "env",
           {
-            "modules": false,
-            "targets": {
-              "browsers": "edge 13"
-            },
-            "forceAllTransforms": true
+            "modules": false
           }
         ]
       ]

@@ -14,7 +14,16 @@ module.exports = {
 
   entry: {
     app: ['./app.tsx',],
-    vendor: ['material-ui'],
+    vendor: [
+      'material-ui',
+      'material-ui-icons',
+      'material-ui-pickers',
+      'moment',
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'd3'
+    ],
   },
 
   module: {
