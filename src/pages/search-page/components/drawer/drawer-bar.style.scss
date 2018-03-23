@@ -1,6 +1,12 @@
-.drawer-bar-container {
+.container {
   justify-content: space-between;
   padding: 2px 4px;
+
+  &-closed {
+    @extend .container;
+
+    justify-content: center;
+  }
 }
 
 .service-container {

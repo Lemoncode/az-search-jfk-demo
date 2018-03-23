@@ -2,11 +2,11 @@ import * as React from "react"
 import { Link } from 'react-router-dom';
 import { homePath } from "../../../home-page";
 import { ResultViewMode } from "../../view-model";
+import { MenuButton } from "../../../../common/components/menu-button";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
 import Typography from "material-ui/Typography";
 import IconButton from "material-ui/IconButton";
-import MenuIcon from "material-ui-icons/Menu";
 import HomeIcon from 'material-ui-icons/Home';
 import ViewComfyIcon from 'material-ui-icons/ViewComfy';
 import DeviceHubIcon from 'material-ui-icons/DeviceHub';
@@ -16,14 +16,6 @@ import SvgIcon from "material-ui-icons/Menu";
 const logoSvg = require("../../../../assets/svg/azure-search.logo.svg");
 const style = require("./page-bar.style.scss");
 
-
-const MenuButton = ({ onClick }) => (
-  <IconButton className={style.toolbarLeft} color="inherit"
-    aria-label="Menu" onClick={onClick}
-  >
-    <MenuIcon />
-  </IconButton>
-);
 
 const Logo = () => (
   <div className={style.logoContainer}>
@@ -77,7 +69,7 @@ const PageBarComponent: React.StatelessComponent<BarProps> = (props) => {
   return (
     <AppBar position="static">
       <Toolbar classes={{root: style.toolbar}}>
-        <MenuButton onClick={props.onMenuClick} />
+        <MenuButton className={style.toolbarLeft} onClick={props.onMenuClick} />
         <Logo />
         <ResultViewModeToggler {...props} />
       </Toolbar>

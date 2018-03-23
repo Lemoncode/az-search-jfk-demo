@@ -10,7 +10,7 @@ const style = require("./home-page.style.scss");
 export const HomePageComponent: React.StatelessComponent<{}> = () => {
   return (
     <div className={style.container}>
-      <Typography variant="display2" classes={{root: style.header}}>
+      <Typography variant="display2" color="inherit" classes={{root: style.header}}>
         JFK Files
       </Typography>
       <br />

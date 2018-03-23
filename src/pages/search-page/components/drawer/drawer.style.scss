@@ -1,31 +1,30 @@
 $drawer-max-width: 25rem;
+$dock-visible-width: 5rem;
 
-.raise {
-  z-index: 1200;
-  box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.15);
-}
-
+// Only for desktop.
 .drawer-dock {
   margin-left: 0;
-  transition: margin-left 0.15s ease-out;
-
-  &-hidden {
-    @extend .drawer-dock;
-
-    margin-left: -$drawer-max-width;
-  }
+  //transition: margin-left 0.15s ease-out;
+  color: inherit;
 }
 
-.drawer-paper {
-  &-mobile {
-    width: 85vw;
-    max-width: $drawer-max-width;
-    padding: 0 1rem;
-  }
+.drawer-paper-mobile {
+  width: 85vw;
+  max-width: $drawer-max-width;
+  padding: 0 1rem;
+}
 
-  &-desktop {
-    position: static !important;
-    width: $drawer-max-width;
-    padding: 0 1rem;
+.drawer-paper-desktop {
+  position: static !important;
+  width: $drawer-max-width;
+  padding: 0 1rem;
+  background-color: transparent !important;
+  transition: width 0.15s ease-out;
+
+  &-hidden {
+    @extend .drawer-paper-desktop;
+
+    width: $dock-visible-width;
+    overflow-x: hidden;
   }
 }

@@ -46,6 +46,7 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
     className={style.drawerContainer}
     activeService={props.activeService}
     show={props.showDrawer}
+    onMenuClick={props.onMenuClick}    
     onClose={props.onDrawerClose}
   >
     <SearchComponent
