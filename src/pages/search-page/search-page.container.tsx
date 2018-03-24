@@ -20,6 +20,7 @@ import {
   resultViewModeUpdate,
 } from "./search-page.container.state";
 import { detailPath, DetailRouteState } from "../detail-page";
+import { storeState, restoreLastState, isLastStateAvailable} from './view-model/state.memento';
 
 
 class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>, State> {
@@ -27,6 +28,12 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
     super(props);
 
     this.state = CreateInitialState();
+  }
+
+  componentDidMount() {
+    if(isLastStateAvailable) {
+      this.setState(restoreLastState());
+    }
   }
 
   // *** DRAWER LOGIC ***
@@ -138,7 +145,9 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
 
   // *** MISC ***
 
-  private handleOnItemClick = (item: Item) => {
+  private handleOnItemClick = (item: Item) => {    
+    storeState(this.state);
+
     this.props.history.push(
       detailPath, 
       {
