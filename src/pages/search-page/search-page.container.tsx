@@ -31,7 +31,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
   }
 
   componentDidMount() {
-    if(isLastStateAvailable) {
+    if(isLastStateAvailable()) {
       this.setState(restoreLastState());
     }
   }
