@@ -1,4 +1,4 @@
-$drawer-max-width: 25rem;
+$drawer-max-width: 31.5rem;
 $dock-visible-width: 5rem;
 
 // Only for desktop.
@@ -8,16 +8,25 @@ $dock-visible-width: 5rem;
   color: inherit;
 }
 
+@mixin drawer-paper {
+  padding: 2.5rem;
+  border-right-width: 10px;
+  border-right-color:rgba(236, 236, 236, 0.3);
+  border-right-style: solid;
+}
+
 .drawer-paper-mobile {
+  @include drawer-paper;
+
   width: 85vw;
   max-width: $drawer-max-width;
-  padding: 0 1rem;
 }
 
 .drawer-paper-desktop {
+  @include drawer-paper;
+
   position: static !important;
   width: $drawer-max-width;
-  padding: 0 1rem;
   background-color: transparent !important;
   transition: width 0.15s ease-out;
 

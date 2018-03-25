@@ -1,3 +1,5 @@
+@import "../../../../theme/_mixins.scss";
+
 .container {
   justify-content: space-between;
   padding: 2px 4px;
@@ -9,13 +11,24 @@
   }
 }
 
-.service-container {
+.caption {
+  flex: 1 1 auto;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  
+  &-title {
+    font-size: 1.05rem;
+    margin: 0;
+  }
+
+  &-subtitle {
+    font-size: 0.85rem;
+    margin: 0;
+  }
 }
 
-.service-icon {
-  margin-right: 0.5rem;
+.close-icon {
+  @include jfk-icon;
 }

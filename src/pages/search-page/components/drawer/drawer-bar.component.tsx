@@ -19,18 +19,27 @@ interface DrawerBarProps {
   className?: string;
 }
 
+const DrawerBarCaption = () => (
+  <div className={style.caption}>
+    <p className={style.captionTitle} color="inherit">
+      Documents revealed.
+    </p>
+    <p className={style.captionSubtitle} color="inherit">
+      Let's find out what happened that day.
+    </p>
+  </div>
+);
+
 const DrawerBarOpenContent = ({activeService, onClose}) => (
   <>
-    <div className={style.serviceContainer}>
-      <Icon classes={{root: style.serviceIcon}} color="primary">
-        {activeService.config.serviceIcon}
-      </Icon>
-      <Typography variant="headline">
-        {activeService.config.serviceName}
-      </Typography>
-    </div>      
-    <IconButton aria-label="Close" onClick={onClose}>
-      <Close />
+    <DrawerBarCaption />
+    <IconButton
+      classes={{label: style.closeIcon}}
+      color="inherit"
+      aria-label="Close"
+      onClick={onClose}
+    >
+      jfk_close
     </IconButton>
   </>
 );

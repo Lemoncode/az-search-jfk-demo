@@ -6,8 +6,6 @@ import { MuiThemeProvider } from 'material-ui/styles';
 import { theme } from "./theme";
 
 
-
-
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Reboot/>
