@@ -27,9 +27,13 @@ const renderInput = (params) => {
   return (
     <TextField
       {...other}
-      classes={{root: style.input}}
+      classes={{underline: style.underline}}
       InputProps = {{
-        ...innerInputProps
+        ...innerInputProps,
+        classes: {
+          root: style.input,
+          underline: style.underline,          
+        }        
       }}
     />
   );
@@ -99,11 +103,11 @@ export const AutocompleteInputComponent: React.StatelessComponent<AutocompleteIn
             {renderInput({
               autoFocus: props.autoFocus,
               fullWidth: true,
+              placeholder: props.placeholder,
               innerInputProps: getInputProps({
                 type: props.type,
                 name: props.name,
                 id: props.id,
-                placeholder: props.placeholder,
                 onKeyDown: props.onKeyPress,
               }),            
             })}

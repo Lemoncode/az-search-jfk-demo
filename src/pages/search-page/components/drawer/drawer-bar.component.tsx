@@ -2,7 +2,6 @@ import * as React from "react";
 import Toolbar from "material-ui/Toolbar";
 import Icon from "material-ui/Icon";
 import IconButton from "material-ui/IconButton";
-import Close from "material-ui-icons/Close";
 import Typography from "material-ui/Typography";
 import { cnc } from "../../../../util";
 import { Service } from "../../service";

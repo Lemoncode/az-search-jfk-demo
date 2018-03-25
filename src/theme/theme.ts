@@ -42,5 +42,9 @@ export const theme = createMuiTheme({
       standard:200,
       complex: 225,
     }
+  },
+  typography: {
+    fontFamily: '"Open Sans", sans-serif',
+    fontSize: "1rem",
   }
 });

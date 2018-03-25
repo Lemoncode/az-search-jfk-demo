@@ -1,11 +1,11 @@
 import * as React from "react"
 import Button from "material-ui/Button";
-import Search from "material-ui-icons/Search";
 import TextField from "material-ui/TextField";
+import Icon from "material-ui/icon";
+import Typography from "material-ui/Typography";
 import { AutocompleteInputComponent } from "./autocomplete.component";
 import { SuggestionCollection } from "../../view-model";
 import { cnc } from "../../../../util";
-import Typography from "material-ui/Typography";
 
 const style = require("./search.style.scss");
 
@@ -46,7 +46,7 @@ const SearchButton = ({ onClick }) => (
     color="secondary"
     onClick={onClick}
   >
-    <Search />
+    SEARCH
   </Button>
 );
 
@@ -62,6 +62,7 @@ const SearchComponent: React.StatelessComponent<SearchProps> = (props) => {
   return (
     <div className={cnc(props.className, style.container)}>
       <div className={style.controlContainer}>
+        <Icon classes={{root: style.icon}}>jfk_search</Icon>
         <SearchAutocompleteInput 
           searchValue={props.value}
           suggestionCollection={props.suggestionCollection}

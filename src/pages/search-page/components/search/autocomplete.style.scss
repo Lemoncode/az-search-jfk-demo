@@ -1,9 +1,15 @@
+@import "../../../../theme/_palette.scss";
+
 .container {
   position: relative;
 }
 
 .input {
-  //
+  color: inherit !important;
+}
+
+.underline:before {
+  background-color: white; 
 }
 
 .dropdown-area {
