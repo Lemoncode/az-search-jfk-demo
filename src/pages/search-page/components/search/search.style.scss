@@ -29,7 +29,8 @@
     
     .button {
       @include red-gradient;
-    
+      
+      flex: 0 0 auto;
       margin-left: 1rem;
       border-radius: 6px;
       padding: 0.75rem;
