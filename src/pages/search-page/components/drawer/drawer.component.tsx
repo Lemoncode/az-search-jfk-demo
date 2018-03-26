@@ -33,7 +33,6 @@ const DrawerForMobileComponent: React.StatelessComponent<DrawerProps> = (props) 
   return (
     <Hidden smUp>
       <Drawer classes={{
-          root: style.drawer,
           paper: style.drawerPaperMobile 
         }}
         variant="temporary"

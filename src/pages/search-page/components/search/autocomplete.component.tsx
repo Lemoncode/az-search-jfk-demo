@@ -27,7 +27,6 @@ const renderInput = (params) => {
   return (
     <TextField
       {...other}
-      classes={{underline: style.underline}}
       InputProps = {{
         ...innerInputProps,
         classes: {

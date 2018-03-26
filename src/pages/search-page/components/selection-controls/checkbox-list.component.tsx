@@ -45,7 +45,12 @@ class CheckboxListComponent extends React.Component<SelectionProps, {}> {
   }
 
   private getCheckbox = (facetValue) => (
-    <Checkbox color="primary"
+    <Checkbox
+      classes={{
+        default: style.itemCheckbox,
+        checked: style.itemCheckboxChecked,
+      }}
+      color="primary"
       value={facetValue.toString()}
       checked={this.isValueInFilterList(facetValue)}
       onChange={this.handleChange(facetValue)}
@@ -55,6 +60,7 @@ class CheckboxListComponent extends React.Component<SelectionProps, {}> {
   private getCheckboxList = () => (
    this.props.facet.values.map((facetValue, index) => 
       <FormControlLabel
+        classes={{label: style.itemLabel}}
         control={this.getCheckbox(facetValue.value)}
         label={`${facetValue.value} (${facetValue.count.toString()})`}
         key={index}

@@ -5,7 +5,7 @@ $colorPrimary: hsl(193, 99%, 57%);
 // $colorPrimaryDarker: hsl(202, 38%, 14%);
 $colorSecondary: hsl(347, 88%, 34%);
 $colorBackground: white;
-$colorPaper: hsl(0, 0%, 93%);
+$colorPaper: transparent;
 $colorGrey: rgb(236, 236, 236);
 
 // Red gradient generator cross-browser.
@@ -24,10 +24,10 @@ $redEnd: hsl(346, 88%, 20%);
   background: linear-gradient(to bottom, $redStart 0%, $redEnd 100%);
   // IE6-9
   filter: progid:DXImageTransform.Microsoft.gradient(
-      startColorstr="#a9122d",
-      endColorstr="#60061b",
-      GradientType=0
-    );
+    startColorstr="#a9122d",
+    endColorstr="#60061b",
+    GradientType=0
+  );
 }
 
 :export {

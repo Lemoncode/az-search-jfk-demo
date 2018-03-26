@@ -1,6 +1,5 @@
 import * as React from "react"
 import IconButton from "material-ui/IconButton";
-import ChevronIcon from "material-ui-icons/ExpandMore";
 import { cnc } from "../../../util";
 
 const style = require("./chevron.style.scss");
@@ -16,13 +15,15 @@ const Chevron: React.StatelessComponent<ChevronProps> = (props) => {
   return (
     <IconButton
       classes={{
-        root: cnc(props.className, style.chevron, props.expanded && style.chevronUp)
+        root: props.className,
+        label: cnc(props.className, style.chevron, props.expanded && style.chevronUp),
       }}
+      color={props.expanded ? "primary" : "inherit"}
       onClick={props.onClick}
       aria-expanded={props.expanded}
       aria-label="Show more"      
     >
-      <ChevronIcon/>
+      jfk_chevron
     </IconButton>
   )
 }

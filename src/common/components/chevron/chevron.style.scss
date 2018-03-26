@@ -1,14 +1,16 @@
-.chevron svg {
-  font-size: 1.25em;
-  perspective: 100vw;
-  transform-style: preserve-3d;
+@import "../../../theme/_mixins.scss";
+
+.chevron {
+  @include jfk-icon;
+
+  transform: rotate(180deg);
   transition: transform 0.25s ease-out;
 }
 
-.chevron-up svg {
+.chevron-up {
   @extend .chevron;
 
-  transform: rotateX(180deg);
+  transform: rotate(0deg);
 }
 
 

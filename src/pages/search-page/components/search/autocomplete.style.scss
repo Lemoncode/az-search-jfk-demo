@@ -5,15 +5,26 @@
 }
 
 .input {
+  font-size: 1.35rem !important;
+  font-weight: 400;
   color: inherit !important;
 }
 
-.underline:before {
-  background-color: white; 
+.underline::before {
+  background-color: transparentize($colorGrey, 0.5) !important;
+}
+
+.underline::after {
+  background-color: $colorPrimary !important;
 }
 
 .dropdown-area {
   position: absolute;
   width: 100%;
   z-index: 1500;
+  background-color: transparentize($colorGrey, 0.65) !important;
+}
+
+.suggestion-item {
+  color: inherit !important;
 }

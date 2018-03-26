@@ -2,7 +2,6 @@
   &-actions {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
   }
 
@@ -11,6 +10,9 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    color: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
   }
 
   &-icon {

@@ -16,7 +16,7 @@ interface FacetHeaderProps {
 
 export const FacetHeaderComponent: React.StatelessComponent<FacetHeaderProps> = (props) => {
   return (
-    <CardActions classes={{root: style.itemActions}}>
+    <CardActions classes={{root: style.itemActions}} color="inherit">
       <div className={style.itemTitle}>
         { props.facet.iconName ? 
           <Icon classes={{root: style.itemIcon}} color="action">
@@ -24,9 +24,7 @@ export const FacetHeaderComponent: React.StatelessComponent<FacetHeaderProps> = 
           </Icon>
           : null
         }            
-        <Typography variant="title">
-          {props.facet.displayName}
-        </Typography>
+        <span>{props.facet.displayName.toUpperCase()}</span>
       </div>          
       <Chevron onClick={props.onToggleExpanded} expanded={props.expanded}/>
     </CardActions>

@@ -40,7 +40,11 @@ export class FacetItemComponent extends React.Component<FacetItemProps, State> {
     if (!facet.values) { return null }
 
     return (
-      <Card classes={{root:style.item}} elevation={0}>
+      <Card
+        className={style.item}
+        color="inherit"
+        elevation={0}
+      >
         <FacetHeaderComponent
           facet={facet}
           expanded={expanded}

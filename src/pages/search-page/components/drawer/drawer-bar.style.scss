@@ -1,6 +1,7 @@
 @import "../../../../theme/_mixins.scss";
 
 .container {
+  flex: 0 0 auto;
   justify-content: space-between;
 
   &-closed {

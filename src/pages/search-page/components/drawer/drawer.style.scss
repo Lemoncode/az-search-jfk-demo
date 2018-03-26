@@ -20,6 +20,7 @@ $dock-visible-width: 5rem;
 
   width: 85vw;
   max-width: $drawer-max-width;
+  background-color: $colorBackground;
 }
 
 .drawer-paper-desktop {
@@ -27,7 +28,6 @@ $dock-visible-width: 5rem;
 
   position: static !important;
   width: $drawer-max-width;
-  background-color: transparent !important;
   transition: width 0.15s ease-out;
 
   &-hidden {

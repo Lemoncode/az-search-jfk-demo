@@ -1,7 +1,22 @@
+@import "../../../../theme/_palette.scss";
+
 .container {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   padding-left: 1rem;
+}
+
+.item-checkbox {
+  color: $colorWhite !important;
+  font-size: 1rem !important;
+
+  &-checked {
+    color: $colorPrimary !important;
+  }
+}
+
+.item-label {
+  color: $colorWhite !important;
 }
