@@ -1,6 +1,6 @@
 import * as React from "react";
 import Divider from "material-ui/Divider";
-import { PageBarComponent } from "./components/pageBar";
+import { PageBarComponent } from "./components/page-bar";
 import { DrawerComponent } from "./components/drawer";
 import { SearchComponent } from "./components/search";
 import { ItemCollectionViewComponent } from "./components/item";

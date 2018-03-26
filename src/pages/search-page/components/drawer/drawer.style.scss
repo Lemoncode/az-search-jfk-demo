@@ -14,6 +14,20 @@ $dock-visible-width: 5rem;
 
   margin-left: 0;
   color: inherit;
+
+  .drawer-paper-desktop {
+    position: static;
+    width: $drawer-max-width;
+    padding: 2.5rem;
+    transition: width 0.15s ease-out;
+  
+    &-hidden {
+      @extend .drawer-paper-desktop;
+  
+      width: $dock-visible-width;
+      overflow-x: hidden;
+    }
+  }
 }
 
 .drawer-paper-mobile {
@@ -25,16 +39,4 @@ $dock-visible-width: 5rem;
   background-color: $colorPrimaryDark !important;
 }
 
-.drawer-paper-desktop {
-  position: static !important;
-  width: $drawer-max-width;
-  padding: 2.5rem;
-  transition: width 0.15s ease-out;
 
-  &-hidden {
-    @extend .drawer-paper-desktop;
-
-    width: $dock-visible-width;
-    overflow-x: hidden;
-  }
-}

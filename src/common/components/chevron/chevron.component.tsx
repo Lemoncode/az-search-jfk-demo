@@ -11,7 +11,7 @@ interface ChevronProps {
   className?: string;
 }
 
-const Chevron: React.StatelessComponent<ChevronProps> = (props) => {
+export const Chevron: React.StatelessComponent<ChevronProps> = (props) => {
   return (
     <IconButton
       classes={{
@@ -27,5 +27,3 @@ const Chevron: React.StatelessComponent<ChevronProps> = (props) => {
     </IconButton>
   )
 }
-
-export { Chevron };

@@ -47,7 +47,7 @@ const DrawerBarClosedContent = ({onMenuClick}) => (
   <MenuButton onClick={onMenuClick}/>
 );
 
-const DrawerBarComponent: React.StatelessComponent<DrawerBarProps> = (props) => {
+export const DrawerBarComponent: React.StatelessComponent<DrawerBarProps> = (props) => {
   const containerStyle = props.viewMode === "open" ? style.container : style.containerClosed;
   return (
     <Toolbar 
@@ -65,5 +65,3 @@ const DrawerBarComponent: React.StatelessComponent<DrawerBarProps> = (props) => 
     </Toolbar>
   );
 };
-
-export { DrawerBarComponent };

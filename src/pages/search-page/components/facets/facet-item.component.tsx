@@ -22,7 +22,7 @@ export class FacetItemComponent extends React.Component<FacetItemProps, State> {
     super(props);
 
     this.state = {
-      expanded: false,
+      expanded: true,
     }
   }
 

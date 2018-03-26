@@ -1,0 +1,25 @@
+@import "./../../../../theme/_breakpoints.scss";
+
+.appbar {
+  box-shadow: none !important;
+
+  .toolbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 3rem;
+    margin: 0.75rem;
+
+    @include respond-to-desktop {
+      height: 7.8rem;
+      margin: 0 1.75rem;
+    }
+
+    .menu-button {
+      @include respond-to-desktop {
+        display: none;
+      }
+    }
+  }
+}

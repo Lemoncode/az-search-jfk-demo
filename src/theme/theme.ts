@@ -6,11 +6,11 @@ const defs = require("./main.scss");
 export const theme = createMuiTheme({
   breakpoints: {
     values: {
-      xs: 0,
-      sm: 768,
-      md: 1024,
-      lg: 1280,
-      xl: 1920,
+      xs: parseInt(defs.breakpointXs),
+      sm: parseInt(defs.breakpointSm),
+      md: parseInt(defs.breakpointMd),
+      lg: parseInt(defs.breakpointLg),
+      xl: parseInt(defs.breakpointXl),
     },
   },
   palette: {

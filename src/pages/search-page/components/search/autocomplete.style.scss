@@ -17,15 +17,15 @@
   .underline::after {
     background-color: $colorPrimary;
   }
-}
 
-.dropdown-area {
-  position: absolute;
-  width: 100%;
-  z-index: 1500;
-  background-color: transparentize($colorGrey, 0.65) !important;
-}
-
-.suggestion-item {
-  color: inherit !important;
+  .dropdown-area {
+    position: absolute;
+    width: 100%;
+    z-index: 1500;
+    background-color: transparentize($colorGrey, 0.5);
+  
+    .suggestion-item {
+      color: inherit;
+    }
+  }
 }

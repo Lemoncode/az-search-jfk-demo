@@ -1,35 +1,69 @@
-.item {
-  &-caption {
-    cursor: pointer;
+@import "./../../../../theme/_breakpoints.scss";
+@import "./../../../../theme/_palette.scss";
+
+$colorTranslucent: transparentize($colorGrey, 0.85);
+
+@include respond-to-desktop {
+  max-height: 4.5rem;
+}
+
+.card {
+  width: 16rem;
+  margin: 0 0.75rem 1.5rem;
+  
+  @include respond-to-desktop {
+    width: 19rem;
+    margin: 0 1rem 2.5rem;
   }
 
-  // &-rating {
-  //   display: flex;
-  //   flex-direction: row;
-  //   justify-content: flex-start;
-  //   align-items: center;
-  // }
+  .media {
+    object-fit: cover;
+    object-position: center;
+    cursor: pointer;
+    height: 22rem;
 
-  &-star {
+    @include respond-to-desktop {
+      height: 26rem;
+    }
+  }
+
+  .caption {
+    cursor: pointer;
+    background-color: $colorTranslucent;
+  }
+
+  .subtitle {
+    font-size: 0.8em;
+    margin-left: 0.3em;
+    color: silver;
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $colorTranslucent;
+  }
+
+  .rating {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+  }
+
+  .star {
     width: 16px;
   }
 
-  // &-actions {
-  //   display: flex;
-  //   flex-direction: row;
-  //   justify-content: space-between;
-  //   align-items: center;
-  // }
+  .chevron {
+    margin: 0 0 0 auto;
+  }
 
-  // &-chevron {
-  //   margin: 0 0 0 auto;
-  // }
-}
-
-.subtitle {
-  font-size: 0.8em;
-  margin-left: 0.3em;
-  color: silver;
+  .collapse {
+    background-color: $colorTranslucent;
+  }
 }
 
 .tag {
