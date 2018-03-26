@@ -2,20 +2,21 @@
 
 .container {
   position: relative;
-}
 
-.input {
-  font-size: 1.35rem !important;
-  font-weight: 400;
-  color: inherit !important;
-}
+  .input {
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: inherit;
+  }
 
-.underline::before {
-  background-color: transparentize($colorGrey, 0.5) !important;
-}
+  .underline::before,
+  .underline:hover::before {
+    background-color: transparentize($colorGrey, 0.5) !important;
+  }
 
-.underline::after {
-  background-color: $colorPrimary !important;
+  .underline::after {
+    background-color: $colorPrimary;
+  }
 }
 
 .dropdown-area {

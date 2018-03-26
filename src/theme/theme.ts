@@ -13,11 +13,6 @@ export const theme = createMuiTheme({
       xl: 1920,
     },
   },
-  mixins: {
-    toolbar: {
-      // TODO. Entry point.
-    }
-  },
   palette: {
     common: {
       black: defs.colorBlack,
@@ -32,7 +27,7 @@ export const theme = createMuiTheme({
     background: {
       default: defs.colorBackground,
       paper: defs.colorPaper,
-    }
+    },
   },
   transitions: {
     duration: {

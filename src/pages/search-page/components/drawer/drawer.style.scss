@@ -3,31 +3,32 @@
 $drawer-max-width: 31rem;
 $dock-visible-width: 5rem;
 
-.drawer-dock {
-  margin-left: 0;
-  color: inherit;
+@mixin border-separator {
   border-right-width: 0.65rem;
   border-right-color: transparentize($colorGrey, 0.65);
   border-right-style: solid;
 }
 
-@mixin drawer-paper {
-  padding: 2.5rem;
+.drawer-dock {
+  @include border-separator;
+
+  margin-left: 0;
+  color: inherit;
 }
 
 .drawer-paper-mobile {
-  @include drawer-paper;
+  @include border-separator;
 
   width: 85vw;
   max-width: $drawer-max-width;
-  background-color: $colorBackground;
+  padding: 1.25rem;
+  background-color: $colorPrimaryDark !important;
 }
 
 .drawer-paper-desktop {
-  @include drawer-paper;
-
   position: static !important;
   width: $drawer-max-width;
+  padding: 2.5rem;
   transition: width 0.15s ease-out;
 
   &-hidden {

@@ -1,9 +1,13 @@
 import * as React from "react";
+import Divider from "material-ui/Divider";
 import { PageBarComponent } from "./components/pageBar";
 import { DrawerComponent } from "./components/drawer";
 import { SearchComponent } from "./components/search";
 import { ItemCollectionViewComponent } from "./components/item";
 import { FacetViewComponent } from "./components/facets";
+import { HorizontalSeparatorComponent } from "./components/horizontal-separator";
+import { GraphViewComponent } from "./components/graph";
+import { SpacerComponent } from "./components/spacer";
 import {
   ItemCollection,
   FacetCollection,
@@ -14,9 +18,9 @@ import {
   ResultViewMode,
 } from "./view-model";
 import { Service } from "./service";
-import { GraphViewComponent } from "./components/graph";
 
 const style = require("./search-page.style.scss");
+
 
 interface SearchPageProps {
   activeService: Service;
@@ -67,18 +71,22 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
 const ResultAreaComponent = (props: SearchPageProps) => {
   
   return (
-    props.resultViewMode === "grid" ?
-    <ItemCollectionViewComponent
-      items={props.itemCollection}
-      activeSearch={props.activeSearch}
-      onClick={props.onItemClick}
-      loading={props.loading}
-      onLoadMore={props.onLoadMore}
-      noMoreResults={props.noMoreResults}
-    /> :
-    <GraphViewComponent
-      searchValue={props.activeSearch}
-    />
+    <SpacerComponent>
+      {
+        props.resultViewMode === "grid" ?
+        <ItemCollectionViewComponent
+          items={props.itemCollection}
+          activeSearch={props.activeSearch}
+          onClick={props.onItemClick}
+          loading={props.loading}
+          onLoadMore={props.onLoadMore}
+          noMoreResults={props.noMoreResults}
+        /> :
+        <GraphViewComponent
+          searchValue={props.activeSearch}
+        />
+      }
+    </SpacerComponent>
   );
 }
 
@@ -91,9 +99,11 @@ const SearchPageComponent = (props: SearchPageProps) => (
         onChangeResultViewMode={props.onChangeResultViewMode}
         onMenuClick={props.onMenuClick}
       />
+      <HorizontalSeparatorComponent />
       <ResultAreaComponent {...props} />
     </main>
   </div>
 )
+
 
 export { SearchPageComponent };

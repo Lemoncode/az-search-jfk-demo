@@ -12,7 +12,7 @@ interface ItemViewProps {
   onClick?: (item: Item) => void;
 }
 
-class ItemCollectionViewClass extends React.Component<ItemViewProps, {}> {
+class ItemCollectionView extends React.Component<ItemViewProps, {}> {
   public constructor(props) {
     super(props);
   }
@@ -35,4 +35,4 @@ class ItemCollectionViewClass extends React.Component<ItemViewProps, {}> {
   }  
 }
 
-export const ItemCollectionViewComponent = infiniteScroll(ItemCollectionViewClass);
+export const ItemCollectionViewComponent = infiniteScroll(ItemCollectionView);

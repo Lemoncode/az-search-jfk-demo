@@ -1,14 +1,16 @@
 import * as React from "react"
 import { Item } from "../../view-model";
 import { Chevron } from "../../../../common/components/chevron";
+import { HocrPreviewComponent } from "../../../../common/components/hocr";
 import Card, { CardActions, CardContent, CardMedia } from "material-ui/Card";
 import List, { ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import Collapse from "material-ui/transitions/Collapse";
 import Typography from "material-ui/Typography";
 import Chip from 'material-ui/Chip';
 import StarIcon from "material-ui-icons/Star";
-import { HocrPreviewComponent } from "../../../../common/components/hocr";
+import { withStyles, WithStyles } from "material-ui/styles";
 
+import { itemStyle } from "./item.style";
 const style = require("./item.style.scss");
 
 
@@ -17,6 +19,7 @@ interface ItemProps {
   activeSearch?: string;
   onClick?: (item: Item) => void;
   simplePreview?: boolean;
+  classes?: any;
 }
 
 interface State {
@@ -31,10 +34,10 @@ const ratingStars = (item: Item) => ((item.rating >= 1.0) ?
   )) : null
 );
 
-const ItemMediaThumbnail: React.StatelessComponent<ItemProps> = ({ item, onClick }) => {
+const ItemMediaThumbnail: React.StatelessComponent<ItemProps> = ({ item, onClick, classes }) => {
   return (
     item.thumbnail ? 
-    <CardMedia className={style.itemMedia}
+    <CardMedia className={classes.media}
       component="img"
       src={item.thumbnail}        
       title={item.title}
@@ -43,9 +46,9 @@ const ItemMediaThumbnail: React.StatelessComponent<ItemProps> = ({ item, onClick
   );
 }
 
-const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, activeSearch, onClick }) => {
+const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, activeSearch, onClick, classes }) => {
   return (
-    <div className={style.itemMedia}
+    <div className={classes.media}
      onClick={handleOnClick({ item, onClick })}
     >
       <HocrPreviewComponent
@@ -60,11 +63,21 @@ const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, activ
   );
 }
 
-const ItemMedia: React.StatelessComponent<ItemProps> = ({ item, activeSearch, onClick, simplePreview }) => {
+const ItemMedia: React.StatelessComponent<ItemProps> = (
+  { item, activeSearch, onClick, simplePreview, classes }) => {
   return (
     simplePreview ? 
-      <ItemMediaThumbnail item={item} onClick={onClick} /> :
-      <ItemMediaHocrPreview item={item} activeSearch={activeSearch} onClick={onClick} />
+      <ItemMediaThumbnail
+        item={item}
+        onClick={onClick}
+        classes={classes}
+      /> :
+      <ItemMediaHocrPreview
+        item={item}
+        activeSearch={activeSearch}
+        onClick={onClick}
+        classes={classes}
+      />
   );
 }
 
@@ -124,7 +137,7 @@ const ItemExtraFieldList: React.StatelessComponent<ItemProps> = ({ item }) => {
   }
 }
 
-class ItemComponent extends React.Component<ItemProps, State> {
+class ItemInner extends React.Component<ItemProps, State> {
   constructor(props) {
     super(props);
 
@@ -141,17 +154,23 @@ class ItemComponent extends React.Component<ItemProps, State> {
   }
     
   public render() {
-    const {item, activeSearch, onClick} = this.props;
+    const {item, activeSearch, onClick, classes } = this.props;
 
     return (
-      <Card classes={{root:style.item}} elevation={8}>
-        <ItemMedia item={item} activeSearch={activeSearch} onClick={onClick} />
+      <Card classes={{root: classes.card}}
+        elevation={8}>
+        <ItemMedia
+          classes={classes}
+          item={item}
+          activeSearch={activeSearch}
+          onClick={onClick}
+        />
         <ItemCaption item={item} onClick={onClick} />
-        <CardActions classes={{root: style.itemActions}}>
-          <div className={style.itemRating}>
+        <CardActions classes={{root: classes.actions}}>
+          <div className={classes.rating}>
             {ratingStars(item)}
           </div>          
-          <Chevron className={style.itemChevron}
+          <Chevron className={classes.chevron}
             onClick={this.toggleExpand} expanded={this.state.expanded} />
         </CardActions>
         <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
@@ -161,5 +180,4 @@ class ItemComponent extends React.Component<ItemProps, State> {
     );
   }  
 }
-
-export { ItemComponent };
+export const ItemComponent = withStyles(itemStyle)(ItemInner);
