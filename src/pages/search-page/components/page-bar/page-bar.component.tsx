@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ResultViewMode } from "../../view-model";
 import { MenuButton } from "../../../../common/components/menu-button";
-import { LogoComponent } from "./logo.component";
+import { LogoComponent } from "./../../../../common/components/logo";
 import { ResultViewModeToggler } from "./view-mode-toggler.component";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
@@ -27,7 +27,7 @@ export const PageBarComponent = (props) => {
           className={style.menuButton}
           onClick={props.onMenuClick}
         />
-        <LogoComponent />
+        <LogoComponent classes={{container: style.logoContainer, object: style.logoObject}}/>
         <ResultViewModeToggler {...props} />
       </Toolbar>
     </AppBar>
