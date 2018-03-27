@@ -41,7 +41,7 @@ export class FacetItemComponent extends React.Component<FacetItemProps, State> {
 
     return (
       <Card
-        className={style.item}
+        className={style.card}
         color="inherit"
         elevation={0}
       >

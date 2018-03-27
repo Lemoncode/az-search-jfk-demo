@@ -16,10 +16,10 @@ interface FacetHeaderProps {
 
 export const FacetHeaderComponent: React.StatelessComponent<FacetHeaderProps> = (props) => {
   return (
-    <CardActions classes={{root: style.itemActions}} color="inherit">
-      <div className={style.itemTitle}>
+    <CardActions classes={{root: style.actions}} color="inherit">
+      <div className={style.title}>
         { props.facet.iconName ? 
-          <Icon classes={{root: style.itemIcon}} color="action">
+          <Icon classes={{root: style.icon}} color="action">
             {props.facet.iconName}
           </Icon>
           : null

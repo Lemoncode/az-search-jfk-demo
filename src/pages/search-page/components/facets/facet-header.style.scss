@@ -1,21 +1,25 @@
-.item {
-  &-actions {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
+@import "../../../../theme/_breakpoints.scss";
 
-  &-title {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    color: inherit;
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  color: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+
+  @include respond-to-desktop {
     font-size: 1.2rem;
-    font-weight: 700;
   }
+}
 
-  &-icon {
-    margin-right: 0.5rem;
-  }
+.icon {
+  margin-right: 0.5rem;
 }

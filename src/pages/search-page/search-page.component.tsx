@@ -5,7 +5,7 @@ import { DrawerComponent } from "./components/drawer";
 import { SearchComponent } from "./components/search";
 import { ItemCollectionViewComponent } from "./components/item";
 import { FacetViewComponent } from "./components/facets";
-import { HorizontalSeparatorComponent } from "./components/horizontal-separator";
+import { HorizontalSeparator } from "./../../common/components/horizontal-separator";
 import { GraphViewComponent } from "./components/graph";
 import { SpacerComponent } from "./components/spacer";
 import {
@@ -99,7 +99,7 @@ const SearchPageComponent = (props: SearchPageProps) => (
         onChangeResultViewMode={props.onChangeResultViewMode}
         onMenuClick={props.onMenuClick}
       />
-      <HorizontalSeparatorComponent />
+      <HorizontalSeparator />
       <ResultAreaComponent {...props} />
     </main>
   </div>

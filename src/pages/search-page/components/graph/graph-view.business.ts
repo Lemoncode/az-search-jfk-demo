@@ -8,7 +8,7 @@ import { createDragBehaviour } from "./graph-view.handlers";
  * Graph configuration parameters.
  */
 const nodeRadius = 15;
-const nodeSeparationFactor = 0.9;
+const nodeSeparationFactor = 1;
 const nodeChargeStrength = -250; // Being negative Charge = Repulsion.
 const nodeChargeAccuracy = 0.4;
 

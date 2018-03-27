@@ -2,6 +2,7 @@ import * as React from "react";
 import { HocrProofreaderComponent } from "../../common/components/hocr";
 import { ZoomMode } from "../../common/components/hocr";
 import { ToolbarComponent } from "./components/toolbar";
+import { HorizontalSeparator } from "../../common/components/horizontal-separator";
 
 const style = require("./detail-page.style.scss");
 
@@ -25,12 +26,14 @@ export class DetailPageComponent extends React.Component<DetailPageProps, {}> {
     return (
       <div className={style.container}>
         <ToolbarComponent
+          zoomMode={this.props.zoomMode}
           onToggleTextClick={this.props.onToggleTextClick}
           onZoomChange={this.props.onZoomChange}
           onCloseClick={this.props.onCloseClick}
         />
+        <HorizontalSeparator className={style.separator}/>
         <HocrProofreaderComponent
-          className={style.mainArea}
+          className={style.hocr}
           hocr={this.props.hocr}
           targetWords={this.props.targetWords}
           zoomMode={this.props.zoomMode}

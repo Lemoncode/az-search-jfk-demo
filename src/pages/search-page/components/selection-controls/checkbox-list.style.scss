@@ -7,17 +7,18 @@
   align-items: flex-start;
   padding-left: 1rem;
 
-  .item-checkbox {
+  .checkbox {
     color: $colorWhite;
-    font-size: 1rem;
-  
+    font-size: inherit;
+
     &-checked {
       color: $colorPrimary;
     }
   }
-  
-  .item-label {
+
+  .label {
     color: $colorWhite;
+    font-size: inherit;
   }
 }
 

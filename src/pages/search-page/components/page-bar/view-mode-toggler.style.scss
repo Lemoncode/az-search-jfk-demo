@@ -2,4 +2,6 @@
 
 .icon {
   @include jfk-icon;
+
+  transition: color 0.25s ease-out;
 }

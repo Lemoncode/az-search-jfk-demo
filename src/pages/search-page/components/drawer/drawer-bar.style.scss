@@ -1,3 +1,4 @@
+@import "../../../../theme/_breakpoints.scss";
 @import "../../../../theme/_mixins.scss";
 
 .container {
@@ -17,15 +18,23 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  
-  &-title {
-    font-size: 1.05rem;
+
+  .title {
     margin: 0;
+    font-size: 0.9rem;
+
+    @include respond-to-desktop {
+      font-size: 1.05rem;
+    }
   }
 
-  &-subtitle {
-    font-size: 0.85rem;
+  .subtitle {
     margin: 0;
+    font-size: 0.7rem;
+
+    @include respond-to-desktop {
+      font-size: 0.85rem;
+    }
   }
 }
 

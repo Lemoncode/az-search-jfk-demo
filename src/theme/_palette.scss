@@ -1,7 +1,8 @@
 $colorWhite: white;
 $colorBlack: black;
 $colorPrimary: hsl(193, 99%, 57%);
-$colorPrimaryDark: hsl(202, 38%, 14%);
+$colorPrimaryDark: hsl(210, 100%, 20%);
+$colorPrimaryDarker: hsl(202, 38%, 14%);
 $colorSecondary: hsl(347, 88%, 34%);
 $colorBackground: white;
 $colorPaper: transparent;
@@ -33,6 +34,7 @@ $redEnd: hsl(346, 88%, 20%);
   colorWhite: $colorWhite;
   colorBlack: $colorBlack;
   colorPrimary: $colorPrimary;
+  colorPrimaryDark: $colorPrimaryDark;
   colorSecondary: $colorSecondary;
   colorBackground: $colorBackground;
   colorPaper: $colorPaper;

@@ -13,6 +13,7 @@
   margin: 0;
   overflow: scroll;
   scroll-behavior: smooth;
+  background-color: lightgrey;
 
   &.no-scrollable {
     overflow: hidden;

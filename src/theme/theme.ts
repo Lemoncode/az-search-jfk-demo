@@ -20,6 +20,7 @@ export const theme = createMuiTheme({
     },
     primary: {
       main: defs.colorPrimary,
+      dark: defs.colorPrimaryDark,
     },
     secondary: {
       main: defs.colorSecondary,

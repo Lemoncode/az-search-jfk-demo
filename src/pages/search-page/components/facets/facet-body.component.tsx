@@ -16,7 +16,7 @@ interface FacetBodyProps {
 export const FacetBodyComponent: React.StatelessComponent<FacetBodyProps> = (props) => {
   return (
     <Collapse in={props.expanded} timeout="auto">
-      <div className={style.controlContainer}>
+      <div className={style.body}>
         {CreateSelectionControl(props.facet, props.filter, props.onFilterUpdate)}
       </div>          
     </Collapse>
