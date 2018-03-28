@@ -1,15 +1,43 @@
-.drawer-bar-container {
+@import "../../../../theme/_breakpoints.scss";
+@import "../../../../theme/_mixins.scss";
+
+.container {
+  flex: 0 0 auto;
   justify-content: space-between;
-  padding: 2px 4px;
+
+  &-closed {
+    @extend .container;
+
+    justify-content: center;
+  }
 }
 
-.service-container {
+.caption {
+  flex: 1 1 auto;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  .title {
+    margin: 0;
+    font-size: 0.9rem;
+
+    @include respond-to-desktop {
+      font-size: 1.05rem;
+    }
+  }
+
+  .subtitle {
+    margin: 0;
+    font-size: 0.7rem;
+
+    @include respond-to-desktop {
+      font-size: 0.85rem;
+    }
+  }
 }
 
-.service-icon {
-  margin-right: 0.5rem;
+.close-icon {
+  @include jfk-icon;
 }

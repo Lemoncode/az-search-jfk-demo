@@ -1,15 +1,11 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { VerticalSeparator } from "./../../../../common/components/vertical-separator";
 import { ZoomMode } from "../../../../common/components/hocr";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
-import Typography from "material-ui/Typography";
+import Button from "material-ui/Button";
 import IconButton from "material-ui/IconButton";
-import CloseIcon from "material-ui-icons/Close";
-import ZoomOutMapIcon from "material-ui-icons/ZoomOutMap";
-import ImportExportIcon from "material-ui-icons/ImportExport";
-import SwapHorizIcon from "material-ui-icons/SwapHoriz";
-import FormatAlignCenterIcon from "material-ui-icons/FormatAlignCenter";
 
 const style = require("./toolbar.style.scss");
 
@@ -19,6 +15,7 @@ const style = require("./toolbar.style.scss");
  */
 
 interface ToolbarProps {
+  zoomMode: ZoomMode;
   onToggleTextClick: () => void;
   onZoomChange: (zoomMode: ZoomMode) => void;
   onCloseClick: () => void;
@@ -35,15 +32,24 @@ export class ToolbarComponent extends React.Component<ToolbarProps, {}> {
 
   public render() {
     return (
-      <Toolbar classes={{ root: style.toolbar }}>
-        <div className={style.toolbarGroup}>
-          <ToggleTextButton onClick={this.props.onToggleTextClick} />
+      <Toolbar classes={{ root: style.toolbar }} disableGutters={true}>
+        <div className={style.group}>
+          <ToggleViewButton onClick={this.props.onToggleTextClick} />
           <VerticalSeparator />
-          <OriginalSizeButton onClick={this.handleZoomClick("original")} />
-          <PageWidthButton onClick={this.handleZoomClick("page-width")} />
-          <PageFullButton onClick={this.handleZoomClick("page-full")} />
+          <OriginalSizeButton
+            zoomMode={this.props.zoomMode}
+            onClick={this.handleZoomClick("original")}
+          />
+          <PageWidthButton
+            zoomMode={this.props.zoomMode}
+            onClick={this.handleZoomClick("page-width")}
+          />
+          <PageFullButton
+            zoomMode={this.props.zoomMode}
+            onClick={this.handleZoomClick("page-full")}
+          />
         </div>
-        <div className={style.toolbarGroup}>
+        <div className={style.group}>
           <CloseButton onClick={this.props.onCloseClick} />
         </div>
       </Toolbar>
@@ -51,34 +57,56 @@ export class ToolbarComponent extends React.Component<ToolbarProps, {}> {
   }
 }
 
-const ToggleTextButton = ({ onClick }) => (
-  <IconButton color="inherit" onClick={onClick}>
-    <FormatAlignCenterIcon />
+const ToggleViewButton = ({ onClick }) => (
+  <Button
+    classes={{root: style.toggleView}}
+    color="inherit"
+    onClick={onClick}
+  >
+    Toggle View
+  </Button>
+);
+
+const toggleColor = (targetMode: ZoomMode, zoomMode: ZoomMode) => {
+  return targetMode === zoomMode ? "primary" : "inherit";
+}
+
+const OriginalSizeButton = ({ zoomMode, onClick }) => (
+  <IconButton
+    classes={{label: style.toggleIcon}}
+    color={toggleColor("original", zoomMode)}
+    onClick={onClick}
+  >
+    jfk_original
   </IconButton>
 );
 
-const OriginalSizeButton = ({ onClick }) => (
-  <IconButton color="inherit" onClick={onClick}>
-    <ZoomOutMapIcon />
+const PageWidthButton = ({ zoomMode, onClick }) => (
+  <IconButton
+    classes={{label: style.toggleIcon}}
+    color={toggleColor("page-width", zoomMode)}
+    onClick={onClick}
+  >
+    jfk_adjust_to_width
   </IconButton>
 );
 
-const PageWidthButton = ({ onClick }) => (
-  <IconButton color="inherit" onClick={onClick}>
-    <SwapHorizIcon />
-  </IconButton>
-);
-
-const PageFullButton = ({ onClick }) => (
-  <IconButton color="inherit" onClick={onClick}>
-    <ImportExportIcon />
+const PageFullButton = ({ zoomMode, onClick }) => (
+  <IconButton
+    classes={{label: style.toggleIcon}}
+    color={toggleColor("page-full", zoomMode)}
+    onClick={onClick}
+  >
+    jfk_adjust_to_height
   </IconButton>
 );
 
 const CloseButton = ({ onClick }) => (
-  <IconButton color="inherit" onClick={onClick}>
-    <CloseIcon />
+  <IconButton
+    classes={{label: style.closeIcon, root: style.closeButton}}
+    color="inherit"
+    onClick={onClick}
+  >
+    jfk_close
   </IconButton>
 );
-
-const VerticalSeparator = () => <div className={style.verticalSeparator}/>

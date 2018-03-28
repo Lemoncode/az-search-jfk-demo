@@ -45,9 +45,11 @@ export class HocrPageComponent extends React.PureComponent<HocrPageProps, {}> {
 
 const getZoomStyle = (zoomMode: ZoomMode, bbox: any) => {
   return {
-    width: (zoomMode === "original") ? `${(bbox[2]-bbox[0])}px` : "",
-    height: (zoomMode === "original") ? `${(bbox[3]-bbox[1])}px` : "",
-    maxWidth: (zoomMode !== "original") ? "100%" : "",
-    maxHeight: (zoomMode === "page-full") ? "100%" : "",
+    width: (zoomMode === "original") ? `${(bbox[2]-bbox[0])}px`
+            : (zoomMode === "page-width") ? "100%" : "",
+    height: (zoomMode === "original") ? `${(bbox[3]-bbox[1])}px`
+            : (zoomMode === "page-full") ? "100%" : "",
+    display: "block",
+    margin: "auto",
   }
 }

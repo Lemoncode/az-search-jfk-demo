@@ -1,13 +1,13 @@
 import * as React from "react"
 import { Item } from "../../view-model";
 import { Chevron } from "../../../../common/components/chevron";
+import { HocrPreviewComponent } from "../../../../common/components/hocr";
 import Card, { CardActions, CardContent, CardMedia } from "material-ui/Card";
 import List, { ListItem, ListItemIcon, ListItemText} from 'material-ui/List';
 import Collapse from "material-ui/transitions/Collapse";
 import Typography from "material-ui/Typography";
 import Chip from 'material-ui/Chip';
 import StarIcon from "material-ui-icons/Star";
-import { HocrPreviewComponent } from "../../../../common/components/hocr";
 
 const style = require("./item.style.scss");
 
@@ -27,14 +27,14 @@ const handleOnClick = ({item, onClick}) => () => onClick? onClick(item) : null;
 
 const ratingStars = (item: Item) => ((item.rating >= 1.0) ? 
   Array(Math.floor(item.rating)).fill(0).map((item, index) => (
-    <StarIcon key={index} classes={{root: style.itemStar}} color="secondary" />
+    <StarIcon key={index} classes={{root: style.star}} color="secondary" />
   )) : null
 );
 
 const ItemMediaThumbnail: React.StatelessComponent<ItemProps> = ({ item, onClick }) => {
   return (
     item.thumbnail ? 
-    <CardMedia className={style.itemMedia}
+    <CardMedia className={style.media}
       component="img"
       src={item.thumbnail}        
       title={item.title}
@@ -45,7 +45,7 @@ const ItemMediaThumbnail: React.StatelessComponent<ItemProps> = ({ item, onClick
 
 const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, activeSearch, onClick }) => {
   return (
-    <div className={style.itemMedia}
+    <div className={style.media}
      onClick={handleOnClick({ item, onClick })}
     >
       <HocrPreviewComponent
@@ -60,26 +60,35 @@ const ItemMediaHocrPreview: React.StatelessComponent<ItemProps> = ({ item, activ
   );
 }
 
-const ItemMedia: React.StatelessComponent<ItemProps> = ({ item, activeSearch, onClick, simplePreview }) => {
+const ItemMedia: React.StatelessComponent<ItemProps> = (
+  { item, activeSearch, onClick, simplePreview }) => {
   return (
     simplePreview ? 
-      <ItemMediaThumbnail item={item} onClick={onClick} /> :
-      <ItemMediaHocrPreview item={item} activeSearch={activeSearch} onClick={onClick} />
+      <ItemMediaThumbnail
+        item={item}
+        onClick={onClick}
+      /> :
+      <ItemMediaHocrPreview
+        item={item}
+        activeSearch={activeSearch}
+        onClick={onClick}
+      />
   );
 }
 
 const ItemCaption: React.StatelessComponent<ItemProps> = ({ item, onClick }) => {
   return (
-    <CardContent classes={{root: style.itemCaption}}
+    <CardContent 
+      classes={{root: style.caption}}
       onClick={handleOnClick({ item, onClick })}
     >
-      <Typography variant="headline" component="h2">
+      <Typography variant="headline" component="h2" color="inherit">
         {item.title} 
         <span className={style.subtitle}>
           {item.subtitle}
         </span>
       </Typography>        
-      <Typography component="p">
+      <Typography component="p" color="inherit">
         {item.excerpt}
       </Typography>
     </CardContent>
@@ -112,19 +121,21 @@ const generateExtraField = (field: any, index: number) => (
 const ItemExtraFieldList: React.StatelessComponent<ItemProps> = ({ item }) => {
   if (item.extraFields) {
     return (
-      <CardContent><List>
-        {
-          item.extraFields.map((field, fieldIndex) => 
-            generateExtraField(field, fieldIndex))
-        }
-      </List></CardContent>
+      <CardContent>
+        <List>
+          {
+            item.extraFields.map((field, fieldIndex) => 
+              generateExtraField(field, fieldIndex))
+          }
+        </List>
+      </CardContent>
     );
   } else {
     return null;
   }
 }
 
-class ItemComponent extends React.Component<ItemProps, State> {
+export class ItemComponent extends React.Component<ItemProps, State> {
   constructor(props) {
     super(props);
 
@@ -141,25 +152,33 @@ class ItemComponent extends React.Component<ItemProps, State> {
   }
     
   public render() {
-    const {item, activeSearch, onClick} = this.props;
+    const {item, activeSearch, onClick } = this.props;
 
     return (
-      <Card classes={{root:style.item}} elevation={8}>
-        <ItemMedia item={item} activeSearch={activeSearch} onClick={onClick} />
+      <Card classes={{root: style.card}}
+        elevation={8}>
+        <ItemMedia
+          item={item}
+          activeSearch={activeSearch}
+          onClick={onClick}
+        />
         <ItemCaption item={item} onClick={onClick} />
-        <CardActions classes={{root: style.itemActions}}>
-          <div className={style.itemRating}>
+        <CardActions classes={{root: style.actions}}>
+          <div className={style.rating}>
             {ratingStars(item)}
           </div>          
-          <Chevron className={style.itemChevron}
+          <Chevron className={style.chevron}
             onClick={this.toggleExpand} expanded={this.state.expanded} />
         </CardActions>
-        <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+        <Collapse 
+          classes={{container: style.collapse}}
+          in={this.state.expanded}
+          timeout="auto"
+          unmountOnExit
+        >
           <ItemExtraFieldList item={item} />
         </Collapse>  
       </Card>
     );
   }  
 }
-
-export { ItemComponent };

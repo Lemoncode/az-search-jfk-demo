@@ -1,31 +1,42 @@
-$drawer-max-width: 25rem;
+@import "../../../../theme/_palette.scss";
 
-.raise {
-  z-index: 1200;
-  box-shadow: 3px 0 10px 0 rgba(0, 0, 0, 0.15);
+$drawer-max-width: 31rem;
+$dock-visible-width: 5rem;
+
+@mixin border-separator {
+  border-right-width: 0.65rem;
+  border-right-color: transparentize($colorGrey, 0.65);
+  border-right-style: solid;
 }
 
 .drawer-dock {
+  @include border-separator;
+
   margin-left: 0;
-  transition: margin-left 0.15s ease-out;
+  color: inherit;
 
-  &-hidden {
-    @extend .drawer-dock;
-
-    margin-left: -$drawer-max-width;
-  }
-}
-
-.drawer-paper {
-  &-mobile {
-    width: 85vw;
-    max-width: $drawer-max-width;
-    padding: 0 1rem;
-  }
-
-  &-desktop {
-    position: static !important;
+  .drawer-paper-desktop {
+    position: static;
     width: $drawer-max-width;
-    padding: 0 1rem;
+    padding: 2.5rem;
+    transition: width 0.15s ease-out;
+  
+    &-hidden {
+      @extend .drawer-paper-desktop;
+  
+      width: $dock-visible-width;
+      overflow-x: hidden;
+    }
   }
 }
+
+.drawer-paper-mobile {
+  @include border-separator;
+
+  width: 85vw;
+  max-width: $drawer-max-width;
+  padding: 1.25rem;
+  background-color: $colorPrimaryDarker !important;
+}
+
+

@@ -33,6 +33,11 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
   componentDidMount() {
     if(isLastStateAvailable()) {
       this.setState(restoreLastState());
+    } else if (this.props.location.state) {
+      this.setState(
+        searchValueUpdate(this.props.location.state.searchValue),
+        this.handleSearchSubmit
+      );
     }
   }
 

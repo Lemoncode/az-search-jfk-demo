@@ -8,11 +8,12 @@ import { createDragBehaviour } from "./graph-view.handlers";
  * Graph configuration parameters.
  */
 const nodeRadius = 15;
-const nodeSeparationFactor = 0.9;
+const nodeSeparationFactor = 1;
 const nodeChargeStrength = -250; // Being negative Charge = Repulsion.
 const nodeChargeAccuracy = 0.4;
 
-const colorizeNode = (d, i) => (i == 0) ? "#FF3900" : "#9ECAE1";
+const colorizeNode = (theme: Theme) => (d, i) => 
+  (i == 0) ? theme.palette.secondary.main : theme.palette.primary.main;
 
 /**
  * Graph Utils.
@@ -67,7 +68,7 @@ const createEdges = (svg, graphDescriptor: GraphResponse) => {
       .style("pointer-events", "none");
 }
 
-const createNodes = (svg, graphDescriptor: GraphResponse) => {
+const createNodes = (svg, graphDescriptor: GraphResponse, theme: Theme) => {
   const nodes = svg
     .append("g")
       .attr("class", "nodes")
@@ -75,7 +76,7 @@ const createNodes = (svg, graphDescriptor: GraphResponse) => {
     .data(graphDescriptor.nodes)
     .enter().append("circle")
       .attr("r", nodeRadius)
-      .style("fill", colorizeNode)
+      .style("fill", colorizeNode(theme))
       .style("cursor", "pointer");
   
   const nodetitles = nodes
@@ -85,7 +86,7 @@ const createNodes = (svg, graphDescriptor: GraphResponse) => {
   return nodes;
 }
 
-const createNodeLabels = (svg, graphDescriptor: GraphResponse) => {
+const createNodeLabels = (svg, graphDescriptor: GraphResponse, theme: Theme) => {
   const ellipticalArc = `M${-5*nodeRadius},${0} A${5*nodeRadius},${2*nodeRadius} 0, 0,0 ${5*nodeRadius},${0}`;
   
   const nodeLabelArcs = svg
@@ -112,7 +113,8 @@ const createNodeLabels = (svg, graphDescriptor: GraphResponse) => {
       .attr("startOffset", "50%")
       .text(d => d.name)
       .style("text-anchor", "middle")
-      .style("alignment-baseline", "hanging");
+      .style("alignment-baseline", "hanging")
+      .style("fill", theme.palette.common.white);
   
   return {nodeLabels, nodeLabelArcs};
 }
@@ -132,8 +134,8 @@ export const loadGraph = (containerNodeId: string, graphDescriptor: GraphRespons
   const svg = createSvg(containerNodeId, theme);
   const arrowDef = createArrowDef(svg);
   const edges = createEdges(svg, graphDescriptor);
-  const nodes = createNodes(svg, graphDescriptor);
-  const {nodeLabels, nodeLabelArcs} = createNodeLabels(svg, graphDescriptor);
+  const nodes = createNodes(svg, graphDescriptor, theme);
+  const {nodeLabels, nodeLabelArcs} = createNodeLabels(svg, graphDescriptor, theme);
 
   const svgRect = getSvgBbox(svg);
   const nodeDistance = nodeSeparationFactor * Math.min(svgRect.width, svgRect.height) / 5;

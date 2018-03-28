@@ -1,3 +1,6 @@
+@import "./../../theme/_palette.scss";
+@import "./../../theme/_breakpoints.scss";
+
 .container {
   display: flex;
   flex-direction: column;
@@ -5,8 +8,25 @@
   align-items: stretch;
   width: 100vw;
   height: 100vh;
-}
+  color: $colorPrimaryDark;
+  background-color: $colorGrey;
 
-.main-area {
-  flex: 1 1 auto;
+  .separator {
+    background-color: darken($colorGrey, 50%);
+    opacity: 0.5;
+    margin: 0;
+
+    @include respond-to-desktop {
+      margin: 0 2rem;
+    }
+  }
+
+  .hocr {
+    flex: 1 1 auto;
+    margin: 0;
+
+    @include respond-to-desktop {
+      margin: 1rem;
+    }
+  }
 }

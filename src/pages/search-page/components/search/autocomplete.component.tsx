@@ -1,10 +1,10 @@
 import * as React from "react";
-import { SuggestionCollection, Suggestion } from "../../view-model";
-import TextField, { TextFieldProps } from "material-ui/TextField";
-import Paper from "material-ui/Paper";
-import { cnc } from "../../../../util";
-import { MenuItem } from "material-ui/Menu";
 import Downshift from "downshift";
+import { MenuItem } from "material-ui/Menu";
+import Paper from "material-ui/Paper";
+import TextField, { TextFieldProps } from "material-ui/TextField";
+import { SuggestionCollection, Suggestion } from "../../view-model";
+import { cnc } from "../../../../util";
 
 const style = require("./autocomplete.style.scss");
 
@@ -27,9 +27,12 @@ const renderInput = (params) => {
   return (
     <TextField
       {...other}
-      classes={{root: style.input}}
       InputProps = {{
-        ...innerInputProps
+        ...innerInputProps,
+        classes: {
+          root: style.input,
+          underline: style.underline,          
+        }        
       }}
     />
   );
@@ -43,10 +46,10 @@ const renderSuggestionItem = (params) => {
   return (
     <MenuItem
       {...composedProps}
+      classes={{ root: style.suggestionItem }}
       key={index}
       selected={isHighlighted}
       component="div"
-      classes={{ root: style.suggestionItem }}
     >
       {suggestion.text}
     </MenuItem>
@@ -99,11 +102,11 @@ export const AutocompleteInputComponent: React.StatelessComponent<AutocompleteIn
             {renderInput({
               autoFocus: props.autoFocus,
               fullWidth: true,
+              placeholder: props.placeholder,
               innerInputProps: getInputProps({
                 type: props.type,
                 name: props.name,
                 id: props.id,
-                placeholder: props.placeholder,
                 onKeyDown: props.onKeyPress,
               }),            
             })}
