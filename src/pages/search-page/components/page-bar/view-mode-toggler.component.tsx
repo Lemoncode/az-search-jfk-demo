@@ -28,14 +28,14 @@ export const ResultViewModeToggler = (props: ViewModeTogglerProps) => {
         color={toggleColorFunc("grid")}
         onClick={notifyModeChangedFunc("grid")}
       >
-        jfk_grid
+        &#xe902;
       </IconButton>
       <IconButton
         classes={{label: style.icon}}
         color={toggleColorFunc("graph")}
         onClick={notifyModeChangedFunc("graph")}
       >
-        jfk_node
+        &#xe904;
       </IconButton>
     </>
   );
