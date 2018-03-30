@@ -1,5 +1,5 @@
 import * as React from "react";
-import Icon from "material-ui/icon";
+import Icon from "material-ui/Icon";
 
 const style = require("./search-input.style.scss");
 

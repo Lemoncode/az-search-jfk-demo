@@ -3,14 +3,10 @@
 
 $colorTranslucent: transparentize($colorGrey, 0.85);
 
-@include respond-to-desktop {
-  max-height: 4.5rem;
-}
-
 .card {
   width: 16rem;
   margin: 0 0.75rem 1.5rem;
-  
+
   @include respond-to-desktop {
     width: 19rem;
     margin: 0 1rem 2.5rem;
