@@ -78,7 +78,16 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
     const {x, y} = shift;
     const scrollLeft = this.viewportRef.scrollWidth * x - (this.viewportRef.clientWidth / 2); 
     const scrollTop = this.viewportRef.scrollHeight * y - (this.viewportRef.clientHeight / 2);
-    this.viewportRef.scrollTo({left: scrollLeft, top: scrollTop});
+    
+    // Workd around Edge Bug
+    // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15534521/
+    if(this.viewportRef.scrollTo) {
+      this.viewportRef.scrollTo({left: scrollLeft, top: scrollTop});
+    } else {
+      this.viewportRef.scrollTop = scrollTop;
+      this.viewportRef.scrollLeft = scrollLeft;
+    }
+    
   }
 
   private resetHighlight = (node: Element) => {
