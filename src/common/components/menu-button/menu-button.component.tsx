@@ -12,6 +12,6 @@ export const MenuButton = ({ onClick, className = "" }) => (
     aria-label="Menu"
     onClick={onClick ? onClick : () => {}}
   >
-    jfk_menu
+    &#xe901;
   </IconButton>
 );

@@ -77,7 +77,7 @@ const OriginalSizeButton = ({ zoomMode, onClick }) => (
     color={toggleColor("original", zoomMode)}
     onClick={onClick}
   >
-    &#xe910;
+    &#xe911;
   </IconButton>
 );
 

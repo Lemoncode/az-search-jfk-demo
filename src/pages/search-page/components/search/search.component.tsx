@@ -62,7 +62,7 @@ const SearchComponent: React.StatelessComponent<SearchProps> = (props) => {
   return (
     <div className={cnc(props.className, style.container)}>
       <div className={style.controlContainer}>
-        <Icon classes={{root: style.icon}}>jfk_search</Icon>
+        <Icon classes={{root: style.icon}}>&#xe900;</Icon>
         <SearchAutocompleteInput 
           searchValue={props.value}
           suggestionCollection={props.suggestionCollection}

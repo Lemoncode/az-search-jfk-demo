@@ -21,7 +21,7 @@ const captureEnter = (onSearchSubmit) => (e => {
 
 export const SearchInput = (props: SearchInputProps) => (
   <div className={style.container}>
-    <Icon classes={{root: style.icon}}>jfk_search</Icon>
+    <Icon classes={{root: style.icon}}>&#xe900;</Icon>
     <input
       className={style.input}
       type="text"
