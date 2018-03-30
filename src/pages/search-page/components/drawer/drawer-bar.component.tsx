@@ -38,7 +38,7 @@ const DrawerBarOpenContent = ({activeService, onClose}) => (
       aria-label="Close"
       onClick={onClose}
     >
-      jfk_close
+      &#xe905;
     </IconButton>
   </>
 );
