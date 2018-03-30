@@ -46,6 +46,7 @@ module.exports = function () {
                   localIdentName: "[local]__[name]___[hash:base64:5]"
                 }
               },
+              { loader: 'resolve-url-loader' },
               { loader: "sass-loader" }
             ]
           })

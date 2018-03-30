@@ -59,7 +59,7 @@ export class ToolbarComponent extends React.Component<ToolbarProps, {}> {
 
 const ToggleViewButton = ({ onClick }) => (
   <Button
-    classes={{root: style.toggleView}}
+    classes={{ root: style.toggleView }}
     color="inherit"
     onClick={onClick}
   >
@@ -73,40 +73,40 @@ const toggleColor = (targetMode: ZoomMode, zoomMode: ZoomMode) => {
 
 const OriginalSizeButton = ({ zoomMode, onClick }) => (
   <IconButton
-    classes={{label: style.toggleIcon}}
+    classes={{ label: style.toggleIcon }}
     color={toggleColor("original", zoomMode)}
     onClick={onClick}
   >
-    jfk_original
+    &#xe910;
   </IconButton>
 );
 
 const PageWidthButton = ({ zoomMode, onClick }) => (
   <IconButton
-    classes={{label: style.toggleIcon}}
+    classes={{ label: style.toggleIcon }}
     color={toggleColor("page-width", zoomMode)}
     onClick={onClick}
   >
-    jfk_adjust_to_width
+    &#xe907;
   </IconButton>
 );
 
 const PageFullButton = ({ zoomMode, onClick }) => (
   <IconButton
-    classes={{label: style.toggleIcon}}
+    classes={{ label: style.toggleIcon }}
     color={toggleColor("page-full", zoomMode)}
     onClick={onClick}
   >
-    jfk_adjust_to_height
+    &#xe908;
   </IconButton>
 );
 
 const CloseButton = ({ onClick }) => (
   <IconButton
-    classes={{label: style.closeIcon, root: style.closeButton}}
+    classes={{ label: style.closeIcon, root: style.closeButton }}
     color="inherit"
     onClick={onClick}
   >
-    jfk_close
+    &#xe905;
   </IconButton>
 );
