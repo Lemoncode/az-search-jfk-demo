@@ -23,7 +23,7 @@ export const Chevron: React.StatelessComponent<ChevronProps> = (props) => {
       aria-expanded={props.expanded}
       aria-label="Show more"      
     >
-      jfk_chevron
+      &#xe906;
     </IconButton>
   )
 }
