@@ -28,9 +28,11 @@
     "material-ui-icons": "1.0.0-beta.17",
     "material-ui-pickers": "1.0.0-beta.15.1",
     "moment": "^2.20.1",
+    "qs": "^6.5.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-router-dom": "^4.2.2"
+    "react-router-dom": "^4.2.2",
+    "react-virtualized": "^9.18.5"
   },
   "devDependencies": {
     "@types/d3": "4.13.0",
@@ -39,6 +41,7 @@
     "@types/react": "^16.0.21",
     "@types/react-dom": "^16.0.2",
     "@types/react-router-dom": "^4.2.0",
+    "@types/react-virtualized": "^9.7.14",
     "awesome-typescript-loader": "^3.3.0",
     "babel-core": "^6.26.0",
     "babel-minify-webpack-plugin": "^0.3.1",
@@ -49,7 +52,6 @@
     "file-loader": "~1.1.5",
     "html-webpack-plugin": "~2.30.1",
     "node-sass": "^4.7.2",
-    "qs": "^6.5.1",
     "resolve-url-loader": "^2.3.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",

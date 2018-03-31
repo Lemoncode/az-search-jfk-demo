@@ -16,6 +16,9 @@ module.exports = {
     app: ['./app.tsx',],
     vendor: [
       'babel-polyfill',
+      'd3',
+      'downshift',
+      'lodash.throttle',
       'material-ui',
       'material-ui-icons',
       'material-ui-pickers',
@@ -24,7 +27,7 @@ module.exports = {
       'react',
       'react-dom',
       'react-router-dom',
-      'd3'
+      'react-virtualized',
     ],
   },
 
