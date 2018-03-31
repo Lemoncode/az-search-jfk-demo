@@ -9,7 +9,7 @@ export class AppRouter extends React.Component {
   public componentDidMount() {
     // We just want to display the background image once all the app is ready
     // if not it just doesn't display.
-    document.body.style.background = 'url("../assets/img/bg.jpg")';
+    document.body.style.backgroundImage = 'url("../assets/img/bg.jpg")';
   }
 
   public render() {
