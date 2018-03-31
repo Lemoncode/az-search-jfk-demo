@@ -1,4 +1,10 @@
 // Setup body.
+
+// To get the bundler adding this image
+.body-bkg {
+  background: url("../assets/img/bg.jpg");
+}
+
 body {
   // Default font style.
   font-family: "Open Sans", sans-serif;
