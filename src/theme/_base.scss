@@ -5,7 +5,9 @@ body {
 
   // Default background style.
   color: $colorWhite;
-  background: url("../assets/img/bg.jpg");
+  /* This will loaded once the react app is ready */
+  /* TODO: we could place a dark background */
+  /*background: url("../assets/img/bg.jpg");*/
   background-position: center;
   background-size: cover;
 
