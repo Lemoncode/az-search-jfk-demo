@@ -6,6 +6,8 @@
 }
 
 body {
+  margin: 0;
+
   // Default font style.
   font-family: "Open Sans", sans-serif;
 
@@ -13,7 +15,7 @@ body {
   color: $colorWhite;
   /* This will loaded once the react app is ready */
   /* TODO: we could place a dark background */
-  /*background: url("../assets/img/bg.jpg");*/
+  /* background: url("../assets/img/bg.jpg");*/
   background-position: center;
   background-size: cover;
 
@@ -41,6 +43,4 @@ body {
     scrollbar-face-color: $colorPrimary;
     scrollbar-track-color: $colorGrey;
   }
-
-  margin: 0;
 }
