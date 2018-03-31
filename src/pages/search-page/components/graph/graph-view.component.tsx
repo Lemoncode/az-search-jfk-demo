@@ -17,6 +17,7 @@ interface GraphViewProps extends WithTheme {
   searchValue: string;
   graphConfig?: GraphConfig;
   className?: string;
+  onGraphNodeDblClick : (term : string) => string;
 }
 
 interface GraphViewState {
@@ -81,7 +82,7 @@ class GraphView extends React.Component<GraphViewProps, GraphViewState> {
 
   public componentDidUpdate(prevProps: GraphViewProps, prevState: GraphViewState) {
     if (this.state.graphDescriptor != prevState.graphDescriptor) {
-      loadGraph(containerId, this.state.graphDescriptor, this.props.theme);
+      loadGraph(containerId, this.state.graphDescriptor, this.props.onGraphNodeDblClick, this.props.theme);
     }      
   }
 
