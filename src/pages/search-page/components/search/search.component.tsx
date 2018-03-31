@@ -1,7 +1,7 @@
 import * as React from "react"
 import Button from "material-ui/Button";
 import TextField from "material-ui/TextField";
-import Icon from "material-ui/icon";
+import Icon from "material-ui/Icon";
 import Typography from "material-ui/Typography";
 import { AutocompleteInputComponent } from "./autocomplete.component";
 import { SuggestionCollection } from "../../view-model";
