@@ -16,6 +16,7 @@ const style = require("./graph-view.style.scss");
 interface GraphViewProps extends WithTheme {
   searchValue: string;
   graphConfig?: GraphConfig;
+  onGraphNodeDblClick : (searchValue : string) => string;
   className?: string;
 }
 
@@ -81,7 +82,7 @@ class GraphView extends React.Component<GraphViewProps, GraphViewState> {
 
   public componentDidUpdate(prevProps: GraphViewProps, prevState: GraphViewState) {
     if (this.state.graphDescriptor != prevState.graphDescriptor) {
-      loadGraph(containerId, this.state.graphDescriptor, this.props.theme);
+      loadGraph(containerId, this.state.graphDescriptor, this.props.onGraphNodeDblClick, this.props.theme);
     }      
   }
 
