@@ -35,6 +35,7 @@
   "devDependencies": {
     "@types/d3": "4.13.0",
     "@types/history": "^4.6.1",
+    "@types/qs": "^6.5.1",
     "@types/react": "^16.0.21",
     "@types/react-dom": "^16.0.2",
     "@types/react-router-dom": "^4.2.0",
@@ -48,6 +49,7 @@
     "file-loader": "~1.1.5",
     "html-webpack-plugin": "~2.30.1",
     "node-sass": "^4.7.2",
+    "qs": "^6.5.1",
     "resolve-url-loader": "^2.3.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^6.0.6",

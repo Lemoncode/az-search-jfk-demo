@@ -1,6 +1,7 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import * as throttle from 'lodash.throttle';
+import {parse} from 'qs';
 import { SearchPageComponent } from "./search-page.component";
 import { State, FilterCollection, Filter, Item, ResultViewMode } from "./view-model";
 import { Service, StateReducer } from "./service";
@@ -33,11 +34,14 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
   componentDidMount() {
     if(isLastStateAvailable()) {
       this.setState(restoreLastState());
-    } else if (this.props.location.state) {
+    } else if (this.props.location.search/*state*//*search*/) {
+      
+      const parsed = parse(this.props.location.search.substring(1));
+
       this.setState(
-        searchValueUpdate(this.props.location.state.searchValue),
+        searchValueUpdate(parsed.term),
         this.handleSearchSubmit
-      );
+      );      
     }
   }
 

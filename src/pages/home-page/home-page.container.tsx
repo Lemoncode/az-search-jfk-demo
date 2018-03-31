@@ -2,6 +2,9 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { HomePageComponent } from "./home-page.component";
 import { searchPath } from "../search-page";
+var qs= require('qs');
+//import * as qs from 'qs';
+//import {stringify} from 'qs';
 
 interface HomePageState {
   searchValue: string;
@@ -15,14 +18,15 @@ export class HomePageContainer extends React.Component<RouteComponentProps<any>,
       searchValue: "",
     }
   }
+  
+  private handleSearchSubmit = () => {        
+    const params = qs.stringify({term: this.state.searchValue});
 
-  private handleSearchSubmit = () => {
-    this.props.history.push(
-      searchPath, 
-      {
-        searchValue: this.state.searchValue,
-      }
-    );
+    this.props.history.push({
+      pathname: searchPath,
+      search: `?${params}`
+    });
+    
   };
 
   private handleSearchUpdate = (newSearch: string) => {
