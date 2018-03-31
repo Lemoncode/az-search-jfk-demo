@@ -40,6 +40,17 @@ export const resultViewModeUpdate = (resultViewMode: ResultViewMode) => (prevSta
   }
 };
 
+export const receivedSearchValueUpdate = (searchValue: string, showDrawer: boolean, resultViewMode: ResultViewMode) =>
+(prevState: State): State => {
+  return {
+    ...prevState,
+    searchValue,
+    showDrawer,
+    resultViewMode,
+    itemCollection: null,
+  }
+};
+
 export const lastPageIndexReachedUpdate = (lastPageIndexReached: boolean) => (prevState: State): State => {
   return {
     ...prevState,

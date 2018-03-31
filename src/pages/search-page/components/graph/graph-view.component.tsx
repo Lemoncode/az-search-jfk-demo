@@ -16,8 +16,8 @@ const style = require("./graph-view.style.scss");
 interface GraphViewProps extends WithTheme {
   searchValue: string;
   graphConfig?: GraphConfig;
+  onGraphNodeDblClick : (searchValue : string) => string;
   className?: string;
-  onGraphNodeDblClick : (term : string) => string;
 }
 
 interface GraphViewState {
