@@ -3,8 +3,6 @@ import { RouteComponentProps } from "react-router";
 import { HomePageComponent } from "./home-page.component";
 import { searchPath } from "../search-page";
 var qs= require('qs');
-//import * as qs from 'qs';
-//import {stringify} from 'qs';
 
 interface HomePageState {
   searchValue: string;
