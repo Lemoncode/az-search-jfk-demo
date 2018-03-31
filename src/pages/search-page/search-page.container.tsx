@@ -1,6 +1,7 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import * as throttle from 'lodash.throttle';
+import { parse } from "qs";
 import { SearchPageComponent } from "./search-page.component";
 import { State, FilterCollection, Filter, Item, ResultViewMode } from "./view-model";
 import { Service, StateReducer } from "./service";
@@ -18,10 +19,10 @@ import {
   postSearchErrorKeep,
   lastPageIndexReachedUpdate,
   resultViewModeUpdate,
+  receivedSearchValueUpdate,
 } from "./search-page.container.state";
 import { detailPath, DetailRouteState } from "../detail-page";
 import { storeState, restoreLastState, isLastStateAvailable} from './view-model/state.memento';
-
 
 class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>, State> {
   constructor(props) {
@@ -33,12 +34,19 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
   componentDidMount() {
     if(isLastStateAvailable()) {
       this.setState(restoreLastState());
-    } else if (this.props.location.state) {
-      this.setState(
-        searchValueUpdate(this.props.location.state.searchValue),
-        this.handleSearchSubmit
-      );
+    } else if (this.props.location.search) {
+      const receivedSearchValue = parse(this.props.location.search.substring(1));
+      this.handleReceivedSearchValue(receivedSearchValue.term);
     }
+  }
+
+  // *** Search Value received through query string ***
+
+  handleReceivedSearchValue = (searchValue : string) => {
+    this.setState(
+      receivedSearchValueUpdate(searchValue, true, "grid"),
+      this.handleSearchSubmit
+    );
   }
 
   // *** DRAWER LOGIC ***
@@ -161,11 +169,12 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
       } as DetailRouteState
     );
   }
-
+  
   // TODO: Snackbar implementation.
   private informMessage = (message: string) => {
     console.log(message);
   }
+
 
   // *** REACT LIFECYCLE ***
 
@@ -193,6 +202,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           noMoreResults={this.state.lastPageIndexReached}
           resultViewMode={this.state.resultViewMode}
           onChangeResultViewMode={this.handleResultViewMode}
+          onGraphNodeDblClick={this.handleReceivedSearchValue}
         />
       </div>
     );

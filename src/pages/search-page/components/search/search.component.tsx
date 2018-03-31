@@ -16,7 +16,7 @@ interface SearchProps {
   onSearchUpdate: (value: string) => void;
   resultCount?: number;
   suggestionCollection?: SuggestionCollection;
-  className?: string;
+  className?: string;  
 }
 
 const captureEnter = (props) => (event => {

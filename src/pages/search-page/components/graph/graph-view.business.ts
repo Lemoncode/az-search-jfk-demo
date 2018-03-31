@@ -26,6 +26,10 @@ const createKeepCoordInCanvas = (svgRect) => (n: number, dim: "X" | "Y", margin:
     : Math.max(margin, Math.min(svgRect.height - margin, n));
 }
 
+const navigateToSelectedTerm = (onGraphNodeDblClick: (string) => void) => (d) => {
+  onGraphNodeDblClick(d.name);
+}
+
 
 /**
  * Graph definitions.
@@ -68,16 +72,17 @@ const createEdges = (svg, graphDescriptor: GraphResponse) => {
       .style("pointer-events", "none");
 }
 
-const createNodes = (svg, graphDescriptor: GraphResponse, theme: Theme) => {
-  const nodes = svg
-    .append("g")
+const createNodes = (svg, graphDescriptor: GraphResponse, onGraphNodeDblClick: (string) => void, theme: Theme) => {
+  const nodes = svg  
+    .append("g")      
       .attr("class", "nodes")
     .selectAll("circle")
     .data(graphDescriptor.nodes)
     .enter().append("circle")
       .attr("r", nodeRadius)
       .style("fill", colorizeNode(theme))
-      .style("cursor", "pointer");
+      .style("cursor", "pointer")
+      .on("dblclick", navigateToSelectedTerm(onGraphNodeDblClick));
   
   const nodetitles = nodes
     .append("title")
@@ -86,7 +91,7 @@ const createNodes = (svg, graphDescriptor: GraphResponse, theme: Theme) => {
   return nodes;
 }
 
-const createNodeLabels = (svg, graphDescriptor: GraphResponse, theme: Theme) => {
+const createNodeLabels = (svg, graphDescriptor: GraphResponse, onGraphNodeDblClick: (string) => void, theme: Theme) => {
   const ellipticalArc = `M${-5*nodeRadius},${0} A${5*nodeRadius},${2*nodeRadius} 0, 0,0 ${5*nodeRadius},${0}`;
   
   const nodeLabelArcs = svg
@@ -108,6 +113,7 @@ const createNodeLabels = (svg, graphDescriptor: GraphResponse, theme: Theme) => 
     .append("text")
       .attr("class", "nodelabel")
       .style("cursor", "pointer")
+      .on("dblclick", navigateToSelectedTerm(onGraphNodeDblClick))
     .append("textPath")
       .attr("xlink:href", (d, i) => `#nodelabelarc${i}`)
       .attr("startOffset", "50%")
@@ -128,14 +134,14 @@ export const resetGraph = (containerNodeId: string) => {
   d3.select(`#${containerNodeId} > *`).remove();
 };
 
-export const loadGraph = (containerNodeId: string, graphDescriptor: GraphResponse, theme: Theme) => {
+export const loadGraph = (containerNodeId: string, graphDescriptor: GraphResponse, onGraphNodeDblClick: (string) => void, theme: Theme) => {
   resetGraph(containerNodeId);
   
   const svg = createSvg(containerNodeId, theme);
   const arrowDef = createArrowDef(svg);
   const edges = createEdges(svg, graphDescriptor);
-  const nodes = createNodes(svg, graphDescriptor, theme);
-  const {nodeLabels, nodeLabelArcs} = createNodeLabels(svg, graphDescriptor, theme);
+  const nodes = createNodes(svg, graphDescriptor, onGraphNodeDblClick, theme);
+  const {nodeLabels, nodeLabelArcs} = createNodeLabels(svg, graphDescriptor, onGraphNodeDblClick, theme);
 
   const svgRect = getSvgBbox(svg);
   const nodeDistance = nodeSeparationFactor * Math.min(svgRect.width, svgRect.height) / 5;
@@ -159,6 +165,7 @@ export const loadGraph = (containerNodeId: string, graphDescriptor: GraphRespons
       .attr("y", (d: any) => keepCoordInCanvas(d.y, "Y", nodeRadius));
   }
 
+
   const simulation = d3.forceSimulation()
     .nodes(graphDescriptor.nodes)  
     .force("link", d3.forceLink(graphDescriptor.edges)
@@ -170,7 +177,8 @@ export const loadGraph = (containerNodeId: string, graphDescriptor: GraphRespons
           .distanceMax(2 * nodeDistance))
     .force("center", d3.forceCenter(svgRect.width / 2, svgRect.height / 2))
     .force("collide", d3.forceCollide(nodeRadius))
-    .on("tick", ticked);
+    .on("tick", ticked)    
+    ;
 
   const dragBehaviour = createDragBehaviour(simulation);
   

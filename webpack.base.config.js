@@ -20,6 +20,7 @@ module.exports = {
       'material-ui-icons',
       'material-ui-pickers',
       'moment',
+      'qs',
       'react',
       'react-dom',
       'react-router-dom',
