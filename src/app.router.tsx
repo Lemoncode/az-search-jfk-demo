@@ -13,26 +13,14 @@ export class AppRouter extends React.Component {
   }
 
   public render() {
-    return(
-      <BrowserRouter>
-      <Switch>
-        {HomeRoute}
-        {SearchRoute}
-        {DetailRoute}
-      </Switch>
-    </BrowserRouter>  
+    return (
+      <HashRouter>
+        <Switch>
+          {HomeRoute}
+          {SearchRoute}
+          {DetailRoute}
+        </Switch>
+      </HashRouter>
     );
   }
 }
-
-/*
-export const AppRouter = () => (
-  <HashRouter>
-    <Switch>
-      {HomeRoute}
-      {SearchRoute}
-      {DetailRoute}
-    </Switch>
-  </HashRouter>
-);
-*/
