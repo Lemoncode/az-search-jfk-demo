@@ -1,11 +1,21 @@
 // Setup body.
+
+// To get the bundler adding this image
+.body-bkg {
+  background: url("../assets/img/bg.jpg");
+}
+
 body {
+  margin: 0;
+
   // Default font style.
   font-family: "Open Sans", sans-serif;
 
   // Default background style.
   color: $colorWhite;
-  background: url("../assets/img/bg.jpg");
+  background-color: $colorPrimaryDarker;
+  // This will loaded once the react app is ready
+  // background: url("../assets/img/bg.jpg");
   background-position: center;
   background-size: cover;
   -webkit-background-size: cover;
@@ -36,6 +46,4 @@ body {
     scrollbar-face-color: $colorPrimary;
     scrollbar-track-color: $colorGrey;
   }
-
-  margin: 0;
 }
