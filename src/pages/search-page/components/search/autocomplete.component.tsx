@@ -20,6 +20,7 @@ interface AutocompleteInputProps {
   placeholder?: string;
   autoFocus?: boolean;
   className?: string;
+  OnDrowpDownItemSelectedChange? : (selectedItem, stateAndHelpers) => void;
 }
 
 const renderInput = (params) => {
@@ -94,6 +95,7 @@ export const AutocompleteInputComponent: React.StatelessComponent<AutocompleteIn
       selectedItem={props.searchValue}
       onInputValueChange={handleInputValueChange(props)}
       itemToString={handleItemToString}
+      onChange={props.OnDrowpDownItemSelectedChange}
     >
       {({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex }) => {
         

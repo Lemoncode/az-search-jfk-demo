@@ -6,6 +6,7 @@ import Typography from "material-ui/Typography";
 import { AutocompleteInputComponent } from "./autocomplete.component";
 import { SuggestionCollection } from "../../view-model";
 import { cnc } from "../../../../util";
+import { Search } from "history";
 
 const style = require("./search.style.scss");
 
@@ -25,7 +26,11 @@ const captureEnter = (props) => (event => {
   }
 });
 
-const SearchAutocompleteInput = ({searchValue, suggestionCollection, onSearchUpdate, onKeyPress}) => (
+const onDropdownItemSelected = (props : SearchProps) =>  (selectedItem, stateAndHelpers) => {
+  props.onSearchSubmit();
+}
+
+const SearchAutocompleteInput = ({searchValue, suggestionCollection, onSearchUpdate, onKeyPress, onDropdownItemSelected}) => (
   <AutocompleteInputComponent className={style.input}
     type="search"
     name="searchBox"
@@ -34,7 +39,8 @@ const SearchAutocompleteInput = ({searchValue, suggestionCollection, onSearchUpd
     searchValue={searchValue}
     suggestionCollection={suggestionCollection}
     onSearchUpdate={onSearchUpdate}
-    onKeyPress={onKeyPress}
+    onKeyPress={onKeyPress}   
+    OnDrowpDownItemSelectedChange= {onDropdownItemSelected} 
     autoFocus
   />
 );
@@ -68,6 +74,7 @@ const SearchComponent: React.StatelessComponent<SearchProps> = (props) => {
           suggestionCollection={props.suggestionCollection}
           onSearchUpdate={props.onSearchUpdate}
           onKeyPress={captureEnter(props)}
+          onDropdownItemSelected={onDropdownItemSelected(props)}
         />
         <SearchButton onClick={props.onSearchSubmit} />
       </div>
