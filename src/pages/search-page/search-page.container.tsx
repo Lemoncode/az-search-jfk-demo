@@ -1,6 +1,7 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import * as throttle from 'lodash.throttle';
+import {parse} from 'qs';
 import { SearchPageComponent } from "./search-page.component";
 import { State, FilterCollection, Filter, Item, ResultViewMode } from "./view-model";
 import { Service, StateReducer } from "./service";
@@ -22,7 +23,7 @@ import {
 import { detailPath, DetailRouteState } from "../detail-page";
 import { storeState, restoreLastState, isLastStateAvailable} from './view-model/state.memento';
 import { setDetailState } from "../detail-page/detail-page.memento";
-
+var qs= require('qs');
 
 class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>, State> {
   constructor(props) {
@@ -34,12 +35,18 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
   componentDidMount() {
     if(isLastStateAvailable()) {
       this.setState(restoreLastState());
-    } else if (this.props.location.state) {
-      this.setState(
-        searchValueUpdate(this.props.location.state.searchValue),
-        this.handleSearchSubmit
-      );
+    } else if (this.props.location.search) {
+      
+      const parsed = parse(this.props.location.search.substring(1));
+      this.onSetNewSearchValue(parsed.term);
     }
+  }
+
+  onSetNewSearchValue = (term : string) => {
+    this.setState(
+      searchValueUpdate(term),
+      this.handleSearchSubmit
+    );      
   }
 
   // *** DRAWER LOGIC ***
@@ -167,6 +174,11 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
     console.log(message);
   }
 
+  private handleGraphNodeTermPageNavigation(term : string) {
+    this.onSetNewSearchValue(term);        
+    this.handleResultViewMode("grid");
+  }
+
   // *** REACT LIFECYCLE ***
 
   public render() {
@@ -193,6 +205,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           noMoreResults={this.state.lastPageIndexReached}
           resultViewMode={this.state.resultViewMode}
           onChangeResultViewMode={this.handleResultViewMode}
+          onGraphNodeDblClick={this.handleGraphNodeTermPageNavigation.bind(this)}
         />
       </div>
     );

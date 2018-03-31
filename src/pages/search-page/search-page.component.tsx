@@ -43,6 +43,7 @@ interface SearchPageProps {
   onMenuClick: () => void;
   onLoadMore: () => void;
   onChangeResultViewMode: (newMode: ResultViewMode) => void;
+  onGraphNodeDblClick: (term : string) => void;
 }
 
 const DrawerAreaComponent = (props: SearchPageProps) => (
@@ -58,7 +59,7 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
       onSearchSubmit={props.onSearchSubmit}
       onSearchUpdate={props.onSearchUpdate}
       suggestionCollection={props.suggestionCollection}
-      resultCount={props.resultCount}
+      resultCount={props.resultCount}      
     />
     <FacetViewComponent
       facets={props.facetCollection}
@@ -84,6 +85,7 @@ const ResultAreaComponent = (props: SearchPageProps) => {
         /> :
         <GraphViewComponent
           searchValue={props.activeSearch}
+          onGraphNodeDblClick={props.onGraphNodeDblClick}
         />
       }
     </SpacerComponent>
