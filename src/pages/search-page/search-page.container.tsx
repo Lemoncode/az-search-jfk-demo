@@ -1,7 +1,7 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import * as throttle from 'lodash.throttle';
-import {parse} from 'qs';
+import { parse } from "qs";
 import { SearchPageComponent } from "./search-page.component";
 import { State, FilterCollection, Filter, Item, ResultViewMode } from "./view-model";
 import { Service, StateReducer } from "./service";
@@ -19,11 +19,11 @@ import {
   postSearchErrorKeep,
   lastPageIndexReachedUpdate,
   resultViewModeUpdate,
+  receivedSearchValueUpdate,
 } from "./search-page.container.state";
 import { detailPath, DetailRouteState } from "../detail-page";
 import { storeState, restoreLastState, isLastStateAvailable} from './view-model/state.memento';
 import { setDetailState } from "../detail-page/detail-page.memento";
-var qs= require('qs');
 
 class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>, State> {
   constructor(props) {
@@ -36,17 +36,18 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
     if(isLastStateAvailable()) {
       this.setState(restoreLastState());
     } else if (this.props.location.search) {
-      
-      const parsed = parse(this.props.location.search.substring(1));
-      this.onSetNewSearchValue(parsed.term);
+      const receivedSearchValue = parse(this.props.location.search.substring(1));
+      this.handleReceivedSearchValue(receivedSearchValue.term);
     }
   }
 
-  onSetNewSearchValue = (term : string) => {
+  // *** Search Value received through query string ***
+
+  handleReceivedSearchValue = (searchValue : string) => {
     this.setState(
-      searchValueUpdate(term),
+      receivedSearchValueUpdate(searchValue, true, "grid"),
       this.handleSearchSubmit
-    );      
+    );
   }
 
   // *** DRAWER LOGIC ***
@@ -168,16 +169,12 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
 
     this.props.history.push(detailPath);
   }
-
+  
   // TODO: Snackbar implementation.
   private informMessage = (message: string) => {
     console.log(message);
   }
 
-  private handleGraphNodeTermPageNavigation(term : string) {
-    this.onSetNewSearchValue(term);        
-    this.handleResultViewMode("grid");
-  }
 
   // *** REACT LIFECYCLE ***
 
@@ -205,7 +202,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           noMoreResults={this.state.lastPageIndexReached}
           resultViewMode={this.state.resultViewMode}
           onChangeResultViewMode={this.handleResultViewMode}
-          onGraphNodeDblClick={this.handleGraphNodeTermPageNavigation.bind(this)}
+          onGraphNodeDblClick={this.handleReceivedSearchValue}
         />
       </div>
     );

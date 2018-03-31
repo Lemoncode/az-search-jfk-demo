@@ -38,7 +38,6 @@ class DetailPageInnerContainer extends React.Component<RouteComponentProps<any>,
   }
 
   public render() {
-    const { location } = this.props;    
     const detailState = getDetailState();
     
     return (

@@ -8,6 +8,9 @@ body {
   background: url("../assets/img/bg.jpg");
   background-position: center;
   background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
 
   // Disable highlight on touch.
   -webkit-tap-highlight-color: transparent;

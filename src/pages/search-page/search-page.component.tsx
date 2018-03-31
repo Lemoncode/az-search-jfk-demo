@@ -43,7 +43,7 @@ interface SearchPageProps {
   onMenuClick: () => void;
   onLoadMore: () => void;
   onChangeResultViewMode: (newMode: ResultViewMode) => void;
-  onGraphNodeDblClick: (term : string) => void;
+  onGraphNodeDblClick: (searchValue: string) => void;
 }
 
 const DrawerAreaComponent = (props: SearchPageProps) => (
