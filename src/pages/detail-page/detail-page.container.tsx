@@ -4,6 +4,7 @@ import { DetailPageComponent } from "./detail-page.component";
 import { DetailRouteState } from "./detail-page.route";
 import { searchPath } from "../search-page";
 import { ZoomMode } from "../../common/components/hocr";
+import { getDetailState } from "./detail-page.memento";
 
 
 interface DetailPageState {
@@ -37,8 +38,8 @@ class DetailPageInnerContainer extends React.Component<RouteComponentProps<any>,
   }
 
   public render() {
-    const { location } = this.props;
-    const detailState: DetailRouteState = location ? location.state : {hocr: "", targetWords: []};
+    const { location } = this.props;    
+    const detailState = getDetailState();
     
     return (
       <DetailPageComponent
