@@ -3,33 +3,35 @@ import paginator from 'paginator';
 import { Page } from './page';
 import cx from 'classnames';
 
-export class Pagination extends React.Component<any, any> {
-  // static propTypes = {
-  //   totalItemsCount: PropTypes.number.isRequired,
-  //   onChange: PropTypes.func.isRequired,
-  //   activePage: PropTypes.number,
-  //   itemsCountPerPage: PropTypes.number,
-  //   pageRangeDisplayed: PropTypes.number,
-  //   prevPageText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  //   nextPageText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  //   lastPageText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  //   firstPageText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  //   disabledClass: PropTypes.string,
-  //   hideDisabled: PropTypes.bool,
-  //   hideNavigation: PropTypes.bool,
-  //   innerClass: PropTypes.string,
-  //   itemClass: PropTypes.string,
-  //   linkClass: PropTypes.string,
-  //   activeClass: PropTypes.string,
-  //   activeLinkClass: PropTypes.string,
-  //   linkClassFirst: PropTypes.string,
-  //   linkClassPrev: PropTypes.string,
-  //   linkClassNext: PropTypes.string,
-  //   linkClassLast: PropTypes.string,
-  //   hideFirstLastPages: PropTypes.bool,
-  //   getPageUrl: PropTypes.func
-  // };
+interface Props {
+  totalItemsCount: number;
+  onChange: (e) => void;
+  activePage?: number;
+  itemsCountPerPage?: number;
+  pageRangeDisplayed?: number;
+  prevPageText?: (string | React.ReactNode);  // Not sure if element makes sense here
+  nextPageText?: (string | React.ReactNode);
+  lastPageText?: (string | React.ReactNode);
+  firstPageText?: (string | React.ReactNode);
+  disabledClass?: string,
+  hideDisabled?: boolean;
+  hideNavigation?: boolean,
+  
+  innerClass?: string;
+  itemClass?: string;
+  linkClass?: string;
+  activeClass?: string;
+  activeLinkClass?: string;
+  linkClassFirst?: string;
+  linkClassPrev?: string;
+  linkClassNext?: string;
+  linkClassLast?: string;
+  
+  hideFirstLastPages?: boolean;
+  getPageUrl?: (i) => string;  
+}
 
+export class Pagination extends React.Component<any, {}> {
   static defaultProps = {
     itemsCountPerPage: 10,
     pageRangeDisplayed: 5,
@@ -93,7 +95,7 @@ export class Pagination extends React.Component<any, any> {
       getPageUrl
     } = this.props;
 
-    const paginationInfo = new paginator(
+    const paginationInfo : any = new paginator(
       itemsCountPerPage,
       pageRangeDisplayed
     ).build(totalItemsCount, activePage);

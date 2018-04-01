@@ -1,22 +1,27 @@
 import * as React from 'react';
 import cx from 'classnames';
 
-export class Page extends React.Component<any, any> {
-  // static propTypes = {
-  //     pageText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  //     pageNumber: PropTypes.number.isRequired,
-  //     onClick: PropTypes.func.isRequired,
-  //     isActive: PropTypes.bool.isRequired,
-  //     isDisabled: PropTypes.bool,
-  //     activeClass: PropTypes.string,
-  //     activeLinkClass: PropTypes.string,
-  //     itemClass: PropTypes.string,
-  //     linkClass: PropTypes.string,
-  //     disabledClass: PropTypes.string,
-  //     href: PropTypes.string
-  // };
+interface Props {
+  pageText: (string | Element); // Review this Element not sure if make sense
+  pageNumber: number;
+  onClick: (e) => void;
+  isActive?: boolean;
+  isDisabled?: boolean,
 
-  static defaultProps = {
+  activeClass?: string, // All this class stuff maybe we can remove it ans use it's css associated styles?
+  activeLinkClass?: string,
+  itemClass?: string,
+  linkClass?: string,
+  disabledClass?: string,
+
+  href?: string  
+}
+
+
+
+export class Page extends React.Component<Props, {}> {
+
+  static defaultProps = { // Confirm defaultProps in ts same approach?
     activeClass: "active",
     disabledClass: "disabled",
     itemClass: undefined,
