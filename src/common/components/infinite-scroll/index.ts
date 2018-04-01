@@ -1,1 +1,1 @@
-export { infiniteScroll } from "./infinite-scroll.hoc";
+export { infiniteScroll } from './infinite-scroll.hoc';

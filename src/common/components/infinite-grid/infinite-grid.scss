@@ -1,0 +1,8 @@
+.grid {
+  outline: none;
+  & :global(.ReactVirtualized__Grid__innerScrollContainer) {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}

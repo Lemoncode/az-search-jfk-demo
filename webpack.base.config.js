@@ -6,10 +6,10 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const basePath = __dirname;
 
 module.exports = {
-  context: path.join(basePath, "src"),
- 
+  context: path.join(basePath, 'src'),
+
   resolve: {
-      extensions: ['.js', '.jsx', '.ts', '.tsx']
+    extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
 
   entry: {
@@ -29,6 +29,9 @@ module.exports = {
       'react-router-dom',
       'react-virtualized',
     ],
+    vendorStyles: [
+      '../node_modules/react-virtualized/styles.css',
+    ],
   },
 
   module: {
@@ -42,8 +45,8 @@ module.exports = {
           useBabel: true,
         },
       },
-       // *** Loading pipe for Raster Images ***
-       {
+      // *** Loading pipe for Raster Images ***
+      {
         test: /\.(png|jpg|gif|bmp)?$/,
         exclude: [/node_modules/],
         use: [
@@ -128,7 +131,7 @@ module.exports = {
             },
           },
         ],
-      },      
+      },
     ]
   },
   plugins: [

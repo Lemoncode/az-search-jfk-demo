@@ -41,7 +41,7 @@ interface SearchPageProps {
   onItemClick: (item: Item) => void;
   onDrawerClose: () => void;
   onMenuClick: () => void;
-  onLoadMore: () => void;
+  onLoadMore: (startIndex: number) => void;
   onChangeResultViewMode: (newMode: ResultViewMode) => void;
   onGraphNodeDblClick: (searchValue: string) => void;
 }
@@ -51,7 +51,7 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
     className={style.drawerContainer}
     activeService={props.activeService}
     show={props.showDrawer}
-    onMenuClick={props.onMenuClick}    
+    onMenuClick={props.onMenuClick}
     onClose={props.onDrawerClose}
   >
     <SearchComponent
@@ -59,7 +59,7 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
       onSearchSubmit={props.onSearchSubmit}
       onSearchUpdate={props.onSearchUpdate}
       suggestionCollection={props.suggestionCollection}
-      resultCount={props.resultCount}      
+      resultCount={props.resultCount}
     />
     <FacetViewComponent
       facets={props.facetCollection}
@@ -70,23 +70,21 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
 );
 
 const ResultAreaComponent = (props: SearchPageProps) => {
-  
+
   return (
     <SpacerComponent>
       {
         props.resultViewMode === "grid" ?
-        <ItemCollectionViewComponent
-          items={props.itemCollection}
-          activeSearch={props.activeSearch}
-          onClick={props.onItemClick}
-          loading={props.loading}
-          onLoadMore={props.onLoadMore}
-          noMoreResults={props.noMoreResults}
-        /> :
-        <GraphViewComponent
-          searchValue={props.activeSearch}
-          onGraphNodeDblClick={props.onGraphNodeDblClick}
-        />
+          <ItemCollectionViewComponent
+            items={props.itemCollection}
+            activeSearch={props.activeSearch}
+            onClick={props.onItemClick}
+            onLoadMore={props.onLoadMore}
+          /> :
+          <GraphViewComponent
+            searchValue={props.activeSearch}
+            onGraphNodeDblClick={props.onGraphNodeDblClick}
+          />
       }
     </SpacerComponent>
   );
