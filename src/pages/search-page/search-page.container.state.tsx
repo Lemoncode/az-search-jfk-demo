@@ -46,7 +46,6 @@ export const receivedSearchValueUpdate = (searchValue: string, showDrawer: boole
     searchValue,
     showDrawer,
     resultViewMode,
-    itemCollection: null,
   }
 };
 
@@ -62,7 +61,6 @@ export const preSearchUpdate = (filters: FilterCollection, pageIndex?: number) =
     ...prevState,
     loading: true,
     suggestionCollection: null,
-    itemCollection: null,
     filterCollection: filters,
     pageIndex: pageIndex || 0,
   }
