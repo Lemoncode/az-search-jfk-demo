@@ -22,7 +22,7 @@ export const Page : React.StatelessComponent<Props> = (props) => {
   return (
     !props.isDisabled &&
     <Button
-      className={styles.page}
+      classes={{label: styles.buttonLabel}}
       onClick={handleClick(props)}
       color={
         Boolean(props.isActive) ?
@@ -35,7 +35,7 @@ export const Page : React.StatelessComponent<Props> = (props) => {
   );
 }
 
-Page.defaultProps =  {
+Page.defaultProps = {
   isActive: false,
   isDisabled: false,
 };
