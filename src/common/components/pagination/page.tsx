@@ -1,70 +1,41 @@
 import * as React from 'react';
+import Button from 'material-ui/Button';
 import cx from 'classnames';
+const styles = require('./page.scss');
 
-export class Page extends React.Component<any, any> {
-  // static propTypes = {
-  //     pageText: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  //     pageNumber: PropTypes.number.isRequired,
-  //     onClick: PropTypes.func.isRequired,
-  //     isActive: PropTypes.bool.isRequired,
-  //     isDisabled: PropTypes.bool,
-  //     activeClass: PropTypes.string,
-  //     activeLinkClass: PropTypes.string,
-  //     itemClass: PropTypes.string,
-  //     linkClass: PropTypes.string,
-  //     disabledClass: PropTypes.string,
-  //     href: PropTypes.string
-  // };
-
-  static defaultProps = {
-    activeClass: "active",
-    disabledClass: "disabled",
-    itemClass: undefined,
-    linkClass: undefined,
-    activeLinkCLass: undefined,
-    isActive: false,
-    isDisabled: false,
-    href: "#"
-  };
-
-  handleClick = (e) => {
-    const { isDisabled, pageNumber } = this.props;
-    e.preventDefault();
-    if (isDisabled) {
-      return;
-    }
-    this.props.onClick(pageNumber);
-  }
-
-  render() {
-    let {
-      pageText,
-      pageNumber,
-      activeClass,
-      itemClass,
-      linkClass,
-      activeLinkClass,
-      disabledClass,
-      isActive,
-      isDisabled,
-      href
-    } = this.props;
-
-    const css = cx(itemClass, {
-      [activeClass]: isActive,
-      [disabledClass]: isDisabled
-    });
-
-    const linkCss = cx(linkClass, {
-      [activeLinkClass]: isActive
-    });
-
-    return (
-      <li className={css} onClick={this.handleClick}>
-        <a className={linkCss} href={href}>
-          {pageText}
-        </a>
-      </li>
-    );
-  }
+interface Props {
+  pageText: (string | React.ReactNode); // Review this Element not sure if make sense
+  pageNumber: number;
+  onClick: (pageNumber : number) => void;
+  isActive?: boolean;
+  isDisabled?: boolean,
 }
+
+
+const handleClick = ({onClick, pageNumber} : Props) => (e) => {
+  e.preventDefault();
+  onClick(pageNumber);
+}
+
+
+export const Page : React.StatelessComponent<Props> = (props) => {
+  return (
+    !props.isDisabled &&
+    <Button
+      className={styles.page}
+      onClick={handleClick(props)}
+      color={
+        Boolean(props.isActive) ?
+          'primary' :
+          'inherit'
+      }
+    >
+      {props.pageText}
+    </Button>
+  );
+}
+
+Page.defaultProps =  {
+  isActive: false,
+  isDisabled: false,
+};

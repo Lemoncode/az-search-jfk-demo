@@ -133,7 +133,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
         console.debug(`Suggestions halted: ${rejectValue}`);
         this.setState(suggestionsUpdate(null));
       });
-  }, 250, {leading: true, trailing: true});
+  }, 500, {leading: true, trailing: true});
   
 
   // *** MISC ***
