@@ -1,5 +1,7 @@
 import * as React from 'react';
+import Button from 'material-ui/Button';
 import cx from 'classnames';
+const styles = require('./page.scss');
 
 interface Props {
   pageText: (string | Element); // Review this Element not sure if make sense
@@ -65,11 +67,18 @@ export class Page extends React.Component<Props, {}> {
     });
 
     return (
-      <li className={css} onClick={this.handleClick}>
-        <a className={linkCss} href={href}>
-          {pageText}
-        </a>
-      </li>
+      !this.props.isDisabled &&
+      <Button
+        className={styles.page}
+        onClick={this.handleClick}
+        color={
+          Boolean(this.props.isActive) ?
+            'primary' :
+            'inherit'
+        }
+      >
+        {pageText}
+      </Button>
     );
   }
 }
