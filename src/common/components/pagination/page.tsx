@@ -4,7 +4,7 @@ import cx from 'classnames';
 const styles = require('./page.scss');
 
 interface Props {
-  pageText: (string | Element); // Review this Element not sure if make sense
+  pageText: (string | React.ReactNode); // Review this Element not sure if make sense
   pageNumber: number;
   onClick: (e) => void;
   isActive?: boolean;
