@@ -18,6 +18,7 @@ import {
   ResultViewMode,
 } from "./view-model";
 import { Service } from "./service";
+import { Pagination } from "../../common/components/pagination/pagination";
 
 const style = require("./search-page.style.scss");
 
@@ -51,7 +52,7 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
     className={style.drawerContainer}
     activeService={props.activeService}
     show={props.showDrawer}
-    onMenuClick={props.onMenuClick}    
+    onMenuClick={props.onMenuClick}
     onClose={props.onDrawerClose}
   >
     <SearchComponent
@@ -59,7 +60,7 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
       onSearchSubmit={props.onSearchSubmit}
       onSearchUpdate={props.onSearchUpdate}
       suggestionCollection={props.suggestionCollection}
-      resultCount={props.resultCount}      
+      resultCount={props.resultCount}
     />
     <FacetViewComponent
       facets={props.facetCollection}
@@ -70,23 +71,32 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
 );
 
 const ResultAreaComponent = (props: SearchPageProps) => {
-  
+
   return (
     <SpacerComponent>
       {
         props.resultViewMode === "grid" ?
-        <ItemCollectionViewComponent
-          items={props.itemCollection}
-          activeSearch={props.activeSearch}
-          onClick={props.onItemClick}
-          loading={props.loading}
-          onLoadMore={props.onLoadMore}
-          noMoreResults={props.noMoreResults}
-        /> :
-        <GraphViewComponent
-          searchValue={props.activeSearch}
-          onGraphNodeDblClick={props.onGraphNodeDblClick}
-        />
+          <div>
+            <ItemCollectionViewComponent
+              items={props.itemCollection}
+              activeSearch={props.activeSearch}
+              onClick={props.onItemClick}
+              loading={props.loading}
+              onLoadMore={props.onLoadMore}
+              noMoreResults={props.noMoreResults}
+            />
+            <Pagination
+              activePage={1}
+              itemsCountPerPage={10}
+              totalItemsCount={400}
+              pageRangeDisplayed={5}
+              onChange={() => { }}
+            />
+          </div> :
+          <GraphViewComponent
+            searchValue={props.activeSearch}
+            onGraphNodeDblClick={props.onGraphNodeDblClick}
+          />
       }
     </SpacerComponent>
   );
