@@ -3,6 +3,8 @@ import paginator from 'paginator';
 import { Page } from './page';
 import cx from 'classnames';
 
+const styles = require('./pagination.scss');
+
 export class Pagination extends React.Component<any, any> {
   // static propTypes = {
   //   totalItemsCount: PropTypes.number.isRequired,
@@ -183,9 +185,9 @@ export class Pagination extends React.Component<any, any> {
   render() {
     const pages = this.buildPages();
     return (
-      <ul className={this.props.innerClass}>
+      <div className={styles.pagination}>
         {pages}
-      </ul>
+      </div>
     );
   }
 }

@@ -86,7 +86,7 @@ const ResultAreaComponent = (props: SearchPageProps) => {
               noMoreResults={props.noMoreResults}
             />
             <Pagination
-              activePage={1}
+              activePage={20}
               itemsCountPerPage={10}
               totalItemsCount={400}
               pageRangeDisplayed={5}

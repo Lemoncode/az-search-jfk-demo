@@ -1,5 +1,7 @@
 import * as React from 'react';
+import Button from 'material-ui/Button';
 import cx from 'classnames';
+const styles = require('./page.scss');
 
 export class Page extends React.Component<any, any> {
   // static propTypes = {
@@ -60,11 +62,18 @@ export class Page extends React.Component<any, any> {
     });
 
     return (
-      <li className={css} onClick={this.handleClick}>
-        <a className={linkCss} href={href}>
-          {pageText}
-        </a>
-      </li>
+      !this.props.isDisabled &&
+      <Button
+        className={styles.page}
+        onClick={this.handleClick}
+        color={
+          Boolean(this.props.isActive) ?
+            'primary' :
+            'inherit'
+        }
+      >
+        {pageText}
+      </Button>
     );
   }
 }
