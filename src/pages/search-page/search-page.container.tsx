@@ -23,6 +23,7 @@ import {
 } from "./search-page.container.state";
 import { detailPath, DetailRouteState } from "../detail-page";
 import { storeState, restoreLastState, isLastStateAvailable} from './view-model/state.memento';
+import { setDetailState } from "../detail-page/detail-page.memento";
 
 class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>, State> {
   constructor(props) {
@@ -161,13 +162,12 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
   private handleOnItemClick = (item: Item) => {    
     storeState(this.state);
 
-    this.props.history.push(
-      detailPath, 
-      {
-        hocr: item.metadata,
-        targetWords: this.state.activeSearch && this.state.activeSearch.split(" "),
-      } as DetailRouteState
-    );
+    setDetailState(      {
+      hocr: item.metadata,
+      targetWords: this.state.activeSearch && this.state.activeSearch.split(" "),
+    } as DetailRouteState);
+
+    this.props.history.push(detailPath);
   }
   
   // TODO: Snackbar implementation.
