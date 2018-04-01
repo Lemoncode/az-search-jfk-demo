@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ItemComponent } from "./item.component";
 import { ItemCollection, Item } from "../../view-model";
-import { infiniteScroll } from "../../../../common/components/infinite-scroll";
 
 const style = require("./item-collection-view.style.scss");
 
@@ -12,7 +11,7 @@ interface ItemViewProps {
   onClick?: (item: Item) => void;
 }
 
-class ItemCollectionView extends React.Component<ItemViewProps, {}> {
+export class ItemCollectionViewComponent extends React.Component<ItemViewProps, {}> {
   public constructor(props) {
     super(props);
   }
@@ -34,5 +33,3 @@ class ItemCollectionView extends React.Component<ItemViewProps, {}> {
     );
   }  
 }
-
-export const ItemCollectionViewComponent = infiniteScroll(ItemCollectionView);

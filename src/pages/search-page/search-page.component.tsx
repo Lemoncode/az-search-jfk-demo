@@ -33,16 +33,18 @@ interface SearchPageProps {
   facetCollection: FacetCollection;
   filterCollection: FilterCollection;
   suggestionCollection?: SuggestionCollection;
-  resultCount?: number;
+  resultCount: number;
+  resultsPerPage: number;
+  pageIndex: number;
   loading: boolean;
-  noMoreResults: boolean;
+  // noMoreResults: boolean;
   onSearchSubmit: () => void;
   onSearchUpdate: (value: string) => void;
   onFilterUpdate: (newFilter: Filter) => void;
   onItemClick: (item: Item) => void;
   onDrawerClose: () => void;
   onMenuClick: () => void;
-  onLoadMore: () => void;
+  onLoadMore: (pageIndex: number) => void;
   onChangeResultViewMode: (newMode: ResultViewMode) => void;
   onGraphNodeDblClick: (searchValue: string) => void;
 }
@@ -81,16 +83,13 @@ const ResultAreaComponent = (props: SearchPageProps) => {
               items={props.itemCollection}
               activeSearch={props.activeSearch}
               onClick={props.onItemClick}
-              loading={props.loading}
-              onLoadMore={props.onLoadMore}
-              noMoreResults={props.noMoreResults}
             />
             <Pagination
-              activePage={1}
-              itemsCountPerPage={10}
-              totalItemsCount={400}
+              activePage={props.pageIndex + 1}
+              itemsCountPerPage={props.resultsPerPage}
+              totalItemsCount={props.resultCount}
               pageRangeDisplayed={5}
-              onChange={() => { }}
+              onChange={pageNum => props.onLoadMore(pageNum - 1)}
             />
           </div> :
           <GraphViewComponent
