@@ -6,79 +6,36 @@ const styles = require('./page.scss');
 interface Props {
   pageText: (string | React.ReactNode); // Review this Element not sure if make sense
   pageNumber: number;
-  onClick: (e) => void;
+  onClick: (pageNumber : number) => void;
   isActive?: boolean;
   isDisabled?: boolean,
-
-  activeClass?: string, // All this class stuff maybe we can remove it ans use it's css associated styles?
-  activeLinkClass?: string,
-  itemClass?: string,
-  linkClass?: string,
-  disabledClass?: string,
-
-  href?: string  
 }
 
 
-
-export class Page extends React.Component<Props, {}> {
-
-  static defaultProps = { // Confirm defaultProps in ts same approach?
-    activeClass: "active",
-    disabledClass: "disabled",
-    itemClass: undefined,
-    linkClass: undefined,
-    activeLinkCLass: undefined,
-    isActive: false,
-    isDisabled: false,
-    href: "#"
-  };
-
-  handleClick = (e) => {
-    const { isDisabled, pageNumber } = this.props;
-    e.preventDefault();
-    if (isDisabled) {
-      return;
-    }
-    this.props.onClick(pageNumber);
-  }
-
-  render() {
-    let {
-      pageText,
-      pageNumber,
-      activeClass,
-      itemClass,
-      linkClass,
-      activeLinkClass,
-      disabledClass,
-      isActive,
-      isDisabled,
-      href
-    } = this.props;
-
-    const css = cx(itemClass, {
-      [activeClass]: isActive,
-      [disabledClass]: isDisabled
-    });
-
-    const linkCss = cx(linkClass, {
-      [activeLinkClass]: isActive
-    });
-
-    return (
-      !this.props.isDisabled &&
-      <Button
-        className={styles.page}
-        onClick={this.handleClick}
-        color={
-          Boolean(this.props.isActive) ?
-            'primary' :
-            'inherit'
-        }
-      >
-        {pageText}
-      </Button>
-    );
-  }
+const handleClick = ({onClick, pageNumber} : Props) => (e) => {
+  e.preventDefault();
+  onClick(pageNumber);
 }
+
+
+export const Page : React.StatelessComponent<Props> = (props) => {
+  return (
+    !props.isDisabled &&
+    <Button
+      className={styles.page}
+      onClick={handleClick(props)}
+      color={
+        Boolean(props.isActive) ?
+          'primary' :
+          'inherit'
+      }
+    >
+      {props.pageText}
+    </Button>
+  );
+}
+
+Page.defaultProps =  {
+  isActive: false,
+  isDisabled: false,
+};

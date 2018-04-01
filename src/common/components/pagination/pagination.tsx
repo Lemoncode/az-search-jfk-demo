@@ -3,37 +3,26 @@ import paginator from 'paginator';
 import { Page } from './page';
 import cx from 'classnames';
 
+// based on: https://github.com/vayser/react-js-pagination
 const styles = require('./pagination.scss');
 
 interface Props {
   totalItemsCount: number;
-  onChange: (e) => void;
+  onChange: (pageNumber: number) => void;
   activePage?: number;
   itemsCountPerPage?: number;
   pageRangeDisplayed?: number;
   prevPageText?: (string | React.ReactNode);  // Not sure if element makes sense here
   nextPageText?: (string | React.ReactNode);
   lastPageText?: (string | React.ReactNode);
-  firstPageText?: (string | React.ReactNode);
-  disabledClass?: string,
+  firstPageText?: (string | React.ReactNode);  
   hideDisabled?: boolean;
   hideNavigation?: boolean,
-  
-  innerClass?: string;
-  itemClass?: string;
-  linkClass?: string;
-  activeClass?: string;
-  activeLinkClass?: string;
-  linkClassFirst?: string;
-  linkClassPrev?: string;
-  linkClassNext?: string;
-  linkClassLast?: string;
-  
-  hideFirstLastPages?: boolean;
-  getPageUrl?: (i) => string;  
+    
+  hideFirstLastPages?: boolean;  
 }
 
-export class Pagination extends React.Component<any, {}> {
+export class Pagination extends React.Component<Props, {}> {
   static defaultProps = {
     itemsCountPerPage: 10,
     pageRangeDisplayed: 5,
@@ -42,12 +31,7 @@ export class Pagination extends React.Component<any, {}> {
     firstPageText: "«",
     nextPageText: "⟩",
     lastPageText: "»",
-    innerClass: "pagination",
-    itemClass: undefined,
-    linkClass: undefined,
-    activeLinkClass: undefined,
     hideFirstLastPages: false,
-    getPageUrl: (i) => "#"
   };
 
   isFirstPageVisible(has_previous_page) {
@@ -82,19 +66,7 @@ export class Pagination extends React.Component<any, {}> {
       lastPageText,
       totalItemsCount,
       onChange,
-      activeClass,
-      itemClass,
-      activeLinkClass,
-      disabledClass,
-      hideDisabled,
-      hideNavigation,
-      linkClass,
-      linkClassFirst,
-      linkClassPrev,
-      linkClassNext,
-      linkClassLast,
       hideFirstLastPages,
-      getPageUrl
     } = this.props;
 
     const paginationInfo : any = new paginator(
@@ -110,15 +82,10 @@ export class Pagination extends React.Component<any, {}> {
       pages.push(
         <Page
           isActive={i === activePage}
-          key={i}
-          href={getPageUrl(i)}
+          key={i}          
           pageNumber={i}
           pageText={i + ""}
-          onClick={onChange}
-          itemClass={itemClass}
-          linkClass={linkClass}
-          activeClass={activeClass}
-          activeLinkClass={activeLinkClass}
+          onClick={onChange}                                        
         />
       );
     }
@@ -130,10 +97,7 @@ export class Pagination extends React.Component<any, {}> {
           pageNumber={paginationInfo.previous_page}
           onClick={onChange}
           pageText={prevPageText}
-          isDisabled={!paginationInfo.has_previous_page}
-          itemClass={itemClass}
-          linkClass={cx(linkClass, linkClassPrev)}
-          disabledClass={disabledClass}
+          isDisabled={!paginationInfo.has_previous_page}                    
         />
       );
 
@@ -144,10 +108,7 @@ export class Pagination extends React.Component<any, {}> {
           pageNumber={1}
           onClick={onChange}
           pageText={firstPageText}
-          isDisabled={!paginationInfo.has_previous_page}
-          itemClass={itemClass}
-          linkClass={cx(linkClass, linkClassFirst)}
-          disabledClass={disabledClass}
+          isDisabled={!paginationInfo.has_previous_page}                    
         />
       );
 
@@ -158,10 +119,7 @@ export class Pagination extends React.Component<any, {}> {
           pageNumber={paginationInfo.next_page}
           onClick={onChange}
           pageText={nextPageText}
-          isDisabled={!paginationInfo.has_next_page}
-          itemClass={itemClass}
-          linkClass={cx(linkClass, linkClassNext)}
-          disabledClass={disabledClass}
+          isDisabled={!paginationInfo.has_next_page}                    
         />
       );
 
@@ -174,10 +132,7 @@ export class Pagination extends React.Component<any, {}> {
           pageText={lastPageText}
           isDisabled={
             paginationInfo.current_page === paginationInfo.total_pages
-          }
-          itemClass={itemClass}
-          linkClass={cx(linkClass, linkClassLast)}
-          disabledClass={disabledClass}
+          }                              
         />
       );
 
