@@ -23,23 +23,23 @@ interface AutocompleteInputProps {
 }
 
 const renderInput = (params) => {
-  const {innerInputProps, ...other} = params;
+  const { innerInputProps, ...other } = params;
   return (
     <TextField
       {...other}
-      InputProps = {{
+      InputProps={{
         ...innerInputProps,
         classes: {
           root: style.input,
-          underline: style.underline,          
-        }        
+          underline: style.underline,
+        }
       }}
     />
   );
 };
 
 const renderSuggestionItem = (params) => {
-  const {suggestion, index, composedProps, highlightedIndex, selectedItem} = params;
+  const { suggestion, index, composedProps, highlightedIndex, selectedItem } = params;
   const isHighlighted = highlightedIndex === index;
   const isSelected = selectedItem === suggestion.text;
 
@@ -57,10 +57,10 @@ const renderSuggestionItem = (params) => {
 };
 
 const renderSuggestionCollection = (params) => {
-  const {suggestionCollection, getItemProps, isOpen, selectedItem, highlightedIndex} = params;
+  const { suggestionCollection, getItemProps, isOpen, selectedItem, highlightedIndex } = params;
   if (isOpen && suggestionCollection && suggestionCollection.length) {
     return (
-      <Paper square classes={{root: style.dropdownArea}}>
+      <Paper square classes={{ root: style.dropdownArea }}>
         {suggestionCollection.map((suggestion, index) =>
           renderSuggestionItem({
             suggestion,
@@ -84,19 +84,19 @@ const handleItemToString = item => (item ? item.toString() : "");
 
 const handleInputValueChange = props => newValue => {
   if (newValue !== props.searchValue) {
-    props.onSearchUpdate(newValue); 
+    props.onSearchUpdate(newValue);
   }
 }
 
 export const AutocompleteInputComponent: React.StatelessComponent<AutocompleteInputProps> = props => {
   return (
-    <Downshift      
+    <Downshift
       selectedItem={props.searchValue}
       onInputValueChange={handleInputValueChange(props)}
       itemToString={handleItemToString}
     >
       {({ getInputProps, getItemProps, isOpen, inputValue, selectedItem, highlightedIndex }) => {
-        
+
         return (
           <div className={cnc(props.className, style.container)}>
             {renderInput({
@@ -108,7 +108,7 @@ export const AutocompleteInputComponent: React.StatelessComponent<AutocompleteIn
                 name: props.name,
                 id: props.id,
                 onKeyDown: props.onKeyPress,
-              }),            
+              }),
             })}
             {renderSuggestionCollection({
               suggestionCollection: props.suggestionCollection,

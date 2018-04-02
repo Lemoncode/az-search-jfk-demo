@@ -36,8 +36,6 @@ interface SearchPageProps {
   resultCount: number;
   resultsPerPage: number;
   pageIndex: number;
-  loading: boolean;
-  // noMoreResults: boolean;
   onSearchSubmit: () => void;
   onSearchUpdate: (value: string) => void;
   onFilterUpdate: (newFilter: Filter) => void;
@@ -72,33 +70,38 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
   </DrawerComponent>
 );
 
-const ResultAreaComponent = (props: SearchPageProps) => {
-
-  return (
-    <SpacerComponent>
-      {
-        props.resultViewMode === "grid" ?
-          <div>
+class ResultAreaComponent extends React.PureComponent<Partial<SearchPageProps>> {
+  private handlePageChange = (pageNum) => {
+    this.props.onLoadMore(pageNum - 1);
+  }
+  
+  render() {
+    return (
+      <SpacerComponent>
+        {
+          this.props.resultViewMode === "grid" ?
+            <div>
             <ItemCollectionViewComponent
-              items={props.itemCollection}
-              activeSearch={props.activeSearch}
-              onClick={props.onItemClick}
+              items={this.props.itemCollection}
+              activeSearch={this.props.activeSearch}
+              onClick={this.props.onItemClick}
             />
             <Pagination
-              activePage={props.pageIndex + 1}
-              itemsCountPerPage={props.resultsPerPage}
-              totalItemsCount={props.resultCount}
+              activePage={this.props.pageIndex + 1}
+              itemsCountPerPage={this.props.resultsPerPage}
+              totalItemsCount={this.props.resultCount}
               pageRangeDisplayed={5}
-              onChange={pageNum => props.onLoadMore(pageNum - 1)}
+              onChange={this.handlePageChange}
             />
-          </div> :
-          <GraphViewComponent
-            searchValue={props.activeSearch}
-            onGraphNodeDblClick={props.onGraphNodeDblClick}
-          />
-      }
-    </SpacerComponent>
-  );
+            </div> :
+            <GraphViewComponent
+              searchValue={this.props.activeSearch}
+              onGraphNodeDblClick={this.props.onGraphNodeDblClick}
+            />
+        }
+      </SpacerComponent>
+    );
+  }
 }
 
 const SearchPageComponent = (props: SearchPageProps) => (
@@ -111,7 +114,17 @@ const SearchPageComponent = (props: SearchPageProps) => (
         onMenuClick={props.onMenuClick}
       />
       <HorizontalSeparator />
-      <ResultAreaComponent {...props} />
+      <ResultAreaComponent
+        itemCollection={props.itemCollection}
+        activeSearch={props.activeSearch}
+	pageIndex={props.pageIndex}
+	resultsPerPage={props.resultsPerPage}
+	resultCount={props.resultCount}
+        onItemClick={props.onItemClick}
+        onLoadMore={props.onLoadMore}
+        onGraphNodeDblClick={props.onGraphNodeDblClick}
+        resultViewMode={props.resultViewMode}
+      />
     </main>
   </div>
 )
