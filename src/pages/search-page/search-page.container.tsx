@@ -78,7 +78,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
       preSearchUpdate(null),
       this.runSearch(postSearchSuccessUpdate, postSearchErrorReset)
     );
-  }; 
+  };
 
   private runSearch = (
     successCallback: (stateReducer: StateReducer) => (prevState: State) => State,
@@ -108,7 +108,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
       this.runSearch(postSearchSuccessUpdate, postSearchErrorReset)
     );
   };
-  
+
 
   // *** PAGINATION LOGIC ***
 
@@ -154,12 +154,12 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
         console.debug(`Suggestions halted: ${rejectValue}`);
         this.setState(suggestionsUpdate(null));
       });
-  }, 250, {leading: true, trailing: true});
-  
+  }, 500, {leading: true, trailing: true});
+
 
   // *** MISC ***
 
-  private handleOnItemClick = (item: Item) => {    
+  private handleOnItemClick = (item: Item) => {
     storeState(this.state);
 
     setDetailState(      {
@@ -169,7 +169,7 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
 
     this.props.history.push(detailPath);
   }
-  
+
   // TODO: Snackbar implementation.
   private informMessage = (message: string) => {
     console.log(message);

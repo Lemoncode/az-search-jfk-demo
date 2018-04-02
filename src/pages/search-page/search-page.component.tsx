@@ -51,7 +51,7 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
     className={style.drawerContainer}
     activeService={props.activeService}
     show={props.showDrawer}
-    onMenuClick={props.onMenuClick}    
+    onMenuClick={props.onMenuClick}
     onClose={props.onDrawerClose}
   >
     <SearchComponent
@@ -59,7 +59,7 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
       onSearchSubmit={props.onSearchSubmit}
       onSearchUpdate={props.onSearchUpdate}
       suggestionCollection={props.suggestionCollection}
-      resultCount={props.resultCount}      
+      resultCount={props.resultCount}
     />
     <FacetViewComponent
       facets={props.facetCollection}
@@ -69,27 +69,28 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
   </DrawerComponent>
 );
 
-const ResultAreaComponent = (props: SearchPageProps) => {
-  
-  return (
-    <SpacerComponent>
-      {
-        props.resultViewMode === "grid" ?
-        <ItemCollectionViewComponent
-          items={props.itemCollection}
-          activeSearch={props.activeSearch}
-          onClick={props.onItemClick}
-          loading={props.loading}
-          onLoadMore={props.onLoadMore}
-          noMoreResults={props.noMoreResults}
-        /> :
-        <GraphViewComponent
-          searchValue={props.activeSearch}
-          onGraphNodeDblClick={props.onGraphNodeDblClick}
-        />
-      }
-    </SpacerComponent>
-  );
+class ResultAreaComponent extends React.PureComponent<Partial<SearchPageProps>> {
+  render() {
+    return (
+      <SpacerComponent>
+        {
+          this.props.resultViewMode === "grid" ?
+            <ItemCollectionViewComponent
+              items={this.props.itemCollection}
+              activeSearch={this.props.activeSearch}
+              onClick={this.props.onItemClick}
+              loading={this.props.loading}
+              onLoadMore={this.props.onLoadMore}
+              noMoreResults={this.props.noMoreResults}
+            /> :
+            <GraphViewComponent
+              searchValue={this.props.activeSearch}
+              onGraphNodeDblClick={this.props.onGraphNodeDblClick}
+            />
+        }
+      </SpacerComponent>
+    );
+  }
 }
 
 const SearchPageComponent = (props: SearchPageProps) => (
@@ -102,7 +103,16 @@ const SearchPageComponent = (props: SearchPageProps) => (
         onMenuClick={props.onMenuClick}
       />
       <HorizontalSeparator />
-      <ResultAreaComponent {...props} />
+      <ResultAreaComponent
+        itemCollection={props.itemCollection}
+        activeSearch={props.activeSearch}
+        onItemClick={props.onItemClick}
+        loading={props.loading}
+        onLoadMore={props.onLoadMore}
+        noMoreResults={props.noMoreResults}
+        onGraphNodeDblClick={props.onGraphNodeDblClick}
+        resultViewMode={props.resultViewMode}
+      />
     </main>
   </div>
 )

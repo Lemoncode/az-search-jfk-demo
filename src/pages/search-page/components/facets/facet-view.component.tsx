@@ -11,23 +11,25 @@ interface FacetViewProps {
   onFilterUpdate: (newFilter: Filter) => void;
 }
 
-const FacetViewComponent: React.StatelessComponent<FacetViewProps> = (props) => {
-  return props.facets ? (
-    <div className={style.container}>
-      { props.facets.map((facet, index) => {
-        const filter = props.filters ? 
-          props.filters.find(f => f.fieldId === facet.fieldId) : null;
-        return (
-          <FacetItemComponent
-            facet={facet}
-            filter={filter}
-            onFilterUpdate={props.onFilterUpdate}
-            key={index}
-          />
-        )        
-      })}
-    </div>
-  ) : null;
+class FacetViewComponent extends React.PureComponent<FacetViewProps> {
+  render() {
+    return this.props.facets ? (
+      <div className={style.container}>
+        {this.props.facets.map((facet, index) => {
+          const filter = this.props.filters ?
+            this.props.filters.find(f => f.fieldId === facet.fieldId) : null;
+          return (
+            <FacetItemComponent
+              facet={facet}
+              filter={filter}
+              onFilterUpdate={this.props.onFilterUpdate}
+              key={index}
+            />
+          )
+        })}
+      </div>
+    ) : null;
+  }
 }
 
 export { FacetViewComponent };
