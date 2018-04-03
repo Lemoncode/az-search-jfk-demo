@@ -25,6 +25,7 @@ export class HocrPageComponent extends React.PureComponent<HocrPageProps, {}> {
 
     return (
       <svg
+        xmlns="http://www.w3.org/2000/svg"
         className={this.props.userStyle.page}
         id={getNodeId(this.props.node, this.props.idSuffix)}
         viewBox={pageOptions.bbox.join(" ")}
