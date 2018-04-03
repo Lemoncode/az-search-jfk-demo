@@ -4,7 +4,7 @@ import { Page } from './page';
 import cx from 'classnames';
 
 // based on: https://github.com/vayser/react-js-pagination
-const styles = require('./pagination.scss');
+const style = require('./pagination.scss');
 
 interface Props {
   totalItemsCount: number;
@@ -28,9 +28,9 @@ export class Pagination extends React.Component<Props, {}> {
     pageRangeDisplayed: 5,
     activePage: 1,
     prevPageText: "⟨",
-    firstPageText: "«",
+    firstPageText: "⟨⟨",
     nextPageText: "⟩",
-    lastPageText: "»",
+    lastPageText: "⟩⟩",
     hideFirstLastPages: false,
   };
 
@@ -74,6 +74,11 @@ export class Pagination extends React.Component<Props, {}> {
       pageRangeDisplayed
     ).build(totalItemsCount, activePage);
 
+    const buttonStyles = {
+      root: style.button,
+      raisedPrimary: style.primary,
+    };
+
     for (
       let i = paginationInfo.first_page;
       i <= paginationInfo.last_page;
@@ -81,6 +86,7 @@ export class Pagination extends React.Component<Props, {}> {
     ) {
       pages.push(
         <Page
+          classes={buttonStyles}
           isActive={i === activePage}
           key={i}          
           pageNumber={i}
@@ -93,6 +99,7 @@ export class Pagination extends React.Component<Props, {}> {
     this.isPrevPageVisible(paginationInfo.has_previous_page) &&
       pages.unshift(
         <Page
+          classes={buttonStyles}
           key={"prev" + paginationInfo.previous_page}
           pageNumber={paginationInfo.previous_page}
           onClick={onChange}
@@ -104,6 +111,7 @@ export class Pagination extends React.Component<Props, {}> {
     this.isFirstPageVisible(paginationInfo.has_previous_page) &&
       pages.unshift(
         <Page
+          classes={buttonStyles}
           key={"first"}
           pageNumber={1}
           onClick={onChange}
@@ -115,6 +123,7 @@ export class Pagination extends React.Component<Props, {}> {
     this.isNextPageVisible(paginationInfo.has_next_page) &&
       pages.push(
         <Page
+          classes={buttonStyles}
           key={"next" + paginationInfo.next_page}
           pageNumber={paginationInfo.next_page}
           onClick={onChange}
@@ -126,6 +135,7 @@ export class Pagination extends React.Component<Props, {}> {
     this.isLastPageVisible(paginationInfo.has_next_page) &&
       pages.push(
         <Page
+          classes={buttonStyles}
           key={"last"}
           pageNumber={paginationInfo.total_pages}
           onClick={onChange}
@@ -142,7 +152,7 @@ export class Pagination extends React.Component<Props, {}> {
   render() {
     const pages = this.buildPages();
     return (
-      <div className={styles.pagination}>
+      <div className={style.pagination}>
         {pages}
       </div>
     );

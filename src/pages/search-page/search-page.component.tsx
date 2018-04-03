@@ -1,5 +1,6 @@
 import * as React from "react";
 import Divider from "material-ui/Divider";
+import Hidden from "material-ui/Hidden";
 import { PageBarComponent } from "./components/page-bar";
 import { DrawerComponent } from "./components/drawer";
 import { SearchComponent } from "./components/search";
@@ -70,10 +71,35 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
   </DrawerComponent>
 );
 
+const handlePageChange = callback => pageNum => callback(pageNum - 1);
+
+const Paginator = (props: Partial<SearchPageProps>) => (
+  <>
+    <Hidden smUp> 
+      {/* Mobile */}
+      <Pagination
+        activePage={props.pageIndex + 1}
+        itemsCountPerPage={props.resultsPerPage}
+        totalItemsCount={props.resultCount}
+        pageRangeDisplayed={1}
+        onChange={handlePageChange(props.onLoadMore)}
+      />
+    </Hidden>
+    <Hidden xsDown>
+      {/* Desktop */}
+      <Pagination
+        activePage={props.pageIndex + 1}
+        itemsCountPerPage={props.resultsPerPage}
+        totalItemsCount={props.resultCount}
+        pageRangeDisplayed={5}
+        onChange={handlePageChange(props.onLoadMore)}
+      />
+    </Hidden>
+  </>
+);
+
 class ResultAreaComponent extends React.PureComponent<Partial<SearchPageProps>> {
-  private handlePageChange = (pageNum) => {
-    this.props.onLoadMore(pageNum - 1);
-  }
+  
   
   render() {
     return (
@@ -86,12 +112,11 @@ class ResultAreaComponent extends React.PureComponent<Partial<SearchPageProps>> 
                 activeSearch={this.props.activeSearch}
                 onClick={this.props.onItemClick}
               />
-              <Pagination
-                activePage={this.props.pageIndex + 1}
-                itemsCountPerPage={this.props.resultsPerPage}
-                totalItemsCount={this.props.resultCount}
-                pageRangeDisplayed={5}
-                onChange={this.handlePageChange}
+              <Paginator
+                pageIndex={this.props.pageIndex}
+                resultsPerPage={this.props.resultsPerPage}
+                resultCount={this.props.resultCount}
+                onLoadMore={this.props.onLoadMore}
               />
             </div> :
             <GraphViewComponent

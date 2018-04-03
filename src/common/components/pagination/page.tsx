@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from 'material-ui/Button';
 import cx from 'classnames';
-const styles = require('./page.scss');
+
 
 interface Props {
   pageText: (string | React.ReactNode); // Review this Element not sure if make sense
@@ -9,6 +9,7 @@ interface Props {
   onClick: (pageNumber : number) => void;
   isActive?: boolean;
   isDisabled?: boolean,
+  classes?: any;
 }
 
 
@@ -22,13 +23,11 @@ export const Page : React.StatelessComponent<Props> = (props) => {
   return (
     !props.isDisabled &&
     <Button
-      classes={{label: styles.buttonLabel}}
+      classes={props.classes}
       onClick={handleClick(props)}
-      color={
-        Boolean(props.isActive) ?
-          'primary' :
-          'inherit'
-      }
+      color={props.isActive ? 'primary' : 'inherit'}
+      variant={"fab"}
+      mini={true}
     >
       {props.pageText}
     </Button>
