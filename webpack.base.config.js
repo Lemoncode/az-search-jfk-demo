@@ -143,7 +143,7 @@ module.exports = {
       chunks: ['manifest', 'vendor', 'appStyles', 'app'],
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor', 'manifest'],
+      names: ['appStyles', 'vendor', 'manifest'],
     }),
   ]
 }
