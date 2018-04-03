@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Button from 'material-ui/Button';
-import cx from 'classnames';
 
 
 interface Props {

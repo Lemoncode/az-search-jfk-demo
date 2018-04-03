@@ -25,6 +25,7 @@ module.exports = {
       'material-ui-icons',
       'material-ui-pickers',
       'moment',
+      'paginator',
       'qs',
       'react',
       'react-dom',

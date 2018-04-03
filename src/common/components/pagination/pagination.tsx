@@ -1,7 +1,6 @@
 import * as React from 'react';
 import paginator from 'paginator';
 import { Page } from './page';
-import cx from 'classnames';
 
 // based on: https://github.com/vayser/react-js-pagination
 const style = require('./pagination.scss');
