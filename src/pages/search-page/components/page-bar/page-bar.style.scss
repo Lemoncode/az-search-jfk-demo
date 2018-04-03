@@ -38,6 +38,7 @@
         flex: 1 1 auto;
         margin: 0 0.5rem;
         max-height: 2.5rem;
+        max-width: 100%;
 
         @include respond-to-desktop {
           max-height: 4.5rem;
