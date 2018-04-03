@@ -8,6 +8,7 @@
   justify-content: flex-start;
   align-items: stretch;
   margin: 1.25rem;
+  overflow-y: auto;
 
   @include respond-to-desktop {
     margin: 2.5rem;

@@ -132,10 +132,14 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
     }
   };
 
+  private onStateUpdated = () => {
+    this.scrollTo(this.state.autoFocusPosSize);
+  }
+
   // *** Lifecycle ***
 
   public componentDidMount() {
-    this.scrollTo(this.state.autoFocusPosSize); // Initial scroll on mount.
+    this.onStateUpdated(); // Initial scroll on mount.
   }
 
   public componentWillReceiveProps(nextProps: HocrPreviewProps) {
@@ -147,7 +151,7 @@ export class HocrPreviewComponent extends React.Component<HocrPreviewProps, Hocr
       this.setState({
         ...this.state,
         ...this.calculateStateFromProps(nextProps),
-      });
+      }, this.onStateUpdated);
     } else if ( this.props.userStyle != nextProps.userStyle ) {
       this.setState({
         ...this.state,

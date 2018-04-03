@@ -13,13 +13,19 @@ module.exports = {
   },
 
   entry: {
-    app: ['./app.tsx',],
+    app: [
+      './app.tsx',
+    ],
+    appStyles: [
+      './theme/main.scss',
+    ],
     vendor: [
       'babel-polyfill',
       'material-ui',
       'material-ui-icons',
       'material-ui-pickers',
       'moment',
+      'paginator',
       'qs',
       'react',
       'react-dom',
@@ -133,10 +139,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       filename: 'index.html', // Name of file in ./dist/
       template: 'index.html', // Name of template in ./src
-      hash: true
+      hash: true,
+      chunksSortMode: 'manual',
+      chunks: ['manifest', 'vendor', 'appStyles', 'app'],
     }),
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['app', 'vendor'],
+      names: ['appStyles', 'vendor', 'manifest'],
     }),
   ]
 }

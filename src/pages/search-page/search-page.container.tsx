@@ -14,10 +14,9 @@ import {
   suggestionsUpdate,
   preSearchUpdate,
   postSearchSuccessUpdate,
-  postSearchSuccessAppend,
+  postSearchMoreSuccessUpdate,
   postSearchErrorReset,
   postSearchErrorKeep,
-  lastPageIndexReachedUpdate,
   resultViewModeUpdate,
   receivedSearchValueUpdate,
 } from "./search-page.container.state";
@@ -112,30 +111,10 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
 
   // *** PAGINATION LOGIC ***
 
-  private reachedLastValidPageIndex = () => {
-    if (this.state.resultCount !== null) {
-      return this.getNextValidPageIndex() * this.state.pageSize >= this.state.resultCount;
-    } else {
-      return false;
-    }
-  }
-
-  private getNextValidPageIndex = () => {
-    return this.state.pageIndex === null ? 0 : this.state.pageIndex + 1;
-  };
-
-  private handleLoadMore = () => {
-    if (this.state.loading) {
-      return;
-    } else if (this.reachedLastValidPageIndex()) {
-      this.informMessage("No More Results Available");
-      this.setState(lastPageIndexReachedUpdate(true));
-      return;
-    }
-
+  private handleLoadMore = (pageIndex: number) => {
     this.setState(
-      preSearchUpdate(this.state.filterCollection, this.getNextValidPageIndex()),
-      this.runSearch(postSearchSuccessAppend, postSearchErrorKeep)
+      preSearchUpdate(this.state.filterCollection, pageIndex),
+      this.runSearch(postSearchMoreSuccessUpdate, postSearchErrorKeep)
     );
   }
 
@@ -193,13 +172,13 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           activeSearch={this.state.activeSearch}
           onItemClick={this.handleOnItemClick}
           resultCount={this.state.resultCount}
+          resultsPerPage={this.state.pageSize}
+          pageIndex={this.state.pageIndex}
           facetCollection={this.state.facetCollection}
           onMenuClick={this.handleMenuClick}
           showDrawer={this.state.showDrawer}
           onDrawerClose={this.handleDrawerClose}
-          loading={this.state.loading}
           onLoadMore={this.handleLoadMore}
-          noMoreResults={this.state.lastPageIndexReached}
           resultViewMode={this.state.resultViewMode}
           onChangeResultViewMode={this.handleResultViewMode}
           onGraphNodeDblClick={this.handleReceivedSearchValue}

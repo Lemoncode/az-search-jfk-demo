@@ -1,5 +1,6 @@
 import * as React from "react";
 import Divider from "material-ui/Divider";
+import Hidden from "material-ui/Hidden";
 import { PageBarComponent } from "./components/page-bar";
 import { DrawerComponent } from "./components/drawer";
 import { SearchComponent } from "./components/search";
@@ -18,6 +19,7 @@ import {
   ResultViewMode,
 } from "./view-model";
 import { Service } from "./service";
+import { Pagination } from "../../common/components/pagination/pagination";
 
 const style = require("./search-page.style.scss");
 
@@ -32,16 +34,16 @@ interface SearchPageProps {
   facetCollection: FacetCollection;
   filterCollection: FilterCollection;
   suggestionCollection?: SuggestionCollection;
-  resultCount?: number;
-  loading: boolean;
-  noMoreResults: boolean;
+  resultCount: number;
+  resultsPerPage: number;
+  pageIndex: number;
   onSearchSubmit: () => void;
   onSearchUpdate: (value: string) => void;
   onFilterUpdate: (newFilter: Filter) => void;
   onItemClick: (item: Item) => void;
   onDrawerClose: () => void;
   onMenuClick: () => void;
-  onLoadMore: () => void;
+  onLoadMore: (pageIndex: number) => void;
   onChangeResultViewMode: (newMode: ResultViewMode) => void;
   onGraphNodeDblClick: (searchValue: string) => void;
 }
@@ -69,20 +71,54 @@ const DrawerAreaComponent = (props: SearchPageProps) => (
   </DrawerComponent>
 );
 
+const handlePageChange = callback => pageNum => callback(pageNum - 1);
+
+const Paginator = (props: Partial<SearchPageProps>) => (
+  <>
+    <Hidden smUp> 
+      {/* Mobile */}
+      <Pagination
+        activePage={props.pageIndex + 1}
+        itemsCountPerPage={props.resultsPerPage}
+        totalItemsCount={props.resultCount}
+        pageRangeDisplayed={1}
+        onChange={handlePageChange(props.onLoadMore)}
+      />
+    </Hidden>
+    <Hidden xsDown>
+      {/* Desktop */}
+      <Pagination
+        activePage={props.pageIndex + 1}
+        itemsCountPerPage={props.resultsPerPage}
+        totalItemsCount={props.resultCount}
+        pageRangeDisplayed={5}
+        onChange={handlePageChange(props.onLoadMore)}
+      />
+    </Hidden>
+  </>
+);
+
 class ResultAreaComponent extends React.PureComponent<Partial<SearchPageProps>> {
+  
+  
   render() {
     return (
       <SpacerComponent>
         {
           this.props.resultViewMode === "grid" ?
-            <ItemCollectionViewComponent
-              items={this.props.itemCollection}
-              activeSearch={this.props.activeSearch}
-              onClick={this.props.onItemClick}
-              loading={this.props.loading}
-              onLoadMore={this.props.onLoadMore}
-              noMoreResults={this.props.noMoreResults}
-            /> :
+            <div>
+              <ItemCollectionViewComponent
+                items={this.props.itemCollection}
+                activeSearch={this.props.activeSearch}
+                onClick={this.props.onItemClick}
+              />
+              <Paginator
+                pageIndex={this.props.pageIndex}
+                resultsPerPage={this.props.resultsPerPage}
+                resultCount={this.props.resultCount}
+                onLoadMore={this.props.onLoadMore}
+              />
+            </div> :
             <GraphViewComponent
               searchValue={this.props.activeSearch}
               onGraphNodeDblClick={this.props.onGraphNodeDblClick}
@@ -106,10 +142,11 @@ const SearchPageComponent = (props: SearchPageProps) => (
       <ResultAreaComponent
         itemCollection={props.itemCollection}
         activeSearch={props.activeSearch}
+        pageIndex={props.pageIndex}
+        resultsPerPage={props.resultsPerPage}
+        resultCount={props.resultCount}
         onItemClick={props.onItemClick}
-        loading={props.loading}
         onLoadMore={props.onLoadMore}
-        noMoreResults={props.noMoreResults}
         onGraphNodeDblClick={props.onGraphNodeDblClick}
         resultViewMode={props.resultViewMode}
       />
