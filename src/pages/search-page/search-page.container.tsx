@@ -178,7 +178,6 @@ class SearchPageInnerContainer extends React.Component<RouteComponentProps<any>,
           onMenuClick={this.handleMenuClick}
           showDrawer={this.state.showDrawer}
           onDrawerClose={this.handleDrawerClose}
-          loading={this.state.loading}
           onLoadMore={this.handleLoadMore}
           resultViewMode={this.state.resultViewMode}
           onChangeResultViewMode={this.handleResultViewMode}

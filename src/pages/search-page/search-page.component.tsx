@@ -81,18 +81,18 @@ class ResultAreaComponent extends React.PureComponent<Partial<SearchPageProps>> 
         {
           this.props.resultViewMode === "grid" ?
             <div>
-            <ItemCollectionViewComponent
-              items={this.props.itemCollection}
-              activeSearch={this.props.activeSearch}
-              onClick={this.props.onItemClick}
-            />
-            <Pagination
-              activePage={this.props.pageIndex + 1}
-              itemsCountPerPage={this.props.resultsPerPage}
-              totalItemsCount={this.props.resultCount}
-              pageRangeDisplayed={5}
-              onChange={this.handlePageChange}
-            />
+              <ItemCollectionViewComponent
+                items={this.props.itemCollection}
+                activeSearch={this.props.activeSearch}
+                onClick={this.props.onItemClick}
+              />
+              <Pagination
+                activePage={this.props.pageIndex + 1}
+                itemsCountPerPage={this.props.resultsPerPage}
+                totalItemsCount={this.props.resultCount}
+                pageRangeDisplayed={5}
+                onChange={this.handlePageChange}
+              />
             </div> :
             <GraphViewComponent
               searchValue={this.props.activeSearch}
@@ -117,9 +117,9 @@ const SearchPageComponent = (props: SearchPageProps) => (
       <ResultAreaComponent
         itemCollection={props.itemCollection}
         activeSearch={props.activeSearch}
-	pageIndex={props.pageIndex}
-	resultsPerPage={props.resultsPerPage}
-	resultCount={props.resultCount}
+        pageIndex={props.pageIndex}
+        resultsPerPage={props.resultsPerPage}
+        resultCount={props.resultCount}
         onItemClick={props.onItemClick}
         onLoadMore={props.onLoadMore}
         onGraphNodeDblClick={props.onGraphNodeDblClick}

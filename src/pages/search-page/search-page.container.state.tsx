@@ -11,7 +11,6 @@ export const CreateInitialState = (): State => ({
   suggestionCollection: null,
   resultCount: null,
   showDrawer: true, // TODO: Hide it by default.
-  loading: false,
   pageSize: 10,
   pageIndex: 0,
   // Override with user config initial state (if exists).
@@ -59,7 +58,6 @@ export const suggestionsUpdate = (suggestionCollection: SuggestionCollection) =>
 export const preSearchUpdate = (filters: FilterCollection, pageIndex?: number) => (prevState: State) => {
   return {
     ...prevState,
-    loading: true,
     suggestionCollection: null,
     filterCollection: filters,
     pageIndex: pageIndex || 0,
@@ -69,7 +67,6 @@ export const preSearchUpdate = (filters: FilterCollection, pageIndex?: number) =
 export const postSearchSuccessUpdate = (stateReducer: StateReducer) => (prevState: State): State => {
   return {
     ...stateReducer<State>(prevState),
-    loading: false,
     suggestionCollection: null,
     activeSearch: prevState.searchValue ? prevState.searchValue : null,
   }
@@ -79,7 +76,6 @@ export const postSearchMoreSuccessUpdate =  (stateReducer: StateReducer) => (pre
   const reducedState = stateReducer<State>(prevState);
   return {
     ...reducedState,
-    loading: false,
     itemCollection: reducedState.itemCollection,
   }
 };
@@ -88,7 +84,6 @@ export const postSearchErrorReset = (rejectValue) => (prevState: State): State =
   console.debug(`Search Failed: ${rejectValue}`);
   return {
     ...prevState,
-    loading: false,
     resultCount: null,
     itemCollection: null,          
     facetCollection: null,
@@ -103,7 +98,6 @@ export const postSearchErrorKeep = (rejectValue) => (prevState: State): State =>
   console.debug(`Search Failed: ${rejectValue}`);
   return {
     ...prevState,
-    loading: false,
     suggestionCollection: null,
     pageIndex: prevState.pageIndex,
   };
