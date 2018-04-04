@@ -20,6 +20,7 @@ import {
 } from "./view-model";
 import { Service } from "./service";
 import { Pagination } from "../../common/components/pagination/pagination";
+import { PlaceholderComponent } from "./components/placeholder";
 
 const style = require("./search-page.style.scss");
 
@@ -75,7 +76,7 @@ const handlePageChange = callback => pageNum => callback(pageNum - 1);
 
 const Paginator = (props: Partial<SearchPageProps>) => (
   <>
-    <Hidden smUp> 
+    <Hidden smUp>
       {/* Mobile */}
       <Pagination
         activePage={props.pageIndex + 1}
@@ -99,32 +100,35 @@ const Paginator = (props: Partial<SearchPageProps>) => (
 );
 
 class ResultAreaComponent extends React.PureComponent<Partial<SearchPageProps>> {
-  
-  
+
+
   render() {
     return (
-      <SpacerComponent>
-        {
-          this.props.resultViewMode === "grid" ?
-            <div>
-              <ItemCollectionViewComponent
-                items={this.props.itemCollection}
-                activeSearch={this.props.activeSearch}
-                onClick={this.props.onItemClick}
+      <>
+        <PlaceholderComponent />
+        <SpacerComponent>
+          {
+            this.props.resultViewMode === "grid" ?
+              <div>
+                <ItemCollectionViewComponent
+                  items={this.props.itemCollection}
+                  activeSearch={this.props.activeSearch}
+                  onClick={this.props.onItemClick}
+                />
+                <Paginator
+                  pageIndex={this.props.pageIndex}
+                  resultsPerPage={this.props.resultsPerPage}
+                  resultCount={this.props.resultCount}
+                  onLoadMore={this.props.onLoadMore}
+                />
+              </div> :
+              <GraphViewComponent
+                searchValue={this.props.activeSearch}
+                onGraphNodeDblClick={this.props.onGraphNodeDblClick}
               />
-              <Paginator
-                pageIndex={this.props.pageIndex}
-                resultsPerPage={this.props.resultsPerPage}
-                resultCount={this.props.resultCount}
-                onLoadMore={this.props.onLoadMore}
-              />
-            </div> :
-            <GraphViewComponent
-              searchValue={this.props.activeSearch}
-              onGraphNodeDblClick={this.props.onGraphNodeDblClick}
-            />
-        }
-      </SpacerComponent>
+          }
+        </SpacerComponent>
+      </>
     );
   }
 }
