@@ -10,12 +10,12 @@
   },
   "scripts": {
     "start": "env-cmd .env if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
-    "start:dev": "env-cmd .env webpack-dev-server --config=webpack.dev.config.js",
-    "start:prod": "env-cmd .env node server",
+    "start:dev": "env-cmd .env cross-env NODE_ENV=development webpack-dev-server --config=webpack.dev.config.js",
+    "start:prod": "env-cmd .env cross-env NODE_ENV=production node server",
     "clean": "rimraf dist",
     "build": "env-cmd .env if-env NODE_ENV=production && npm run build:prod || npm run build:dev",
-    "build:dev": "npm run clean && env-cmd .env webpack --config=webpack.dev.config.js",
-    "build:prod": "npm run clean && env-cmd .env webpack -p --config=webpack.prod.config.js"
+    "build:dev": "npm run clean && env-cmd .env cross-env NODE_ENV=development webpack --config=webpack.dev.config.js",
+    "build:prod": "npm run clean && env-cmd .env cross-env NODE_ENV=production webpack -p --config=webpack.prod.config.js"
   },
   "author": "Javier Calzado",
   "license": "ISC",

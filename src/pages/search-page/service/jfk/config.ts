@@ -3,7 +3,6 @@ import { ServiceConfig } from "../../service";
 import { mapStateToSuggestionPayload, mapSuggestionResponseToState } from "./mapper.suggestion";
 import { mapStateToSearchPayload, mapSearchResponseToState } from "./mapper.search";
 
-
 export const jfkServiceConfig: ServiceConfig = {
   serviceId: "jfk-docs",
   serviceName: "JFK Documents",
