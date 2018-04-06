@@ -9,14 +9,12 @@
     "msg": "Github Deploy in gh-pages"
   },
   "scripts": {
-    "start": "env-cmd .env npm run start:env",
-    "start:env": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
-    "start:dev": "env-cmd .env.dev webpack-dev-server --config=webpack.dev.config.js",
-    "start:prod": "node server",
-    "clean": "rimraf \"%npm_package_config_build%/**/*\" && rimraf \"%npm_package_config_build%/**/.!(git)\"",
-    "build": "env-cmd .env npm run build:env",
-    "build:env": "if-env NODE_ENV=production && npm run build:prod || npm run build:dev",
-    "build:dev": "npm run clean && env-cmd .env.dev webpack --config=webpack.dev.config.js",
+    "start": "env-cmd .env if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:dev": "env-cmd .env webpack-dev-server --config=webpack.dev.config.js",
+    "start:prod": "env-cmd .env node server",
+    "clean": "rimraf dist",
+    "build": "env-cmd .env if-env NODE_ENV=production && npm run build:prod || npm run build:dev",
+    "build:dev": "npm run clean && env-cmd .env webpack --config=webpack.dev.config.js",
     "build:prod": "npm run clean && env-cmd .env webpack -p --config=webpack.prod.config.js"
   },
   "author": "Javier Calzado",
