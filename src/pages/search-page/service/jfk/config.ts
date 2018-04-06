@@ -11,12 +11,12 @@ export const jfkServiceConfig: ServiceConfig = {
   
   searchConfig: {
     apiConfig: {
-      protocol: "https",
-      serviceName: "jfk-files",
-      serviceDomain: "search.windows.net",
-      servicePath: "indexes/jfkdocs/docs",
-      apiVer: "2017-11-11",
-      apiKey: "263B733973D2050A214AF930AFD36D60",
+      protocol: process.env.SEARCH_CONFIG_PROTOCOL,
+      serviceName: process.env.SEARCH_CONFIG_SERVICE_NAME,
+      serviceDomain: process.env.SEARCH_CONFIG_SERVICE_DOMAIN,
+      servicePath: process.env.SEARCH_CONFIG_SERVICE_PATH,
+      apiVer: process.env.SEARCH_CONFIG_API_VER,
+      apiKey: process.env.SEARCH_CONFIG_API_KEY,
       method: "GET",
     },
     defaultPayload: defaultAzPayload,
@@ -26,12 +26,12 @@ export const jfkServiceConfig: ServiceConfig = {
 
   suggestionConfig: {
     apiConfig: {
-      protocol: "https",
-      serviceName: "jfk-files",
-      serviceDomain: "search.windows.net",
-      servicePath: "indexes/jfk/docs/autocomplete",
-      apiVer: "2017-11-11-Preview",
-      apiKey: "263B733973D2050A214AF930AFD36D60",
+      protocol: process.env.SUGGESTION_CONFIG_PROTOCOL,
+      serviceName: process.env.SUGGESTION_CONFIG_SERVICE_NAME,
+      serviceDomain: process.env.SUGGESTION_CONFIG_SERVICE_DOMAIN,
+      servicePath: process.env.SUGGESTION_CONFIG_SERVICE_PATH,
+      apiVer: process.env.SUGGESTION_CONFIG_API_VER,
+      apiKey: process.env.SUGGESTION_CONFIG_API_KEY,
       method: "GET",
     },
     defaultPayload: {

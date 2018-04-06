@@ -146,5 +146,21 @@ module.exports = {
     new webpack.optimize.CommonsChunkPlugin({
       names: ['appStyles', 'vendor', 'manifest'],
     }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'SEARCH_CONFIG_PROTOCOL': JSON.stringify(process.env.SEARCH_CONFIG_PROTOCOL),
+        'SEARCH_CONFIG_SERVICE_NAME': JSON.stringify(process.env.SEARCH_CONFIG_SERVICE_NAME),
+        'SEARCH_CONFIG_SERVICE_DOMAIN': JSON.stringify(process.env.SEARCH_CONFIG_SERVICE_DOMAIN),
+        'SEARCH_CONFIG_SERVICE_PATH': JSON.stringify(process.env.SEARCH_CONFIG_SERVICE_PATH),
+        'SEARCH_CONFIG_API_VER': JSON.stringify(process.env.SEARCH_CONFIG_API_VER),
+        'SEARCH_CONFIG_API_KEY': JSON.stringify(process.env.SEARCH_CONFIG_API_KEY),
+        'SUGGESTION_CONFIG_PROTOCOL': JSON.stringify(process.env.SUGGESTION_CONFIG_PROTOCOL),
+        'SUGGESTION_CONFIG_SERVICE_NAME': JSON.stringify(process.env.SUGGESTION_CONFIG_SERVICE_NAME),
+        'SUGGESTION_CONFIG_SERVICE_DOMAIN': JSON.stringify(process.env.SUGGESTION_CONFIG_SERVICE_DOMAIN),
+        'SUGGESTION_CONFIG_SERVICE_PATH': JSON.stringify(process.env.SUGGESTION_CONFIG_SERVICE_PATH),
+        'SUGGESTION_CONFIG_API_VER': JSON.stringify(process.env.SUGGESTION_CONFIG_API_VER),
+        'SUGGESTION_CONFIG_API_KEY': JSON.stringify(process.env.SUGGESTION_CONFIG_API_KEY),
+      }
+    })
   ]
 }
